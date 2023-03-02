@@ -1,9 +1,8 @@
 <script setup>
 	import { reactive, onMounted } from 'vue';
 	import { APP_KEY_SEARCH_HISTORY } from '@/constants';
-	import GoodsItem from '@/components/goods-item.vue';
 	import vLoadMore from '@/components/@lgs/load-more/load-more.vue';
-	import NoData from '@/components/@lgs/no-data/no-data.vue';
+	import vNoData from '@/components/@lgs/no-data/no-data.vue';
 
 	import service from '@/service';
 
@@ -118,11 +117,11 @@
 		<view v-if="state.searchRes">
 			<template v-if="state.searchRes.length > 0">
 				<block v-for="(item, index) in state.searchRes" :key="index">
-					<goods-item />
+					<view class="search-res-item" />
 				</block>
 				<v-load-more :hasMore="false" />
 			</template>
-			<no-data v-else tips="未找到相关内容"></no-data>
+			<v-no-data v-else tips="未找到相关内容" />
 		</view>
 		<!-- Search Res End -->
 
@@ -188,6 +187,10 @@
 	}
 
 	.search-res-item {
-		height: 120rpx;
+		height: 200rpx;
+		background-color: #eee;
+		margin-bottom: 20rpx;
+		border-radius: 12rpx;
+		opacity: .75;
 	}
 </style>

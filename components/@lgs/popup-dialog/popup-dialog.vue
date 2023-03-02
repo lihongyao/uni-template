@@ -20,9 +20,9 @@
 		<view class="message">{{message}}</view>
 		<view class="actions">
 			<template v-if="showCancelButton">
-				<view class="button" @click="emits('cancel')" :style="'--cancel-bg-color:'+ cancelButtonBgColor" >{{cancelButtonText}}</view>
+				<view class="button cancel" @click="emits('cancel')" :style="'--cancel-bg-color:'+ cancelButtonBgColor" >{{cancelButtonText}}</view>
 			</template>
-			<view class="button" :class="{alone: !showCancelButton}" @click="emits('sure')" :style="'--sure-bg-color:'+ sureButtonBgColor" >{{sureButtonText}}</view>
+			<view class="button sure" :class="{alone: !showCancelButton}" @click="emits('sure')" :style="'--sure-bg-color:'+ sureButtonBgColor" >{{sureButtonText}}</view>
 		</view>
 	</view>
 </template>
@@ -66,12 +66,12 @@
 					width: 400rpx;
 				}
 
-				&:first-child {
+				&.cancel {
 					background: var(--cancel-bg-color);
 					margin-right: 60rpx;
 				}
 
-				&:last-child {
+				&.sure {
 					background: var(--sure-bg-color);
 				}
 			}

@@ -1,18 +1,26 @@
 <script setup>
-import { onMounted } from "vue";
-import Utils from "@/utils";
-	
-	
-	
+	import { onLoad, onShow } from "@dcloudio/uni-app";
+	import { onMounted, reactive } from "vue";
+	import Utils from "@/utils";
+
+	// -- constants
+
+	// -- state 
+	const state = reactive({})
+
 	// -- life circles
-	onMounted(() => {
-		Utils.checkLogin()
-	})
+	onMounted(() => {})
+
+	// -- methods 
+
+	// -- events
 	
 </script>
 
 <template>
-	<div class="page">This is ShopCart page </div>
+	<div class="page h-100 flex-h-center ls-2 ff-DIN-Bold f60 color-theme">
+		SHOPPING CART
+	</div>
 </template>
 
 <style lang="less" scoped></style>

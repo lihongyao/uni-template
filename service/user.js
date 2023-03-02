@@ -36,6 +36,6 @@ export function edit(data) {
  */
 export function info() {
 	return request({
-		url: '/api/xxx'
+		url: '/api/users/info'
 	})
 }

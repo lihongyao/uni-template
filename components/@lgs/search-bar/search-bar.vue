@@ -30,6 +30,7 @@
 
 
 <style lang="less" scoped>
+
 	.lg-search-bar {
 		width: 750rpx;
 		padding: 0 30rpx;
@@ -37,6 +38,9 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
+		position: fixed;
+		top: 0;
+		z-index: 1;
 	}
 
 	.lg-notice-bar {

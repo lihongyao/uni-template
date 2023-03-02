@@ -1,5 +1,6 @@
 <script setup>
 	import { defineProps } from 'vue';
+	import defaultLogo from '@/static/logo.png';
 	const props = defineProps({
 		logo: { type: String, default: '' },
 		tips: { type: String, default: "数据加载中..." },
@@ -13,7 +14,7 @@
 <template>
 	<view class="lg-loading" :style="{ paddingTop: `${top}rpx` }">
 		<view class="lg-loading__ct">
-			<image class="lg-loading__logo" :src="logo ?? './images/logo_2.png'" />
+			<image class="lg-loading__logo" :src="logo || defaultLogo" />
 			<view class="lg-loading__border" :style="'--border-color:'+ borderColor" />
 		</view>
 		<view v-if="showTips" class="lg-loading__tips">{{tips}}</view>
@@ -35,8 +36,8 @@
 		}
 
 		&__logo {
-			width: 44rpx;
-			height: 44rpx;
+			width: 50rpx;
+			height: 50rpx;
 			position: relative;
 			z-index: 2;
 		}

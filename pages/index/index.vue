@@ -5,7 +5,6 @@
 	import vSearchBar from '@/components/@lgs/search-bar/search-bar.vue';
 	import vLoadMore from '@/components/@lgs/load-more/load-more.vue';
 	import defaultBanners from "@/static/images/default_banners.png";
-	import GoodsItem from '@/components/goods-item.vue';
 	// -- constants
 	const searchTexts = ["苹果", "香蕉"];
 	const dotsStyles = { selectedBackgroundColor: '#FFFFFF', backgroundColor: 'rgba(255,255,255,.72)', bottom: '10', width: '6' };
@@ -39,6 +38,7 @@
 
 <template>
 	<view class="page">
+		
 		<!-- Search-bar Start -->
 		<v-search-bar :contents="searchTexts" @tap="Utils.push('/pages/search/search')"></v-search-bar>
 		<!-- Search-bar End -->
@@ -71,7 +71,7 @@
 			</view>
 			<view class="goods-list mt-40 px-30">
 				<block v-for="item in 10" :key="item">
-					<goods-item />
+					<view class="goods-item"></view>
 				</block>
 			</view>
 		</view>
@@ -81,6 +81,9 @@
 </template>
 
 <style lang="less" scoped>
+	.page {
+		padding-top: 120rpx;
+	}
 	.search-bar-wrap {
 		width: 750rpx;
 		height: 90rpx;
@@ -134,5 +137,13 @@
 				position: relative;
 			}
 		}
+	}
+	
+	.goods-item {
+		height: 200rpx;
+		background-color: #eee;
+		margin-bottom: 20rpx;
+		border-radius: 12rpx;
+		opacity: .75;
 	}
 </style>

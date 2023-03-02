@@ -65,6 +65,18 @@
 		});
 	}
 	const onAddressItemTap = (item) => {
+		/************************************************
+		// -- 确认订单页面选择地址时通过如下方法跳转
+		// -- 用户选择地址后即可回传选择的地址信息
+		uni.navigateTo({
+			url: "/pages/address/list?q=choose-address",
+			events: {
+				"CHOOSED_ADDRESS": (data) => {
+					console.log(data);
+				}
+			}
+		});
+		*************************************************/
 		if (!state.q) return;
 		state.eventChannel.emit('CHOOSED_ADDRESS', { ...item, area: { ...item.area } });
 		Utils.pop();

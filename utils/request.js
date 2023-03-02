@@ -41,7 +41,6 @@ const request = (options) => {
 				...headers
 			},
 			success: (response) => {
-				uni.hideLoading();
 				if ([200, 201].includes(response.statusCode)) {
 					const { code, msg } = response.data;
 					switch (code) {
@@ -78,7 +77,6 @@ const request = (options) => {
 				}
 			},
 			fail: (err) => {
-				uni.hideLoading();
 				console.log('AJAX_ERROR：', err)
 			},
 			complete: () => {}

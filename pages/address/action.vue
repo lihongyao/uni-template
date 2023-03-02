@@ -1,6 +1,6 @@
 <script setup>
 	import { onLoad, onShow } from "@dcloudio/uni-app";
-	import { reactive, toRefs, getCurrentInstance } from "vue";
+	import { reactive, getCurrentInstance } from "vue";
 	import Utils from '@/utils/index.js';
 	import Validator from 'lg-validator';
 
@@ -74,9 +74,11 @@
 				if (res.confirm) {
 					Utils.loading('处理中...');
 					setTimeout(() => {
+						uni.hideLoading();
 						Utils.pop();
 					}, 1000)
 					// Api.address.remove(addressId).then(() => {
+					// 	uni.hideLoading();
 					// 	Utils.pop();
 					// });
 				}
@@ -87,9 +89,11 @@
 		if (check()) {
 			Utils.loading('处理中...');
 			setTimeout(() => {
+				uni.hideLoading();
 				Utils.pop();
 			}, 1000);
 			// Api.address.addOrUpdate(state.formData).then(() => {
+			// 	uni.hideLoading();
 			// 	Utils.pop();
 			// });
 		}
@@ -142,20 +146,18 @@
 			</template>
 		</view>
 		<!-- 提交按钮 -->
-		<button class="submit-button color-FFFFFF f32 flex-h-center mt-80 rounded-48" @click="onSubmit">保存地址</button>
-		<view class="space-200"></view>
+		<button class="submit-button color-FFFFFF f32 flex-h-center mt-80 rounded-48 bg-theme" @click="onSubmit">保存地址</button>
+		<view class="space-200" />
 	</view>
 </template>
 
 <style scoped lang="less">
 	.page {
-
 		:deep(.uni-easyinput__content) {
-			min-height: 0;
-
 			input {
-				padding-left: 0 !important;
-				font-size: 28rpx !important;
+				padding: 0;
+				margin: 0;
+				font-size: 28rpx;
 				color: #202020;
 			}
 		}
@@ -175,7 +177,6 @@
 		.submit-button {
 			width: 600rpx;
 			height: 88rpx;
-			background: #42b983;
 		}
 	}
 </style>

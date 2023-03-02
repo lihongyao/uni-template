@@ -3,10 +3,11 @@
 	const props = defineProps({
 		data: Object
 	})
+	const emits = defineEmits(['pay', "receive", "cancel", "afterSale", "evaluate"])
 </script>
 
 <template>
-	<view class="list-item px-30 pt-20 pb-30 bg-FFFFFF rounded-12 mt-20" >
+	<view class="list-item px-30 pt-20 pb-30 bg-FFFFFF rounded-12 mt-20">
 		<view class="flex-h-between f20 pb-20 border-bottom mb-20 ">
 			<view class="" style="color: #686868;">
 				<text>订单号&nbsp;</text>
@@ -21,10 +22,11 @@
 			<view v-if="data.orderState === 4" class="status cancel flex-h-center f20 rounded-16">已取消</view> -->
 		</view>
 		<view class="flex-h-end">
-			<view class="order-button rounded-28 flex-h-center f26 color-202020 v">取消订单</view>
-			<view class="order-button rounded-28 flex-h-center f26 color-202020 v ml-20">立即评价</view>
-			<view class="order-button rounded-28 flex-h-center f26 color-FFFFFF bg-42b983 ml-20">立即支付</view>
-			<view class="order-button rounded-28 flex-h-center f26 color-FFFFFF bg-42b983 ml-20">申请售后</view>
+			<view class="order-button rounded-28 flex-h-center f26 color-202020 v" @click.stop="emits('cancel', '订单编号')">取消订单</view>
+			<view class="order-button rounded-28 flex-h-center f26 color-202020 v ml-20" @click.stop="emits('evaluate', '订单编号')">立即评价</view>
+			<view class="order-button rounded-28 flex-h-center f26 color-FFFFFF bg-theme ml-20" @click.stop="emits('pay', '订单编号')">立即支付</view>
+			<view class="order-button rounded-28 flex-h-center f26 color-FFFFFF bg-theme ml-20" @click.stop="emits('afterSale', '订单编号')">申请售后</view>
+			<view class="order-button rounded-28 flex-h-center f26 color-FFFFFF bg-theme ml-20" @click.stop="emits('receive', '订单编号')">确认收货</view>
 		</view>
 	</view>
 

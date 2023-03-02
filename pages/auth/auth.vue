@@ -92,7 +92,7 @@
 			<view class="f32 f-600 lh-44 mt-20" style="color: #202020;">产品名称</view>
 			<!-- 获取用户信息 -->
 			<template v-if="state.key === 'GET_USER_PROFILE'">
-				<view class="desc">为了我们更好的服务您，xxxx小程序需要获取您的基础信息，请点击“授权登录”按钮，打开头像、昵称等信息的授权。</view>
+				<view class="desc">为了我们更好的服务您，【产品名称】小程序需要获取您的基础信息，请点击“授权登录”按钮，打开头像、昵称等信息的授权。</view>
 				<button v-if="state.canIUseGetUserProfile" class="button flex-h-center" @click="onGetUserProfile">授权登录</button>
 				<button v-else class="button flex-h-center" open-type="getUserInfo" @getuserinfo="onGetUserInfo">授权登录</button>
 			</template>

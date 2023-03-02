@@ -11,6 +11,7 @@
 
 	// -- refs
 	const popupService = ref();
+
 	// -- state
 	const state = reactive({
 		isLogin: uni.getStorageSync(APP_KEY_PHONE)
@@ -50,6 +51,13 @@
 			case "我的客服":
 				popupService.value.open();
 				break;
+			case "地址管理":
+			case "意见反馈":
+				Utils.push(path);
+				/*Utils.checkLogin().then(r => {
+					Utils.push(path);
+				})*/
+				break;
 			default: {
 				Utils.push(path);
 			}
@@ -84,7 +92,7 @@
 						</view>
 					</template>
 				</view>
-				<view v-if="state.isLogin" class="switch flex-h-center f28 f-40 " >普通会员</view>
+				<view v-if="state.isLogin" class="switch flex-h-center f28 f-40 ">普通会员</view>
 			</view>
 			<!-- 我的订单 -->
 			<view class="orders pt-30 pb-40 px-30 rounded-24 bg-FFFFFF mt-40">

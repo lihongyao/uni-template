@@ -67,28 +67,28 @@
 			getOrders();
 		}
 	}
-	const onCancel = (id) => {
-		uni.showModal({
-			title: '温馨提示',
-			content: "您确定要取消订单么？",
-			showCancel: true,
-			cancelText: '点错了',
-			success: async function(res) {
-				if (res.confirm) {
-					Utils.loading('处理中...');
-					const r = await Api.order.cancel(id);
-					console.log(r);
-					if (r) {
-						// --- 重载数据
-						reloadList();
-					}
-				}
-			}
-		})
+	const onCancel = (orderNo) => {
+		console.log("取消订单：", orderNo);
+
+	}
+	const onReceive = (orderNo) => {
+		console.log("确认收货：", orderNo);
+
+	}
+	const onAfterSale = (orderNo) => {
+		console.log("申请收货：", orderNo);
+
+	}
+	const onEvaluate = (orderNo) => {
+		console.log("立即评价：", orderNo);
 	}
 	const onPay = ({ payCost, id }) => {
 		Utils.loading('处理中...');
-		Api.order.getPayParams({
+		setTimeout(() => {
+			uni.hideLoading();
+			Utils.push('/pages/orders/pay-res');
+		}, 1000);
+		/*service.order.getPayParams({
 			id,
 			type: 1,
 			money: payCost
@@ -109,7 +109,7 @@
 					console.log('fail:' + JSON.stringify(err));
 				}
 			});
-		})
+		})*/
 	}
 </script>
 
@@ -117,23 +117,27 @@
 <template>
 
 	<view class="page">
-		<!-- 过滤 -->
-		<v-menu-bar :data="menus" v-model="state.key" :showBorder="false" themeColor="#42b983"></v-menu-bar>
+		<!-- MenuBar Start -->
+		<v-menu-bar :data="menus" v-model="state.key" :showBorder="false" themeColor="#42b983" />
+		<!-- MenuBar End -->
+
+		<!-- List Start -->
 		<view class="list-wrap px-20">
 			<scroll-view class="list" :scroll-y="true" :lower-threshold="20" @scrolltolower="onLoadMore">
 				<template v-if="state.list">
 					<template v-if="state.list.length > 0">
 						<block v-for="(item, index) in state.list" :key="index">
-							<v-list-item :data="item" />
+							<v-list-item :data="item" @pay="onPay" @receive="onReceive" @cancel="onCancel" @afterSale="onAfterSale" @evaluate="onEvaluate" />
 						</block>
 						<view class="f28 text-center color-999999 py-40">{{state.hasMore ? '数据加载中...' : '没有更多啦~'}}</view>
 						<view class="space-100"></view>
 					</template>
 					<v-no-data v-else tips="暂无数据~"></v-no-data>
 				</template>
-				<v-loading v-else logo="https://qn.d-dou.com/dcep/dbean/ea6b99dd3aff434f88461cab092a80fezk35n0.png"></v-loading>
+				<v-loading v-else />
 			</scroll-view>
 		</view>
+		<!-- List End -->
 	</view>
 </template>
 

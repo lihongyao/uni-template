@@ -25,8 +25,8 @@ export const APP_OSS_HOST = ""
 /**********************
  ** Weixin
  **********************/
-export const MP_APPID = 'wx9d0f652e42541e26';
-export const MP_APP_SECRET = '802086a41c9b347b0c8d4e86bd979db5';
+export const MP_APPID = ''; /** 微信appID */
+export const MP_APP_SECRET = ''; /** 微信appSecret */
 
 
 /**********************
@@ -44,6 +44,7 @@ import ICON_UNPAY from '../pages/mine/images/unpay.png'
 import ICON_RECEIVE from '../pages/mine/images/receive.png'
 import ICON_DELIVER from '../pages/mine/images/deliver.png'
 import ICON_COMPLETE from '../pages/mine/images/complete.png'
+
 export const APP_MINE_ORDERS = [{
 		icon: ICON_UNPAY,
 		path: '/pages/orders/list?q=0',

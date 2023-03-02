@@ -51,6 +51,10 @@ image { box-sizing: content-box; }
 /**********************
  ** Background & Colors
  **********************/
+ .bg-theme { background-color: #42b983; }
+ .color-theme { color: #42b983; }
+ 
+ 
 .bg-FFFFFF { background-color: #FFFFFF; }
 .bg-F9F9F9 { background-color: #F9F9F9; }
 .bg-42b983 { background-color: #42b983; }
