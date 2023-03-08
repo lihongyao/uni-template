@@ -1,5 +1,10 @@
 {
 	"pages": [{
+		"path": "pages/launch/launch",
+		"style": {
+			"navigationStyle": "custom"
+		}
+	}, {
 		"path": "pages/mine/mine",
 		"style": {
 			"navigationBarTitleText": "个人中心",

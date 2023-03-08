@@ -60,14 +60,14 @@
 	const onGetPhoneNumber = ({ detail }) => {
 		const { errMsg, code } = detail;
 		console.log("手机号授权code：", code);
-		
+
 		Utils.loading("处理中...");
 		setTimeout(() => {
 			uni.hideLoading();
 			Bus.$emit("BINDED_PHONE");
 			Utils.pop();
 		}, 1000);
-		
+
 		if (/ok/.test(errMsg)) {
 			// -- 更新手机号
 			// Api.user.bindPhone({ code }).then(r => {
@@ -78,7 +78,12 @@
 		}
 	}
 	const onBack = () => {
-		Utils.pop();
+		const pages = getCurrentPages();
+		if (pages.length > 1) {
+			Utils.pop();
+		} else {
+			Utils.reLaunch("/pages/index/index")
+		}
 	}
 </script>
 
