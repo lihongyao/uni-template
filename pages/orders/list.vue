@@ -3,9 +3,11 @@
 	import { reactive, watch } from 'vue';
 	import service from '@/service';
 	import Utils from '@/utils';
-	import vLoading from '@/components/@lgs/loading/loading.vue';
-	import vNoData from '@/components/@lgs/no-data/no-data.vue';
-	import vMenuBar from '@/components/@lgs/menu-bar/menu-bar.vue';
+	import vLoading from '@/components/@lgs/Loading/Loading.vue';
+	import vNoData from '@/components/@lgs/NoData/NoData.vue';
+	import vMenuBar from '@/components/@lgs/MenuBar/MenuBar.vue';
+	import vScrollList from '@/components/@lgs/ScrollList/ScrollList.vue';
+	import vLoadMore from '@/components/@lgs/LoadMore/LoadMore.vue';
 	import vListItem from './list-item.vue';
 
 	// -- constants
@@ -21,49 +23,51 @@
 	const state = reactive({
 		key: undefined,
 		list: null,
+		current: 1,
 		hasMore: false,
-		page: 1,
-		isFirstIn: true,
+		isLoading: false,
+		isRefresh: false,
 	});
 	// -- life circles
 	onLoad(({ q = -1 }) => {
 		state.key = +q;
 	})
-	onShow(() => {
-		if (!state.isFirstIn) {
-			reloadList();
-		}
-		state.isFirstIn = false;
-	});
+
 	//  -- watchs
 	watch(() => state.key, (newValue, oldValue) => {
-		reloadList();
+		state.list = null;
+		onRefresh();
 	})
 	// -- methods
-	const reloadList = () => {
-		state.list = null;
-		state.page = 1;
-		getOrders();
-	}
-	const getOrders = () => {
+	const getOrders = (next) => {
+		state.isLoading = true;
 		const orderState = state.key === -1 ? undefined : state.key;
+		// -- 模拟请求
 		setTimeout(() => {
-			state.list = [{}, {}, {}];
-			state.hasMore = false;
-		}, 1000)
-		// Api.order.listByUser({ orderState, pageIndex: state.page, pageSize: 20 }).then(r => {
-		// 	if (state.list === null) {
-		// 		state.list = r.data;
-		// 	} else {
-		// 		state.list = state.list.concat(r.data);
-		// 	}
-		// 	state.hasMore = state.page < r.pageInfo.pages;
-		// })
+			next && next();
+			const data = [{ status: 0 }, { status: 1 }, { status: 2 }, { status: 3 }, { status: 4 }, { status: 0 }, { status: 3 }];
+			if (state.isRefresh) {
+				state.list = data;
+			} else {
+				state.list = state.list.concat(data);
+			}
+			state.isLoading = false;
+			state.hasMore = state.current < 3;
+		}, 500);
+
 	}
 	// -- events
+	const onRefresh = (next) => {
+		console.log("__下拉刷新__");
+		state.current = 1;
+		state.isRefresh = true;
+		getOrders(next);
+	}
 	const onLoadMore = () => {
-		if (state.hasMore) {
-			state.page++;
+		if (state.hasMore && !state.isLoading) {
+			console.log("__上拉加载__");
+			state.current++;
+			state.isRefresh = false;
 			getOrders();
 		}
 	}
@@ -122,35 +126,27 @@
 		<!-- MenuBar End -->
 
 		<!-- List Start -->
-		<view class="list-wrap px-20">
-			<scroll-view class="list" :scroll-y="true" :lower-threshold="20" @scrolltolower="onLoadMore">
-				<template v-if="state.list">
-					<template v-if="state.list.length > 0">
+		<v-scroll-list @refresh="onRefresh" @load="onLoadMore">
+			<template v-if="state.list">
+				<template v-if="state.list.length > 0">
+					<view class="px-20">
 						<block v-for="(item, index) in state.list" :key="index">
 							<v-list-item :data="item" @pay="onPay" @receive="onReceive" @cancel="onCancel" @afterSale="onAfterSale" @evaluate="onEvaluate" />
 						</block>
-						<view class="f28 text-center color-999999 py-40">{{state.hasMore ? '数据加载中...' : '没有更多啦~'}}</view>
-						<view class="space-100"></view>
-					</template>
-					<v-no-data v-else tips="暂无数据~"></v-no-data>
+					</view>
+					<v-load-more v-show="state.list" :hasMore="state.hasMore" />
+					<view class="space-100"></view>
 				</template>
-				<v-loading v-else />
-			</scroll-view>
-		</view>
+				<v-no-data v-else tips="暂无数据~"></v-no-data>
+			</template>
+			<v-loading v-else />
+		</v-scroll-list>
 		<!-- List End -->
 	</view>
 </template>
 
 <style scoped lang="less">
-	.page {
-		height: 100%;
-
-		.list-wrap {
-			height: calc(100% - 80rpx);
-
-			.list {
-				height: 100%;
-			}
-		}
+	:deep(.lg-scroll-list) {
+		height: calc(100vh - 80rpx);
 	}
 </style>

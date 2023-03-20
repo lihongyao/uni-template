@@ -7,6 +7,8 @@ const APP_HOST_TES = '测试环境';
 const APP_HOST_PRO = '生产环境';
 
 export const APP_HOST = APP_HOST_DEV;
+export const APP_SCOKET_HOST = APP_HOST.replace(/https?/, "ws");
+
 
 
 /**********************
@@ -20,6 +22,9 @@ export const APP_KEY_SEARCH_HISTORY = 'APP_KEY_SEARCH_HISTORY'; /** 搜索历史
  ** Others
  **********************/
 export const APP_OSS_HOST = ""
+export const APP_H5_URI = ""
+export const APP_UPLOAD_IMAGE_URI = APP_HOST + '图片上传地址'
+export const APP_UPLOAD_VOICE_URI = APP_HOST + '音频上传地址';
 
 
 /**********************
@@ -32,6 +37,10 @@ export const MP_APP_SECRET = ''; /** 微信appSecret */
 /**********************
  ** Some For Project.
  **********************/
+export const EDITOR_TOOLBARKEYS = [
+	"bold", "italic", "underline", "ol", "ul", "undo", "redo", "clear"
+]
+
 export const APP_MINE_FNS = [
 	{ label: '地址管理', path: '/pages/address/list' },
 	{ label: '我的客服', path: '' },
@@ -40,10 +49,10 @@ export const APP_MINE_FNS = [
 	{ label: '隐私政策', path: '/pages/web-page/web-page?q=2' },
 ]
 
-import ICON_UNPAY from '../pages/mine/images/unpay.png'
-import ICON_RECEIVE from '../pages/mine/images/receive.png'
-import ICON_DELIVER from '../pages/mine/images/deliver.png'
-import ICON_COMPLETE from '../pages/mine/images/complete.png'
+import ICON_UNPAY from '@/pages/TabPages/images/unpay.png'
+import ICON_RECEIVE from '@/pages/TabPages/images/receive.png'
+import ICON_DELIVER from '@/pages/TabPages/images/deliver.png'
+import ICON_COMPLETE from '@/pages/TabPages/images/complete.png'
 
 export const APP_MINE_ORDERS = [{
 		icon: ICON_UNPAY,

@@ -123,7 +123,7 @@
 			<view class="form-item flex-h-between border-bottom py-30 align-items-start">
 				<view class="label text-justify  mr-60">所在地区</view>
 				<view class="pr-40 color-202020 flex-1 flex-h-between" @click="onChooseLocation">
-					<view v-if="state.formData.area" class="flex-1 flex-shrink">{{state.formData.area.name}}</view>
+					<view v-if="state.formData.area" class="flex-1 flex-shrink f28">{{state.formData.area.name}}</view>
 					<view v-else class="flex-1 flex-shrink color-999999 f28">请选择</view>
 					<image class="icon-right ml-20" src="./images/icon_right.png" />
 				</view>
@@ -153,14 +153,24 @@
 
 <style scoped lang="less">
 	.page {
+
 		:deep(.uni-easyinput__content) {
+			border: none;
+			border-radius: 0;
+
+			.uniui-clear {
+				font-size: 40rpx !important;
+			}
+
 			input {
-				padding: 0;
+				padding: 0 !important;
 				margin: 0;
 				font-size: 28rpx;
 				color: #202020;
 			}
+
 		}
+
 
 		.icon-right {
 			width: 20rpx;

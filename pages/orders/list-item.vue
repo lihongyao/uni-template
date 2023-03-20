@@ -14,19 +14,18 @@
 				<text>UHAHV05271677647582944</text>
 			</view>
 			<!-- 状态 -->
-			<view class="status unpay flex-h-center f20 rounded-16">待支付</view>
-			<!-- <view v-if="data.orderState === 0" class="status unpay flex-h-center f20 rounded-16">待支付</view>
-			<view v-if="data.orderState === 1" class="status unsure flex-h-center f20 rounded-16">待发货</view>
-			<view v-if="data.orderState === 2" class="status unvisit flex-h-center f20 rounded-16">待收货</view>
-			<view v-if="data.orderState === 3" class="status completed flex-h-center f20 rounded-16">已完成</view>
-			<view v-if="data.orderState === 4" class="status cancel flex-h-center f20 rounded-16">已取消</view> -->
+			<view v-if="data.status === 0" class="status unpay flex-h-center f20 rounded-16">待支付</view>
+			<view v-if="data.status === 1" class="status unsure flex-h-center f20 rounded-16">待发货</view>
+			<view v-if="data.status === 2" class="status unvisit flex-h-center f20 rounded-16">待收货</view>
+			<view v-if="data.status === 3" class="status completed flex-h-center f20 rounded-16">已完成</view>
+			<view v-if="data.status === 4" class="status cancel flex-h-center f20 rounded-16">已取消</view>
 		</view>
 		<view class="flex-h-end">
-			<view class="order-button rounded-28 flex-h-center f26 color-202020 v" @click.stop="emits('cancel', '订单编号')">取消订单</view>
-			<view class="order-button rounded-28 flex-h-center f26 color-202020 v ml-20" @click.stop="emits('evaluate', '订单编号')">立即评价</view>
-			<view class="order-button rounded-28 flex-h-center f26 color-FFFFFF bg-theme ml-20" @click.stop="emits('pay', '订单编号')">立即支付</view>
-			<view class="order-button rounded-28 flex-h-center f26 color-FFFFFF bg-theme ml-20" @click.stop="emits('afterSale', '订单编号')">申请售后</view>
-			<view class="order-button rounded-28 flex-h-center f26 color-FFFFFF bg-theme ml-20" @click.stop="emits('receive', '订单编号')">确认收货</view>
+			<view v-if="[0, 1].includes(data.status)" class="order-button rounded-28 flex-h-center f26 color-202020 v" @click.stop="emits('cancel', '订单编号')">取消订单</view>
+			<view v-if="[3].includes(data.status)" class="order-button rounded-28 flex-h-center f26 color-202020 v ml-20" @click.stop="emits('evaluate', '订单编号')">立即评价</view>
+			<view v-if="[0].includes(data.status)" class="order-button rounded-28 flex-h-center f26 color-FFFFFF bg-theme ml-20" @click.stop="emits('pay', '订单编号')">立即支付</view>
+			<view v-if="[3].includes(data.status)" class="order-button rounded-28 flex-h-center f26 color-FFFFFF bg-theme ml-20" @click.stop="emits('afterSale', '订单编号')">申请售后</view>
+			<view v-if="[2].includes(data.status)" class="order-button rounded-28 flex-h-center f26 color-FFFFFF bg-theme ml-20" @click.stop="emits('receive', '订单编号')">确认收货</view>
 		</view>
 	</view>
 

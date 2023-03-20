@@ -14,8 +14,9 @@
 	// -- state
 	const url = ref('');
 	// -- life circles
-	onLoad(({ q }) => {
-		url.value = WEBPAGEs[q].url;
+	onLoad(({ q, uri }) => {
+
+		url.value = uri ? decodeURIComponent(uri) : WEBPAGEs[q].url
 	});
 </script>
 

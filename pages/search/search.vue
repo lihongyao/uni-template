@@ -1,8 +1,8 @@
 <script setup>
 	import { reactive, onMounted } from 'vue';
 	import { APP_KEY_SEARCH_HISTORY } from '@/constants';
-	import vLoadMore from '@/components/@lgs/load-more/load-more.vue';
-	import vNoData from '@/components/@lgs/no-data/no-data.vue';
+	import vLoadMore from '@/components/@lgs/LoadMore/LoadMore.vue';
+	import vNoData from '@/components/@lgs/NoData/NoData.vue';
 
 	import service from '@/service';
 
@@ -104,7 +104,7 @@
 		<!-- Search Start -->
 		<view class="search-bar-wrap px-40 fixed-top bg-FFFFFF">
 			<view class="search-bar rounded-36 pl-24 flex-h-between ">
-				<image class="icon-48x48" src="../../components/@lgs/search-bar/images/icon_search.png"></image>
+				<image class="icon-48x48" src="../../components/@lgs/SearchBar/images/icon_search.png"></image>
 				<input class="uni-input flex-1 pl-20" v-model="state.keyword" placeholder="请输入搜索关键字" confirm-type="search" :placeholder-style="placeholderStyle" @confirm="onSearch" @input="onInput" />
 				<view class="close-wrap flex-h-center" @click="onClear">
 					<image v-if="state.keyword" class="icon-48x48" src="../../static/images/icon_clear.png"></image>

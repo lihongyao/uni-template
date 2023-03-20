@@ -1,11 +1,17 @@
 <script setup>
 	import { defineProps } from 'vue';
 	import defaultLogo from '@/static/logo.png';
+
 	const props = defineProps({
+		/** logo */
 		logo: { type: String, default: '' },
+		/** 提示文本　*/
 		tips: { type: String, default: "数据加载中..." },
+		/** 是否展示提示文本　*/
 		showTips: { type: Boolean, default: true },
-		top: { type: Number, default: 100 },
+		/** 距离顶部的距离　*/
+		top: { type: Number, default: 500 },
+		/** 边框颜色 */
 		borderColor: { type: String, default: "#42b983" }
 	})
 </script>
@@ -48,9 +54,9 @@
 			height: 100%;
 			left: 0;
 			top: 0;
-			border-width: 6rpx 0 0 0;
+			border-width: 6rpx 6rpx 0 0;
 			border-style: solid;
-			border-color: var(--border-color);
+			border-color: var(--border-color) transparent transparent transparent;
 			border-radius: 50%;
 			-webkit-animation: rotate 1s linear infinite;
 			animation: rotate 1s linear infinite;

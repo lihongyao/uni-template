@@ -1,9 +1,9 @@
 <script setup>
 	import { reactive, onMounted } from 'vue';
-
+	import Utils from '@/utils';
 	// -- state 
 	const state = reactive({
-		count: 3,
+		count: 2,
 		statusBarHeight: 0,
 		titleBarHeight: 0,
 		countHeight: 0,
@@ -18,6 +18,13 @@
 		timedown();
 	});
 	// -- methods
+	const jump = () => {
+		if (state.isLogin) {
+			Utils.reLaunch("/pages/TabPages/index");
+		} else {
+			Utils.push("/pages/auth/auth");
+		}
+	}
 	const login = () => {
 		// -- 执行登录，获取code
 		uni.login({
@@ -25,10 +32,14 @@
 			scopes: 'auth_base',
 			success: (loginRes) => {
 				const code = loginRes.code;
-				state.isLogin = false;
+				state.isLogin = true;
+				if (state.count === 0) {
+					jump();
+				}
 			}
 		})
 	}
+
 	const calcs = () => {
 		// -- 获取状态栏高度
 		const { statusBarHeight, screenWidth } = uni.getWindowInfo();
@@ -49,12 +60,8 @@
 				// -- 清除定时器
 				clearInterval(timer);
 				// -- 根据登录态决定跳转页面
-				if (state.isLogin) {
-
-				} else {
-					uni.reLaunch({
-						url: "/pages/auth/auth",
-					});
+				if (state.isLogin !== null) {
+					jump();
 				}
 			}
 		}, 1000);

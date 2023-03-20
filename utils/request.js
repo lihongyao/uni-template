@@ -29,15 +29,16 @@ const request = (options) => {
 		if (!/^http(s?)/.test(url)) {
 			url = `${APP_HOST}${url}`
 		};
-
-		// 发送请求
+		// -- 获取token
+		const token = uni.getStorageSync(APP_KEY_TOKEN);
+		// -- 发送请求
 		uni.request({
 			url,
 			method,
 			data,
 			timeout: 20 * 1000,
 			header: {
-				"Authorization": 'Bearer ' + uni.getStorageSync(APP_KEY_TOKEN),
+				"Authorization": 'Bearer ' + token.token,
 				...headers
 			},
 			success: (response) => {
@@ -46,6 +47,8 @@ const request = (options) => {
 					switch (code) {
 						case 200:
 							resolve(response.data);
+							break;
+						case 401:
 							break;
 						case 8888:
 							// 是否正在刷新token
@@ -74,6 +77,8 @@ const request = (options) => {
 						default:
 							uni.showToast({ title: msg || '服务器忙，请稍后再试！', icon: 'none' });
 					}
+				} else {
+					uni.showToast({ title: response.data.error, icon: 'none' })
 				}
 			},
 			fail: (err) => {

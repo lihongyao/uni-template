@@ -82,7 +82,7 @@
 		if (pages.length > 1) {
 			Utils.pop();
 		} else {
-			Utils.reLaunch("/pages/index/index")
+			Utils.reLaunch("/pages/TabPages/index")
 		}
 	}
 </script>
@@ -92,7 +92,7 @@
 	<view class="page">
 		<view class="wrap rounded-24 bg-FFFFFF pt-70 px-48 mx-auto flex-v-center justify-content-start">
 			<!-- logo -->
-			<image class="icon-160x160" src="../../static/logo.png"></image>
+			<image class="icon-160x160" src="@/static/logo.png"></image>
 			<!-- 店铺名称 -->
 			<view class="f32 f-600 lh-44 mt-20" style="color: #202020;">产品名称</view>
 			<!-- 获取用户信息 -->
@@ -105,7 +105,7 @@
 			<template v-else>
 				<view class="desc">为了我们更好的服务您，请使用微信快捷登录获取您的手机号码</view>
 				<button class="button flex-h-center" open-type="getPhoneNumber" @getphonenumber="onGetPhoneNumber">
-					<image class="icon-44x44 mr-8" src="https://qn.d-dou.com/dcep/dbean/0ee92ad7a1b6443e87a709e88a967931m6eurq.png"></image>
+					<image class="icon-44x44 mr-8" src="./icon_weixin.png"></image>
 					<text>微信快捷登录</text>
 				</button>
 			</template>

@@ -1,0 +1,130 @@
+@font-face {
+  font-family: "iconfont"; /* Project id 3940375 */
+  src: url('//at.alicdn.com/t/c/font_3940375_fwo8xhlhloj.woff2?t=1678419655257') format('woff2'),
+       url('//at.alicdn.com/t/c/font_3940375_fwo8xhlhloj.woff?t=1678419655257') format('woff'),
+       url('//at.alicdn.com/t/c/font_3940375_fwo8xhlhloj.ttf?t=1678419655257') format('truetype');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-Undo:before {
+  content: "\e8a0";
+}
+
+.icon-Redo:before {
+  content: "\e8ab";
+}
+
+.icon-fengexian:before {
+  content: "\ec7f";
+}
+
+.icon-fontbgcolor:before {
+  content: "\e678";
+}
+
+.icon-riqi:before {
+  content: "\e67c";
+}
+
+.icon-font-colors:before {
+  content: "\e7f7";
+}
+
+.icon-zitishangbiao:before {
+  content: "\ec83";
+}
+
+.icon-zitixiabiao:before {
+  content: "\ec85";
+}
+
+.icon-daibanshixiang:before {
+  content: "\e6a5";
+}
+
+.icon-shanchu:before {
+  content: "\e8b6";
+}
+
+.icon-bold:before {
+  content: "\e6d9";
+}
+
+.icon-strikethrough:before {
+  content: "\e729";
+}
+
+.icon-image:before {
+  content: "\e6f5";
+}
+
+.icon-chuizhijianju-:before {
+  content: "\e640";
+}
+
+.icon-shuipingjianju-:before {
+  content: "\e641";
+}
+
+.icon-richtextbulletedlist:before {
+  content: "\e71a";
+}
+
+.icon-richtextnumberedlist:before {
+  content: "\e71b";
+}
+
+.icon-underline:before {
+  content: "\e72b";
+}
+
+.icon-italic:before {
+  content: "\e6f8";
+}
+
+.icon-remove_formatting:before {
+  content: "\e717";
+}
+
+.icon-todos:before {
+  content: "\e664";
+}
+
+.icon-indent:before {
+  content: "\eb50";
+}
+
+.icon-outdent:before {
+  content: "\eb6d";
+}
+
+.icon-fontsize:before {
+  content: "\e7a1";
+}
+
+.icon-font:before {
+  content: "\e704";
+}
+
+.icon-juzhongduiqi:before {
+  content: "\ec80";
+}
+
+.icon-youduiqi:before {
+  content: "\ec82";
+}
+
+.icon-zuoduiqi:before {
+  content: "\ec88";
+}
+
+.icon-zuoyouduiqi:before {
+  content: "\ec87";
+}

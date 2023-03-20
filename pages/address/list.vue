@@ -1,8 +1,8 @@
 <script setup>
 	import { reactive, onMounted, getCurrentInstance } from 'vue';
 	import { onLoad, onShow } from "@dcloudio/uni-app";
-	import vLoading from '@/components/@lgs/loading/loading.vue';
-	import vNoData from '@/components/@lgs/no-data/no-data.vue';
+	import vLoading from '@/components/@lgs/Loading/Loading.vue';
+	import vNoData from '@/components/@lgs/NoData/NoData.vue';
 	import Tools from 'lg-tools';
 	import Utils from '@/utils';
 	// -- state

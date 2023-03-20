@@ -1,15 +1,14 @@
 <script setup>
+	import Utils from '@/utils/index.js';
 	const onGoHome = () => {
-		uni.reLaunch({
-			url: "/pages/index/index"
-		})
+		Utils.reLaunch("/pages/TabPages/index");
 	}
 </script>
 <template>
 
 	<view class="page">
 		<view class=" text-center mb-30">
-			<image class=" icon-80x80" src="../../static/images/pay_success.png"></image>
+			<image class="icon-80x80" src="@/static/images/pay_success.png"></image>
 		</view>
 		<view class=" text-center ff-DIN-Bold f64 color-42b983 ls-2">
 			支付成功

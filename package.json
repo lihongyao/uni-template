@@ -3,7 +3,8 @@
     "crypto-js": "^4.1.1",
     "js-base64": "^3.7.5",
     "lg-bus": "^1.0.2",
-    "lg-tools": "^1.0.53",
-    "lg-validator": "^1.0.6"
+    "lg-tools": "^2.0.0",
+    "lg-validator": "^1.0.6",
+    "pinia": "^2.0.33"
   }
 }

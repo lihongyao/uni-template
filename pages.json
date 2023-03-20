@@ -5,7 +5,7 @@
 			"navigationStyle": "custom"
 		}
 	}, {
-		"path": "pages/mine/mine",
+		"path": "pages/TabPages/mine",
 		"style": {
 			"navigationBarTitleText": "个人中心",
 			"navigationStyle": "custom"
@@ -16,7 +16,7 @@
 			"navigationBarTitleText": "支付成功"
 		}
 	}, {
-		"path": "pages/index/index",
+		"path": "pages/TabPages/index",
 		"style": {
 			"navigationBarTitleText": "水果销售"
 		}
@@ -26,7 +26,7 @@
 			"navigationBarTitleText": "意见反馈"
 		}
 	}, {
-		"path": "pages/categories/categories",
+		"path": "pages/TabPages/categories",
 		"style": {
 			"navigationBarTitleText": "分类列表"
 		}
@@ -51,7 +51,7 @@
 			"navigationBarTitleText": "地址管理"
 		}
 	}, {
-		"path": "pages/shop-cart/shop-cart",
+		"path": "pages/TabPages/shop-cart",
 		"style": {
 			"navigationBarTitleText": "购物车"
 		}
@@ -72,25 +72,25 @@
 		"borderStyle": "black",
 		"backgroundColor": "#ffffff",
 		"list": [{
-				"pagePath": "pages/index/index",
+				"pagePath": "pages/TabPages/index",
 				"iconPath": "static/images/icon_home.png",
 				"selectedIconPath": "static/images/icon_home_sel.png",
 				"text": "首页"
 			},
 			{
-				"pagePath": "pages/categories/categories",
+				"pagePath": "pages/TabPages/categories",
 				"iconPath": "static/images/icon_categories.png",
 				"selectedIconPath": "static/images/icon_categories_sel.png",
 				"text": "分类"
 			},
 			{
-				"pagePath": "pages/shop-cart/shop-cart",
+				"pagePath": "pages/TabPages/shop-cart",
 				"iconPath": "static/images/icon_shopcar.png",
 				"selectedIconPath": "static/images/icon_shopcar_sel.png",
 				"text": "购物车"
 			},
 			{
-				"pagePath": "pages/mine/mine",
+				"pagePath": "pages/TabPages/mine",
 				"iconPath": "static/images/icon_mine.png",
 				"selectedIconPath": "static/images/icon_mine_sel.png",
 				"text": "我的"
