@@ -1,3 +1,4 @@
+
 /**********************
  ** Request Uris.
  **********************/
@@ -7,8 +8,7 @@ const APP_HOST_TES = '测试环境';
 const APP_HOST_PRO = '生产环境';
 
 export const APP_HOST = APP_HOST_DEV;
-export const APP_SCOKET_HOST = APP_HOST.replace(/https?/, "ws");
-
+export const APP_SCOKET_HOST = APP_HOST.replace(/https?/, /https/.test(APP_HOST) ? 'wss' : 'ws');
 
 
 /**********************
