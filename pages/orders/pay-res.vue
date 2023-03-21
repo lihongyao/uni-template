@@ -1,3 +1,10 @@
+<!--
+ * @Author: Lee
+ * @Date: 2023-03-08 10:42:07
+ * @LastEditors: Lee
+ * @LastEditTime: 2023-03-21 09:30:33
+ * @Description: 
+-->
 <script setup>
 	import Utils from '@/utils/index.js';
 	const onGoHome = () => {
@@ -10,7 +17,7 @@
 		<view class=" text-center mb-30">
 			<image class="icon-80x80" src="@/static/images/pay_success.png"></image>
 		</view>
-		<view class=" text-center ff-DIN-Bold f64 color-42b983 ls-2">
+		<view class=" text-center ff-DIN-Bold f64 color-theme ls-2">
 			支付成功
 		</view>
 

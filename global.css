@@ -1,5 +1,5 @@
 /**********************
- ** Define Custom Fonts
+ ** Define Fonts
  **********************/
 @font-face {
 	font-family: "DIN-Bold";
@@ -65,11 +65,13 @@ image { box-sizing: content-box; }
 .bg-theme { background-color: #42b983; }
 .bg-B8BDC8 { background-color: #B8BDC8; }
  
-.color-theme  { color: #42b983; } /** 主色 */
+.color-theme    { color: #42b983; } /** 主色 */
 .color-theme-30 { color: rgba(19,37,74,0.3); }
 
 
+.color-black-30 { color: rgba(0,0,0,0.30); }
 .color-black-36 { color: rgba(0,0,0,0.36); }
+
 .color-white-50 { color: rgba(255,255,255, .5); }
 
 
@@ -78,7 +80,6 @@ image { box-sizing: content-box; }
  
 .bg-FFFFFF { background-color: #FFFFFF; }
 .bg-F9F9F9 { background-color: #F9F9F9; }
-.bg-42b983 { background-color: #42b983; }
 .bg-EAEAEE { background-color: #EAEAEE; }
 
 .color-111111 { color: #111111; }
@@ -91,7 +92,6 @@ image { box-sizing: content-box; }
 .color-999999 { color: #999999; }
 .color-FFFFFF { color: #FFFFFF; }
 .color-202020 { color: #202020; }
-.color-42b983 { color: #42b983; }
 .color-A5A5A5 { color: #A5A5A5; }
 .color-FF004C { color: #FF004C; }
 .color-8C8C8C { color: #8C8C8C; }
