@@ -196,138 +196,6 @@ export default class Utils {
 		// #endif
 	}
 
-	/**
-	 * 打开地图选择位置。
-	 */
-	static chooseLocation() {
-		return new Promise((resolve) => {
-			uni.chooseLocation({
-				success: function(res) {
-					if (/ok/.test(res.errMsg) && res.name) {
-						delete res.errMsg;
-						resolve(res);
-					} else {
-						Utils.toast("请选择地址并点击确定~");
-					}
-				},
-				fail() {
-					// 调用失败 / 表示用户未授权
-					// 判断是否是第1次进入 ，如果是第1次进入，在拒绝授权后不再弹框
-					if (!uni.getStorageSync('XXX_UN_FIRSTIN')) {
-						uni.setStorageSync('XXX_UN_FIRSTIN', true);
-						return;
-					}
-					uni.getSetting({
-						success(res) {
-							// 判断用户是否授权获取定位信息
-							if (!res.authSetting['scope.userLocation']) {
-								uni.showModal({
-									title: "授权获取你的位置信息",
-									content: "定位，获取用户距离",
-									success(r) {
-										if (r.confirm) {
-											// 如果用户同意授权地理信息，则打开授权设置页面，判断用户的操作
-											uni.openSetting({
-												success(data) {
-													// 如果用户授权了地理信息在， 则提示授权成功
-													if (data.authSetting['scope.userLocation']) {
-														uni.chooseLocation({
-															success(res) {
-																if (/ok/.test(res.errMsg) && res.name) {
-																	delete res.errMsg;
-																	resolve(res);
-																} else {
-																	Utils.toast("请选择地址列表并点击确定~");
-																}
-															}
-														})
-													} else {
-														console.log('[Utils.chooseLocation]：用户未授权')
-													}
-												}
-											})
-										} else {
-											console.log('[Utils.chooseLocation]：用户点击取消授权')
-										}
-									}
-								})
-							}
-						},
-						fail() {
-							console.log('[Utils.chooseLocation]：拉取用户授权配置信息失败')
-						}
-					})
-				}
-			});
-		})
-	}
-
-	/**
-	 * 获取定位信息
-	 */
-	static getLocation() {
-		return new Promise((resolve) => {
-			// 直接获取用户定位信息 / 获取失败则做后续处理
-			uni.getLocation({
-				success({ errMsg, latitude, longitude }) {
-					if (/ok/.test(errMsg)) {
-						resolve({ lat: latitude, lng: longitude });
-					} else {
-						resolve({});
-					}
-				},
-				fail() {
-					// 调用失败 / 表示用户未授权
-					// 判断是否是第1次进入 ，如果是第1次进入，在拒绝授权后不再弹框
-					if (!uni.getStorageSync('UN_FIRSTIN')) {
-						uni.setStorageSync('UN_FIRSTIN', true);
-						resolve({});
-						return;
-					}
-					// 如果不是第1次进入，再次弹框让用户授权
-					uni.getSetting({
-						success(res) {
-							// 判断用户是否授权获取定位信息
-							if (!res.authSetting['scope.userLocation']) {
-								uni.showModal({
-									title: "授权获取你的位置信息",
-									content: "用于定位当前位置和商家的距离",
-									success(r) {
-										if (r.confirm) {
-											// 如果用户同意授权地理信息，则打开授权设置页面，判断用户的操作
-											uni.openSetting({
-												success(data) {
-													// 如果用户授权了地理信息在， 则提示授权成功
-													if (data.authSetting['scope.userLocation']) {
-														uni.getLocation({
-															success({ errMsg, latitude, longitude }) {
-																if (/ok/.test(errMsg)) {
-																	resolve({ lat: latitude, lng: longitude });
-																} else {
-																	resolve({});
-																}
-															},
-														})
-													} else {
-														resolve({});
-													}
-												}
-											})
-										} else {
-											resolve({});
-										}
-									}
-								})
-							}
-						},
-						fail() {
-							resolve({});
-						}
-					})
-				}
-			})
-		})
-	}
 
 	/**
 	 * 订阅授权
@@ -437,48 +305,6 @@ export default class Utils {
 		})
 	}
 
-	/**
-	 * 
-	 * @param {base64} data
-	 */
-	static saveImageToPhotosAlbum(data) {
-		console.log("__saveImageToPhotosAlbum__");
-		// -- 获取用户当前权限
-		uni.getSetting({
-			success(res) {
-				// -- 验证用户是否授权
-				if (res.authSetting['scope.writePhotosAlbum']) {
-					// -- 已授权
-					console.log("用户已授权");
-				} else {
-					// -- 未授权
-					uni.authorize({
-						scope: 'scope.writePhotosAlbum',
-						success() {
-							console.log("授权了");
-						},
-						fail() {
-							uni.showModal({
-								title: "请打开保存相册权限，再点击保存图片",
-								content: "用于定位当前位置和商家的距离",
-								success(r) {
-									if (r.confirm) {
-										uni.openSetting({
-											withSubscriptions: true,
-											success(res) {
-												console.log(res);
-											}
-										})
-									}
-								}
-							})
-						}
-					})
-				}
-			}
-		})
-	}
-
 
 	/**
 	 * 权限校验
@@ -488,7 +314,7 @@ export default class Utils {
 	 * @param {String} options.content 提示框内容
 	 */
 	static checkAuthorizeWithScope(scope, options = {}) {
-		const { title = '温馨提示', content = `请求授权：${scope}` } = options;
+		const { title = '授权申请', content = `请求授权：${scope}` } = options;
 		return new Promise(resolve => {
 			uni.getSetting({
 				success: (res) => {
@@ -506,7 +332,12 @@ export default class Utils {
 											success(res) {
 												if (res.authSetting[scope]) {
 													resolve();
+												} else {
+													console.log("「checkAuthorizeWithScope」：用户拒绝授权");
 												}
+											},
+											fail: (error) => {
+												console.log("「checkAuthorizeWithScope」：", error);
 											}
 										});
 									}
@@ -515,13 +346,20 @@ export default class Utils {
 						}
 					} else {
 						// -- 初次授权
+						console.log(scope);
 						uni.authorize({
 							scope,
 							success: () => {
 								resolve();
+							},
+							fail: (error) => {
+								console.log("「checkAuthorizeWithScope」：", error);
 							}
 						})
 					}
+				},
+				fail: (error) => {
+					console.log("「checkAuthorizeWithScope」：", error);
 				}
 			})
 		});

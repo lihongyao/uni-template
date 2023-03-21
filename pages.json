@@ -1,5 +1,15 @@
 {
 	"pages": [{
+		"path": "pages/address/list",
+		"style": {
+			"navigationBarTitleText": "地址管理"
+		}
+	}, {
+		"path": "pages/address/action",
+		"style": {
+			"navigationBarTitleText": "地址管理"
+		}
+	}, {
 		"path": "pages/launch/launch",
 		"style": {
 			"navigationStyle": "custom"
@@ -39,16 +49,6 @@
 		"path": "pages/orders/list",
 		"style": {
 			"navigationBarTitleText": "订单列表"
-		}
-	}, {
-		"path": "pages/address/list",
-		"style": {
-			"navigationBarTitleText": "地址管理"
-		}
-	}, {
-		"path": "pages/address/action",
-		"style": {
-			"navigationBarTitleText": "地址管理"
 		}
 	}, {
 		"path": "pages/TabPages/shop-cart",

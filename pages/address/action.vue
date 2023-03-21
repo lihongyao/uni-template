@@ -3,6 +3,21 @@
 	import { reactive, getCurrentInstance } from "vue";
 	import Utils from '@/utils/index.js';
 	import Validator from 'lg-validator';
+	/**
+	注意：使用chooseLocation需在mainfest.json文件（切换至源码视图）中添加如下配置
+	"mp-weixin": {
+		...
+		"permission": {
+			"scope.userLocation": {
+				"desc": "用于定位选择位置"
+			}
+		},
+		"requiredPrivateInfos": [
+			"getLocation",
+			"chooseLocation",
+		]
+	}
+	**/
 
 	// -- constants
 	const placeholderStyle = "color:#999999; font-size: 28rpx"
@@ -99,9 +114,36 @@
 		}
 	}
 	const onChooseLocation = () => {
-		Utils.chooseLocation().then(res => {
-			state.formData.area = res;
+		// 1. 获取定位示例
+		/*Utils.checkAuthorizeWithScope("scope.userLocation", {
+			content: "需要获取你的地理位置，用于定位选择位置"
+		}).then(() => {
+			uni.getLocation({
+				success({ errMsg, latitude, longitude }) {
+					if (/ok/.test(errMsg)) {
+						const coordinate = { lat: latitude, lng: longitude };
+						console.log(coordinate);
+					}
+				},
+			})
+		})*/
+		Utils.getLocation().then(r => {
+			console.log(r);
 		})
+		Utils.checkAuthorizeWithScope("scope.userLocation", {
+			content: "需要获取你的地理位置，用于定位选择位置"
+		}).then(() => {
+			uni.chooseLocation({
+				success(res) {
+					if (/ok/.test(res.errMsg) && res.name) {
+						delete res.errMsg;
+						state.formData.area = res;
+					} else {
+						Utils.toast("请先选择地址再点击确定");
+					}
+				}
+			})
+		});
 	}
 </script>
 
