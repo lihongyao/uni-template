@@ -5,26 +5,38 @@
 	const state = reactive({
 		visible: false,
 		options: {
-			title: '温馨提示',
-			message: '',
-			showCancelButton: true,
-			cancelButtonText: "取消",
-			sureButtonText: "确定",
-			cancelButtonBgColor: "#D0D0D0",
-			sureButtonBgColor: "#1946BB"
+			title: '温馨提示', // 标题
+			content: '', // 提示信息
+			showCancel: true, // 是否显示取消按钮
+			cancelText: "取消", // 取消按钮文本
+			confirmText: "确定", // 确认按钮文本内容
+			cancelBgColor: "#D0D0D0", // 取消按钮背景色
+			confirmBgColor: "#1946BB" // 确认按钮背景色
 		}
 	});
 
 	// -- methods
+	/**
+	 * 显示提示框
+	 */
 	const open = (options) => {
-		state.options = Object.assign({}, state.options, options);
+		const defaultOptions = {
+			title: '温馨提示',
+			content: '',
+			showCancel: true,
+			cancelText: "取消",
+			confirmText: "确定",
+			cancelBgColor: "#D0D0D0",
+			confirmBgColor: "#1946BB"
+		}
+		state.options = Object.assign({}, defaultOptions, options);
 		state.visible = true;
 	}
 
 	// -- events 
 	const onSure = () => {
 		state.visible = false;
-		state.options.onSure && state.options.onSure();
+		state.options.onConfirm && state.options.onConfirm();
 	}
 	const onCancel = () => {
 		state.visible = false;
@@ -39,12 +51,12 @@
 	<view class="lg-dialog" :class="{visible: state.visible}">
 		<view class="lg-dialog__wrap">
 			<view class="title">{{state.options.title}}</view>
-			<view class="message">{{state.options.message}}</view>
+			<view class="content">{{state.options.content}}</view>
 			<view class="actions">
-				<template v-if="state.options.showCancelButton">
-					<view class="button cancel" @click="onCancel" :style="'--cancel-bg-color:'+ state.options.cancelButtonBgColor">{{state.options.cancelButtonText}}</view>
+				<template v-if="state.options.showCancel">
+					<view class="button cancel" @click="onCancel" :style="'--cancel-bg-color:'+ state.options.cancelBgColor">{{state.options.cancelText}}</view>
 				</template>
-				<view class="button sure" :class="{alone: !state.options.showCancelButton}" @click="onSure" :style="'--sure-bg-color:'+ state.options.sureButtonBgColor">{{state.options.sureButtonText}}</view>
+				<view class="button sure" :class="{alone: !state.options.showCancel}" @click="onSure" :style="'--sure-bg-color:'+ state.options.confirmBgColor">{{state.options.confirmText}}</view>
 			</view>
 		</view>
 	</view>
@@ -91,7 +103,7 @@
 				font-weight: 600;
 			}
 
-			.message {
+			.content {
 				font-size: 32rpx;
 				line-height: 40rpx;
 				margin-top: 30rpx;

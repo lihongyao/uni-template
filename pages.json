@@ -1,5 +1,10 @@
 {
 	"pages": [{
+		"path": "pages/launch/launch",
+		"style": {
+			"navigationStyle": "custom"
+		}
+	}, {
 		"path": "pages/address/list",
 		"style": {
 			"navigationBarTitleText": "地址管理"
@@ -8,11 +13,6 @@
 		"path": "pages/address/action",
 		"style": {
 			"navigationBarTitleText": "地址管理"
-		}
-	}, {
-		"path": "pages/launch/launch",
-		"style": {
-			"navigationStyle": "custom"
 		}
 	}, {
 		"path": "pages/TabPages/mine",

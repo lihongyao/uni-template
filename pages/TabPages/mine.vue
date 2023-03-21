@@ -40,10 +40,10 @@
 		switch (label) {
 			case "我的客服":
 				dialog.value.open({
-					message: "客服热线：17398888669",
-					sureButtonText: "立即拨打",
-					sureButtonBgColor: "#42b983",
-					onSure: () => {
+					content: "客服热线：17398888669",
+					confirmText: "立即拨打",
+					confirmBgColor: "#42b983",
+					onConfirm: () => {
 						uni.makePhoneCall({ 
 							phoneNumber: '17398888669',
 							fail: () => {

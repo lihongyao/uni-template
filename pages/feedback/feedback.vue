@@ -21,11 +21,11 @@
 		setTimeout(() => {
 			uni.hideLoading();
 			dialog.value.open({
-				message: "我们已收到您的反馈~",
-				sureButtonText: "知道了",
-				sureButtonBgColor: "#42b983",
+				content: "我们已收到您的反馈~",
+				confirmText: "知道了",
+				confirmBgColor: "#42b983",
 				showCancelButton: false,
-				onSure: () => {
+				onConfirm: () => {
 					Utils.pop();
 				}
 			})

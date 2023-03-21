@@ -170,6 +170,7 @@ export default class Utils {
 			})
 		})
 	}
+	
 
 	/**
 	 * 检查是否绑定手机号
