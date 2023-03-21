@@ -1,6 +1,7 @@
 <!-- 参考：https://juejin.cn/post/7166139934036721694#heading-3 -->
 <!-- 1. 使用时 pages.json/tabBar 正常配置 -->
 <!-- 2. 在需要使用的地方引入TabBarStrange，并在onShow中调用 uni.hideTabBar 隐藏原生标签栏 -->
+<!-- 3. 监听 change 事件，可实现跳转拦截 -->
 <script setup>
 	// -- imports 
 	import { onMounted, reactive } from 'vue';
