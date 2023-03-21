@@ -3,7 +3,7 @@
 
 <script setup>
 	import { reactive, onMounted, nextTick } from 'vue';
-	import Loading from '@/components/@lgs/Loading/Loading.vue';
+	import Loading from '@/components/@lgs/Loadings/Loadings.vue';
 	import NoData from '@/components/@lgs/NoData/NoData.vue';
 	import LoadMore from '@/components/@lgs/LoadMore/LoadMore.vue';
 	import service from '@/service';

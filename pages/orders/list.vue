@@ -3,7 +3,7 @@
 	import { reactive, watch } from 'vue';
 	import service from '@/service';
 	import Utils from '@/utils';
-	import vLoading from '@/components/@lgs/Loading/Loading.vue';
+	import vLoading from '@/components/@lgs/Loadings/Loadings.vue';
 	import vNoData from '@/components/@lgs/NoData/NoData.vue';
 	import vMenuBar from '@/components/@lgs/MenuBar/MenuBar.vue';
 	import vScrollList from '@/components/@lgs/ScrollList/ScrollList.vue';

@@ -127,9 +127,7 @@
 				},
 			})
 		})*/
-		Utils.getLocation().then(r => {
-			console.log(r);
-		})
+
 		Utils.checkAuthorizeWithScope("scope.userLocation", {
 			content: "需要获取你的地理位置，用于定位选择位置"
 		}).then(() => {
