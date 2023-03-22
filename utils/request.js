@@ -38,7 +38,7 @@ const request = (options) => {
 			data,
 			timeout: 20 * 1000,
 			header: {
-				"Authorization": 'Bearer ' + token.token,
+				"Authorization": 'Bearer ' + token,
 				...headers
 			},
 			success: (response) => {

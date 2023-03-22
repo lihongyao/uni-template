@@ -123,44 +123,24 @@ export default class Utils {
 		})
 	}
 
-
 	/**
-	 * 执行登录
-	 * @param {Function} login 登录接口函数
-	 * @param {Function} editApiFn 编辑用户信息接口函数
+	 * 微信登录
+	 * @param {Object} loginFn
+	 * @param {Object} shareCode
 	 */
-	static login(loginFn, eidt, shareCode) {
+	static login(loginFn, shareCode) {
 		return new Promise((resolve, reject) => {
 			uni.login({
 				provider: "weixin",
-				scopes: "auth_base", // 静默授权
+				scopes: "auth_base",
 				withCredentials: true,
 				success({ code }) {
 					console.log("登录授权code：", code);
-					loginFn && loginFn(code).then(r => {
-						const { isBindPhone, token } = r.data;
+					loginFn && loginFn({ code, shareCode }).then((resp) => {
+						const { isBindPhone, token } = resp.data;
 						uni.setStorageSync(APP_KEY_TOKEN, token);
 						uni.setStorageSync(APP_KEY_PHONE, isBindPhone);
 						resolve(null);
-						// -- 判断用户是否授权获取信息，如果已授权则获取
-						/*
-						uni.getSetting({
-							success(res) {
-								if (res.authSetting['scope.userInfo']) {
-									uni.getUserInfo({
-										provider: 'weixin',
-										withCredentials: true,
-										success: function({ userInfo }) {
-											if (userInfo) {
-												console.log(userInfo);
-											}
-										}
-									});
-								} else {
-									
-								}
-							}
-						})*/
 					})
 				},
 				fail(err) {

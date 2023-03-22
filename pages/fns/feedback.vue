@@ -19,7 +19,7 @@
 		}
 		Utils.loading('处理中...');
 		setTimeout(() => {
-			uni.hideLoading();
+			Utils.hideLoading();
 			dialog.value.open({
 				content: "我们已收到您的反馈~",
 				confirmText: "知道了",

@@ -74,11 +74,11 @@
 				if (res.confirm) {
 					Utils.loading('处理中...');
 					setTimeout(() => {
-						uni.hideLoading();
+						Utils.hideLoading();
 						Utils.pop();
 					}, 1000)
 					// Api.address.remove(addressId).then(() => {
-					// 	uni.hideLoading();
+					// 	Utils.hideLoading();
 					// 	Utils.pop();
 					// });
 				}
@@ -89,11 +89,11 @@
 		if (check()) {
 			Utils.loading('处理中...');
 			setTimeout(() => {
-				uni.hideLoading();
+				Utils.hideLoading();
 				Utils.pop();
 			}, 1000);
 			// Api.address.addOrUpdate(state.formData).then(() => {
-			// 	uni.hideLoading();
+			// 	Utils.hideLoading();
 			// 	Utils.pop();
 			// });
 		}

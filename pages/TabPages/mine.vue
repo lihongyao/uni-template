@@ -1,5 +1,6 @@
 <script setup>
-	import { reactive, onMounted, ref } from 'vue';
+	import { onLoad } from '@dcloudio/uni-app';
+	import { reactive, ref } from 'vue';
 	import Tools from 'lg-tools';
 	import Bus from 'lg-bus';
 	import Utils from '@/utils/index.js';
@@ -18,51 +19,44 @@
 	});
 
 	// -- life circles
-	onMounted(() => {
+	onLoad(() => {
 		// 1. 监听绑定手机
 		Bus.$on("BINDED_PHONE", () => {
 			state.isLogin = true;
+			uni.setStorageSync(APP_KEY_PHONE, true);
 		});
+		// 2. ...
 	})
 
 	// -- events
-	const onOrderItemTap = (url) => {
-		Utils.push(url);
-		/*Utils.checkLogin().then(r => {
-			Utils.push(url);
-		})*/
+	const onOrderItemTap = (path) => {
+		Utils.checkLogin().then(() => {
+			Utils.push(path);
+		})
 	}
 
 
+	const onFnsItemTap = ({ label, path, checkLogin }) => {
+		if (label === "我的客服") {
+			dialog.value.open({
+				content: "客服热线：17398888669",
+				confirmText: "立即拨打",
+				confirmBgColor: "#42b983",
+				onConfirm: () => {
+					uni.makePhoneCall({
+						phoneNumber: '17398888669',
+						fail: () => {
 
-	const onFnsItemTap = ({ label, path }) => {
-		console.log(path);
-		switch (label) {
-			case "我的客服":
-				dialog.value.open({
-					content: "客服热线：17398888669",
-					confirmText: "立即拨打",
-					confirmBgColor: "#42b983",
-					onConfirm: () => {
-						uni.makePhoneCall({
-							phoneNumber: '17398888669',
-							fail: () => {
-
-							}
-						});
-					}
-				})
-				break;
-			case "地址管理":
-			case "意见反馈":
+						}
+					});
+				}
+			})
+		} else if (checkLogin) {
+			Utils.checkLogin().then(() => {
 				Utils.push(path);
-				/*Utils.checkLogin().then(r => {
-					Utils.push(path);
-				})*/
-				break;
-			default: {
-				Utils.push(path);
-			}
+			})
+		} else {
+			Utils.push(path);
 		}
 	}
 </script>
@@ -89,7 +83,7 @@
 						</view>
 					</template>
 					<template v-else>
-						<image class="icon-96x96 rounded-circle" src="../../static/logo.png" />
+						<image class="icon-96x96 rounded-circle" src="@/static/logo.png" />
 						<view class="f32 f-600 color-202020 ml-24" @click="Utils.push('/pages/auth/auth')">立即登录
 						</view>
 					</template>
@@ -100,7 +94,7 @@
 			<view class="orders pt-30 pb-40 px-30 rounded-24 bg-FFFFFF mt-40">
 				<view class="flex-h-between">
 					<view class="f32 lh-44 f-600 color-202020">我的订单</view>
-					<view class="flex-h-center" @click="Utils.push('/pages/orders/list')">
+					<view class="flex-h-center" @click="onOrderItemTap('/pages/orders/list')">
 						<text class="f24 lh-34 color-999999 mr-8">全部订单</text>
 						<image class="icon-36x36" src="@/static/images/icon_right.png" />
 					</view>

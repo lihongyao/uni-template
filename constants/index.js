@@ -40,10 +40,10 @@ export const MP_APP_SECRET = ''; /** 微信appSecret */
  **********************/
 
 export const APP_MINE_FNS = [
-	{ label: '地址管理', path: '/pages/address/list' },
-	{ label: '我的客服', path: '' },
-	{ label: '意见反馈', path: '/pages/fns/feedback' },
-	{ label: '设置', path: '/pages/fns/sets' },
+	{ label: '地址管理', path: '/pages/address/list', checkLogin: true },
+	{ label: '我的客服', path: '', checkLogin: false },
+	{ label: '意见反馈', path: '/pages/fns/feedback', checkLogin: true },
+	{ label: '设置', path: '/pages/fns/sets', checkLogin: false },
 ];
 
 import ICON_UNPAY from '@/pages/TabPages/images/unpay.png';

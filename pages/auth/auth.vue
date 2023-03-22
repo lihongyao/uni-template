@@ -22,7 +22,7 @@
 	const edit = async (data) => {
 		Utils.loading("处理中...");
 		setTimeout(() => {
-			uni.hideLoading();
+			Utils.hideLoading();
 			state.key = 'GET_USER_PHONE';
 		}, 1000);
 		/*
@@ -35,11 +35,10 @@
 
 	// -- events
 	const onGetUserInfo = ({ detail }) => {
-		const { errMsg, userInfo } = detail;
+		const { errMsg, userInfo: { avatarUrl, nickName } } = detail;
 		if (/ok/.test(errMsg)) {
-			const { avatarUrl, nickName } = userInfo;
 			// -- 更新用户信息
-			edit({ avatarUrl, nickname: nickName });
+			edit({ avatarUrl, nickName });
 		}
 	}
 
@@ -47,11 +46,10 @@
 		wx.getUserProfile({
 			desc: '用于完善用户头像、昵称展示信息',
 			success: (res) => {
-				const { errMsg, userInfo } = res;
+				const { errMsg, userInfo: { avatarUrl, nickName } } = res;
 				if (/ok/.test(errMsg)) {
-					const { avatarUrl, nickName } = userInfo;
 					// -- 更新用户信息
-					edit({ avatarUrl, nickname: nickName });
+					edit({ avatarUrl, nickName });
 				}
 			}
 		});
@@ -60,10 +58,9 @@
 	const onGetPhoneNumber = ({ detail }) => {
 		const { errMsg, code } = detail;
 		console.log("手机号授权code：", code);
-
 		Utils.loading("处理中...");
 		setTimeout(() => {
-			uni.hideLoading();
+			Utils.hideLoading();
 			Bus.$emit("BINDED_PHONE");
 			Utils.pop();
 		}, 1000);

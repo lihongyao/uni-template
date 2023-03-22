@@ -89,7 +89,7 @@
 	const onPay = ({ payCost, id }) => {
 		Utils.loading('处理中...');
 		setTimeout(() => {
-			uni.hideLoading();
+			Utils.hideLoading();
 			Utils.push('/pages/orders/pay-res');
 		}, 1000);
 		/*service.order.getPayParams({

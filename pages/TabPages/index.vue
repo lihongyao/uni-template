@@ -1,5 +1,6 @@
 <script setup>
-	import { onMounted, reactive } from "vue";
+	import { onLoad } from '@dcloudio/uni-app';
+	import { reactive } from "vue";
 	import Utils from "@/utils";
 	import service from "@/service";
 	import SearchBar from '@/components/@lgs/SearchBar/SearchBar.vue';
@@ -18,7 +19,10 @@
 			{ bannerPic: defaultBanners },
 		]
 	})
+	// -- life circles
+	onLoad(() => {
 
+	});
 	// -- events
 	const onSwiperChange = ({ detail }) => {
 		state.swiperCurrentIndex = detail.current;
@@ -26,13 +30,6 @@
 	const onSwiperItemTap = ({ jumpUrl }) => {
 		console.log(jumpUrl);
 	}
-
-	// -- life circles
-	onMounted(() => {
-		/*Utils.login(service.user.login).then(() => {
-			console.log("已登录");
-		});*/
-	});
 </script>
 
 

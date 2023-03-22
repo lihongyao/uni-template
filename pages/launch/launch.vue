@@ -1,6 +1,8 @@
 <script setup>
 	import { reactive, onMounted } from 'vue';
+	import { APP_KEY_TOKEN, APP_KEY_PHONE } from '@/constants';
 	import Utils from '@/utils';
+	import service from '@/service';
 	// -- state 
 	const state = reactive({
 		count: 2,
@@ -8,7 +10,7 @@
 		titleBarHeight: 0,
 		countHeight: 0,
 		countPaddingLeft: 0,
-		isLogin: null
+		canJump: null
 	});
 
 	// -- life circles
@@ -18,27 +20,6 @@
 		timedown();
 	});
 	// -- methods
-	const jump = () => {
-		if (state.isLogin) {
-			Utils.reLaunch("/pages/TabPages/index");
-		} else {
-			Utils.push("/pages/auth/auth");
-		}
-	}
-	const login = () => {
-		// -- 执行登录，获取code
-		uni.login({
-			provider: "weixin",
-			scopes: 'auth_base',
-			success: (loginRes) => {
-				const code = loginRes.code;
-				state.isLogin = true;
-				if (state.count === 0) {
-					jump();
-				}
-			}
-		})
-	}
 
 	const calcs = () => {
 		// -- 获取状态栏高度
@@ -53,18 +34,39 @@
 		state.countPaddingLeft = screenWidth - right;
 
 	}
+	const login = () => {
+		// -- 获取code
+		uni.login({
+			provider: "weixin",
+			scopes: 'auth_base',
+			success: async ({ code }) => {
+				// -- 用户登录
+				// const resp = await service.user.login(code)
+				// const { token, isBindPhone } = resp.data;
+				// uni.setStorageSync(APP_KEY_TOKEN, token);
+				// uni.setStorageSync(APP_KEY_PHONE, isBindPhone);
+				state.canJump = true;
+				if (state.count === 0) {
+					jump();
+				}
+			}
+		})
+	}
 	const timedown = () => {
 		const timer = setInterval(() => {
 			state.count--;
 			if (state.count === 0) {
 				// -- 清除定时器
 				clearInterval(timer);
-				// -- 根据登录态决定跳转页面
-				if (state.isLogin !== null) {
+				// -- 判断是否已处理用户登录态
+				if (state.canJump) {
 					jump();
 				}
 			}
 		}, 1000);
+	}
+	const jump = () => {
+		Utils.reLaunch("/pages/TabPages/index");
 	}
 </script>
 
