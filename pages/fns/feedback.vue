@@ -24,7 +24,7 @@
 				content: "我们已收到您的反馈~",
 				confirmText: "知道了",
 				confirmBgColor: "#42b983",
-				showCancelButton: false,
+				showCancel: false,
 				onConfirm: () => {
 					Utils.pop();
 				}
@@ -40,8 +40,7 @@
 		<view class="wrap bg-FFFFFF px-30 py-30 rounded-24">
 			<uni-easyinput type="textarea" v-model="feedback" placeholder="请填写您的意见和反馈,便于更好的服务您~" :clearable="true" :auto-height="true" :placeholder-style="placeholderStyle" :input-border="false" />
 		</view>
-		<button class="sure-button flex-h-center f32 color-FFFFFF rounded-48 mx-auto mt-80 bg-theme" @click="onSureButtonTap">确认提交</button>
-		<Dialog />
+		<button class="action-button mt-80" @click="onSureButtonTap">确认提交</button>
 		<Dialog ref="dialog" />
 	</view>
 </template>
@@ -56,10 +55,5 @@
 				color: #202020;
 			}
 		}
-	}
-
-	.sure-button {
-		width: 600rpx;
-		height: 88rpx;
 	}
 </style>

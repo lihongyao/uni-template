@@ -12,7 +12,7 @@
 	const props = defineProps({
 		//** 默认值 */
 		defaultValue: { type: [Number, String], default: '' }
-		
+
 	});
 	// -- state 
 	const state = reactive({
@@ -142,11 +142,11 @@
 							</view>
 						</view>
 					</block>
-					<load-more :hasMore="state.hasMore" />
+					<LoadMore :hasMore="state.hasMore" />
 				</template>
-				<no-data v-else tips="当前分类为空~" :top="200" />
+				<NoData v-else tips="当前分类为空~" :top="200" />
 			</template>
-			<loading v-else :top="200" />
+			<Loading v-else :top="200" />
 		</scroll-view>
 	</view>
 </template>

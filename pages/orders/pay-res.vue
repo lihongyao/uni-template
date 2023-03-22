@@ -1,10 +1,3 @@
-<!--
- * @Author: Lee
- * @Date: 2023-03-08 10:42:07
- * @LastEditors: Lee
- * @LastEditTime: 2023-03-21 09:30:33
- * @Description: 
--->
 <script setup>
 	import Utils from '@/utils/index.js';
 	const onGoHome = () => {

@@ -13,6 +13,19 @@
 </script>
 
 
-<style>
+<style lang="less">
 	@import url("./global.css");
+
+	.action-button {
+		width: 600rpx;
+		height: 88rpx;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		border-radius: 44rpx;
+		background-color: #42b983;
+		font-size: 32rpx;
+		color: #FFFFFF;
+
+	}
 </style>

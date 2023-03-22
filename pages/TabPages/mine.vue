@@ -44,10 +44,10 @@
 					confirmText: "立即拨打",
 					confirmBgColor: "#42b983",
 					onConfirm: () => {
-						uni.makePhoneCall({ 
+						uni.makePhoneCall({
 							phoneNumber: '17398888669',
 							fail: () => {
-								
+
 							}
 						});
 					}
@@ -102,7 +102,7 @@
 					<view class="f32 lh-44 f-600 color-202020">我的订单</view>
 					<view class="flex-h-center" @click="Utils.push('/pages/orders/list')">
 						<text class="f24 lh-34 color-999999 mr-8">全部订单</text>
-						<image class="icon-arrow" src="./images/icon_right.png" />
+						<image class="icon-36x36" src="@/static/images/icon_right.png" />
 					</view>
 				</view>
 				<view class="flex-h-around mt-32">
@@ -119,7 +119,7 @@
 				<block v-for="(item, index) in APP_MINE_FNS" :key="item.label">
 					<view class="py-30 flex-h-between " :class="index !== APP_MINE_FNS.length - 1 ? 'border-bottom' : ''" @click="onFnsItemTap(item)">
 						<text class="f28 lh-40 f-400 color-444444">{{item.label}}</text>
-						<image class="icon-arrow mr-40" src="./images/icon_right.png"></image>
+						<image class="icon-40x40 mr-40" src="@/static/images/icon_right.png"></image>
 					</view>
 				</block>
 			</view>
@@ -132,10 +132,7 @@
 
 <style scoped lang="less">
 	.page {
-		.icon-arrow {
-			width: 10rpx;
-			height: 16rpx;
-		}
+
 
 		.top-bar {
 			padding-top: 108rpx;

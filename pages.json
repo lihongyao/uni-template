@@ -31,7 +31,17 @@
 			"navigationBarTitleText": "水果销售"
 		}
 	}, {
-		"path": "pages/feedback/feedback",
+		"path": "pages/fns/about-us",
+		"style": {
+			"navigationBarTitleText": "关于我们"
+		}
+	}, {
+		"path": "pages/fns/sets",
+		"style": {
+			"navigationBarTitleText": "设置"
+		}
+	}, {
+		"path": "pages/fns/feedback",
 		"style": {
 			"navigationBarTitleText": "意见反馈"
 		}

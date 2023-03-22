@@ -10,11 +10,11 @@
 <template>
 	<view class="page h-100">
 		<!-- SearchBar Start -->
-		<search-bar :contents="searchTexts" @tap="Utils.push('/pages/search/search')" />
+		<SearchBar :contents="searchTexts" @tap="Utils.push('/pages/search/search')" />
 		<!-- SearchBar End -->
 
 		<!-- SlideBar Start -->
-		<slide-bar />
+		<SlideBar />
 		<!-- SlideBar End -->
 	</view>
 </template>

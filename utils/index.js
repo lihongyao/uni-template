@@ -170,7 +170,7 @@ export default class Utils {
 			})
 		})
 	}
-	
+
 
 	/**
 	 * 检查是否绑定手机号
@@ -439,6 +439,57 @@ export default class Utils {
 						Utils.hideLoading();
 						Utils.toast("图片下载失败");
 					}
+				})
+			})
+		})
+	}
+
+	/**
+	 * 打开地图选址
+	 * 注意：使用chooseLocation需在mainfest.json文件（切换至源码视图）中添加如下配置
+	 * "mp-weixin": {
+	 *   "permission": { "scope.userLocation": { "desc": "用于定位选择位置" }},
+	 *   "requiredPrivateInfos": [ "getLocation", "chooseLocation"]
+	 * }
+	 */
+	static chooseLocation() {
+		return new Promise(resolve => {
+			Utils.checkAuthorizeWithScope("scope.userLocation", {
+				content: "需要获取你的地理位置，用于定位选择位置"
+			}).then(() => {
+				uni.chooseLocation({
+					success: (resp) => {
+						const { errMsg, ...fileds } = resp;
+						if (/ok/.test(errMsg) && fileds.name) {
+							resolve(fileds);
+						} else {
+							Utils.toast("请先选择地址再点击确定");
+						}
+					}
+				});
+			})
+		})
+	}
+
+	/**
+	 * 获取用户定位信息
+	 * 注意：使用chooseLocation需在mainfest.json文件（切换至源码视图）中添加如下配置
+	 * "mp-weixin": {
+	 *   "permission": { "scope.userLocation": { "desc": "用于定位选择位置" }},
+	 *   "requiredPrivateInfos": [ "getLocation", "chooseLocation"]
+	 * }
+	 */
+	static getLocation() {
+		return new Promise(resolve => {
+			Utils.checkAuthorizeWithScope("scope.userLocation", {
+				content: "需要获取你的地理位置，用于定位选择位置"
+			}).then(() => {
+				uni.getLocation({
+					success({ errMsg, latitude, longitude }) {
+						if (/ok/.test(errMsg)) {
+							resolve({ lat: latitude, lng: longitude })
+						}
+					},
 				})
 			})
 		})

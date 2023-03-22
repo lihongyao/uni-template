@@ -1,8 +1,8 @@
 <script setup>
 	import { reactive, onMounted, getCurrentInstance } from 'vue';
 	import { onLoad, onShow } from "@dcloudio/uni-app";
-	import vLoading from '@/components/@lgs/Loadings/Loadings.vue';
-	import vNoData from '@/components/@lgs/NoData/NoData.vue';
+	import Loadings from '@/components/@lgs/Loadings/Loadings.vue';
+	import NoData from '@/components/@lgs/NoData/NoData.vue';
 	import Tools from 'lg-tools';
 	import Utils from '@/utils';
 	// -- state
@@ -107,13 +107,13 @@
 						</view>
 					</block>
 				</template>
-				<v-no-data v-else tips="您当前还没有添加地址哟~"></v-no-data>
+				<NoData v-else tips="您当前还没有添加地址哟~" />
 			</template>
-			<v-loading v-else />
+			<Loadings v-else />
 		</view>
 		<!-- 添加地址按钮 -->
 		<template v-if="state.list !== null">
-			<button class="add-button mt-80 f32 flex-h-center mx-auto color-FFFFFF" @click="Utils.push('/pages/address/action')">添加地址</button>
+			<button class="action-button mt-80" @click="Utils.push('/pages/address/action')">添加地址</button>
 		</template>
 	</view>
 </template>
@@ -141,12 +141,5 @@
 			padding: 0 10rpx;
 			border-radius: 4rpx;
 		}
-	}
-
-	.add-button {
-		width: 600rpx;
-		height: 88rpx;
-		background: #42b983;
-		border-radius: 48rpx;
 	}
 </style>

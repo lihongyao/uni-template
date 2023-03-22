@@ -1,8 +1,8 @@
 <script setup>
 	import { reactive, onMounted } from 'vue';
 	import { APP_KEY_SEARCH_HISTORY } from '@/constants';
-	import vLoadMore from '@/components/@lgs/LoadMore/LoadMore.vue';
-	import vNoData from '@/components/@lgs/NoData/NoData.vue';
+	import LoadMore from '@/components/@lgs/LoadMore/LoadMore.vue';
+	import NoData from '@/components/@lgs/NoData/NoData.vue';
 
 	import service from '@/service';
 
@@ -104,10 +104,10 @@
 		<!-- Search Start -->
 		<view class="search-bar-wrap px-40 fixed-top bg-FFFFFF">
 			<view class="search-bar rounded-36 pl-24 flex-h-between ">
-				<image class="icon-48x48" src="../../components/@lgs/SearchBar/images/icon_search.png"></image>
+				<image class="icon-48x48" src="@/components/@lgs/SearchBar/images/icon_search.png"></image>
 				<input class="uni-input flex-1 pl-20" v-model="state.keyword" placeholder="请输入搜索关键字" confirm-type="search" :placeholder-style="placeholderStyle" @confirm="onSearch" @input="onInput" />
 				<view class="close-wrap flex-h-center" @click="onClear">
-					<image v-if="state.keyword" class="icon-48x48" src="../../static/images/icon_clear.png"></image>
+					<image v-if="state.keyword" class="icon-48x48" src="@/static/images/icon_clear.png"></image>
 				</view>
 			</view>
 		</view>
@@ -119,9 +119,9 @@
 				<block v-for="(item, index) in state.searchRes" :key="index">
 					<view class="search-res-item" />
 				</block>
-				<v-load-more :hasMore="false" />
+				<LoadMore :hasMore="false" />
 			</template>
-			<v-no-data v-else tips="未找到相关内容" />
+			<NoData v-else tips="未找到相关内容" />
 		</view>
 		<!-- Search Res End -->
 
@@ -130,7 +130,7 @@
 			<view v-if="state.searchHistories" class="mb-40">
 				<view class="f32 lh-44 color-333333 f-600 flex-h-between">
 					<text>历史搜索</text>
-					<image class="icon-32x32" src="../../static/images/icon_delete.png" @click="onClearSearchHistories" />
+					<image class="icon-32x32" src="@/static/images/icon_delete.png" @click="onClearSearchHistories" />
 				</view>
 				<view class="flex-h-between flex-wrap">
 					<block v-for="(keyword, index) in state.searchHistories" :key="index">
@@ -144,7 +144,7 @@
 			<view v-if="state.searchHot && state.searchHot.length > 0">
 				<view class="f32 lh-44 color-333333 f-600 flex-h-start">
 					<text>热门搜索</text>
-					<image class="icon-32x32 ml-10" src="../../static/images/icon_hot.png" />
+					<image class="icon-32x32 ml-10" src="@/static/images/icon_hot.png" />
 				</view>
 				<view class="flex-h-between flex-wrap">
 					<block v-for="(keyword, index) in state.searchHot" :key="index">

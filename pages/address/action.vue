@@ -3,21 +3,6 @@
 	import { reactive, getCurrentInstance } from "vue";
 	import Utils from '@/utils/index.js';
 	import Validator from 'lg-validator';
-	/**
-	注意：使用chooseLocation需在mainfest.json文件（切换至源码视图）中添加如下配置
-	"mp-weixin": {
-		...
-		"permission": {
-			"scope.userLocation": {
-				"desc": "用于定位选择位置"
-			}
-		},
-		"requiredPrivateInfos": [
-			"getLocation",
-			"chooseLocation",
-		]
-	}
-	**/
 
 	// -- constants
 	const placeholderStyle = "color:#999999; font-size: 28rpx"
@@ -114,34 +99,9 @@
 		}
 	}
 	const onChooseLocation = () => {
-		// 1. 获取定位示例
-		/*Utils.checkAuthorizeWithScope("scope.userLocation", {
-			content: "需要获取你的地理位置，用于定位选择位置"
-		}).then(() => {
-			uni.getLocation({
-				success({ errMsg, latitude, longitude }) {
-					if (/ok/.test(errMsg)) {
-						const coordinate = { lat: latitude, lng: longitude };
-						console.log(coordinate);
-					}
-				},
-			})
-		})*/
-
-		Utils.checkAuthorizeWithScope("scope.userLocation", {
-			content: "需要获取你的地理位置，用于定位选择位置"
-		}).then(() => {
-			uni.chooseLocation({
-				success(res) {
-					if (/ok/.test(res.errMsg) && res.name) {
-						delete res.errMsg;
-						state.formData.area = res;
-					} else {
-						Utils.toast("请先选择地址再点击确定");
-					}
-				}
-			})
-		});
+		Utils.chooseLocation().then(data => {
+			state.formData.area = data;
+		})
 	}
 </script>
 
@@ -186,7 +146,7 @@
 			</template>
 		</view>
 		<!-- 提交按钮 -->
-		<button class="submit-button color-FFFFFF f32 flex-h-center mt-80 rounded-48 bg-theme" @click="onSubmit">保存地址</button>
+		<button class="action-button mt-80" @click="onSubmit">保存地址</button>
 		<view class="space-200" />
 	</view>
 </template>
@@ -222,11 +182,6 @@
 			width: 112rpx;
 			font-size: 28rpx;
 			color: #202020;
-		}
-
-		.submit-button {
-			width: 600rpx;
-			height: 88rpx;
 		}
 	}
 </style>

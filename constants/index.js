@@ -38,23 +38,12 @@ export const MP_APP_SECRET = ''; /** 微信appSecret */
 /**********************
  ** Some For Project.
  **********************/
-export const EDITOR_TOOLBARKEYS = [
-  'bold',
-  'italic',
-  'underline',
-  'ol',
-  'ul',
-  'undo',
-  'redo',
-  'clear',
-];
 
 export const APP_MINE_FNS = [
-  { label: '地址管理', path: '/pages/address/list' },
-  { label: '我的客服', path: '' },
-  { label: '意见反馈', path: '/pages/feedback/feedback' },
-  { label: '用户协议', path: '/pages/web-page/web-page?q=1' },
-  { label: '隐私政策', path: '/pages/web-page/web-page?q=2' },
+	{ label: '地址管理', path: '/pages/address/list' },
+	{ label: '我的客服', path: '' },
+	{ label: '意见反馈', path: '/pages/fns/feedback' },
+	{ label: '设置', path: '/pages/fns/sets' },
 ];
 
 import ICON_UNPAY from '@/pages/TabPages/images/unpay.png';
@@ -62,25 +51,24 @@ import ICON_RECEIVE from '@/pages/TabPages/images/receive.png';
 import ICON_DELIVER from '@/pages/TabPages/images/deliver.png';
 import ICON_COMPLETE from '@/pages/TabPages/images/complete.png';
 
-export const APP_MINE_ORDERS = [
-  {
-    icon: ICON_UNPAY,
-    path: '/pages/orders/list?q=0',
-    label: '待支付',
-  },
-  {
-    icon: ICON_DELIVER,
-    path: '/pages/orders/list?q=1',
-    label: '待发货',
-  },
-  {
-    icon: ICON_RECEIVE,
-    path: '/pages/orders/list?q=2',
-    label: '待收货',
-  },
-  {
-    icon: ICON_COMPLETE,
-    path: '/pages/orders/list?q=3',
-    label: '已完成',
-  },
+export const APP_MINE_ORDERS = [{
+		icon: ICON_UNPAY,
+		path: '/pages/orders/list?q=0',
+		label: '待支付',
+	},
+	{
+		icon: ICON_DELIVER,
+		path: '/pages/orders/list?q=1',
+		label: '待发货',
+	},
+	{
+		icon: ICON_RECEIVE,
+		path: '/pages/orders/list?q=2',
+		label: '待收货',
+	},
+	{
+		icon: ICON_COMPLETE,
+		path: '/pages/orders/list?q=3',
+		label: '已完成',
+	},
 ];

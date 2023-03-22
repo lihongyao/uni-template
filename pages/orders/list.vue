@@ -3,12 +3,12 @@
 	import { reactive, watch } from 'vue';
 	import service from '@/service';
 	import Utils from '@/utils';
-	import vLoading from '@/components/@lgs/Loadings/Loadings.vue';
-	import vNoData from '@/components/@lgs/NoData/NoData.vue';
-	import vMenuBar from '@/components/@lgs/MenuBar/MenuBar.vue';
-	import vScrollList from '@/components/@lgs/ScrollList/ScrollList.vue';
-	import vLoadMore from '@/components/@lgs/LoadMore/LoadMore.vue';
-	import vListItem from './list-item.vue';
+	import MenuBar from '@/components/@lgs/MenuBar/MenuBar.vue';
+	import ScrollList from '@/components/@lgs/ScrollList/ScrollList.vue';
+	import Loadings from '@/components/@lgs/Loadings/Loadings.vue';
+	import LoadMore from '@/components/@lgs/LoadMore/LoadMore.vue';
+	import NoData from '@/components/@lgs/NoData/NoData.vue';
+	import ListItem from './list-item.vue';
 
 	// -- constants
 	const menus = [
@@ -122,25 +122,25 @@
 
 	<view class="page">
 		<!-- MenuBar Start -->
-		<v-menu-bar :data="menus" v-model="state.key" :showBorder="false" themeColor="#42b983" />
+		<MenuBar :data="menus" v-model="state.key" :showBorder="false" themeColor="#42b983" />
 		<!-- MenuBar End -->
 
 		<!-- List Start -->
-		<v-scroll-list @refresh="onRefresh" @load="onLoadMore">
+		<ScrollList @refresh="onRefresh" @load="onLoadMore">
 			<template v-if="state.list">
 				<template v-if="state.list.length > 0">
 					<view class="px-20">
 						<block v-for="(item, index) in state.list" :key="index">
-							<v-list-item :data="item" @pay="onPay" @receive="onReceive" @cancel="onCancel" @afterSale="onAfterSale" @evaluate="onEvaluate" />
+							<ListItem :data="item" @pay="onPay" @receive="onReceive" @cancel="onCancel" @afterSale="onAfterSale" @evaluate="onEvaluate" />
 						</block>
 					</view>
-					<v-load-more v-show="state.list" :hasMore="state.hasMore" />
+					<LoadMore v-show="state.list" :hasMore="state.hasMore" />
 					<view class="space-100"></view>
 				</template>
-				<v-no-data v-else tips="暂无数据~"></v-no-data>
+				<NoData v-else tips="暂无数据~" />
 			</template>
-			<v-loading v-else />
-		</v-scroll-list>
+			<Loadings v-else />
+		</ScrollList>
 		<!-- List End -->
 	</view>
 </template>

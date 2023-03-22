@@ -2,8 +2,8 @@
 	import { onMounted, reactive } from "vue";
 	import Utils from "@/utils";
 	import service from "@/service";
-	import vSearchBar from '@/components/@lgs/SearchBar/SearchBar.vue';
-	import vLoadMore from '@/components/@lgs/LoadMore/LoadMore.vue';
+	import SearchBar from '@/components/@lgs/SearchBar/SearchBar.vue';
+	import LoadMore from '@/components/@lgs/LoadMore/LoadMore.vue';
 	import defaultBanners from "@/static/images/default_banners.png";
 	// -- constants
 	const searchTexts = ["苹果", "香蕉"];
@@ -38,9 +38,9 @@
 
 <template>
 	<view class="page">
-		
+
 		<!-- Search-bar Start -->
-		<v-search-bar :contents="searchTexts" @tap="Utils.push('/pages/search/search')"></v-search-bar>
+		<SearchBar :contents="searchTexts" @tap="Utils.push('/pages/search/search')" />
 		<!-- Search-bar End -->
 
 		<!-- Swiper Start -->
@@ -76,7 +76,7 @@
 			</view>
 		</view>
 		<!-- HotSale End -->
-		<v-load-more :hasMore="false" />
+		<LoadMore :hasMore="false" />
 	</view>
 </template>
 
@@ -84,6 +84,7 @@
 	.page {
 		padding-top: 120rpx;
 	}
+
 	.search-bar-wrap {
 		width: 750rpx;
 		height: 90rpx;
@@ -138,7 +139,7 @@
 			}
 		}
 	}
-	
+
 	.goods-item {
 		height: 200rpx;
 		background-color: #eee;
