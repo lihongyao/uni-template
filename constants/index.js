@@ -3,7 +3,7 @@
  **********************/
 
 // -- server
-const APP_HOST_DEV = 'http://192.168.0.47:8888';
+const APP_HOST_DEV = 'http://192.168.0.22:8888';
 const APP_HOST_TES = '测试环境';
 const APP_HOST_PRO = '生产环境';
 export const APP_HOST = APP_HOST_DEV;
