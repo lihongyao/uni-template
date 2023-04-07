@@ -5,6 +5,7 @@
     "lg-bus": "^1.0.2",
     "lg-tools": "^2.0.0",
     "lg-validator": "^1.0.6",
-    "pinia": "^2.0.33"
+    "pinia": "^2.0.33",
+    "umtrack-wx": "^2.8.0"
   }
 }

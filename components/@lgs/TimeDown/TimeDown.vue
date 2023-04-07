@@ -2,14 +2,14 @@
 	import { onMounted, reactive } from "vue";
 	// -- props
 	const props = defineProps({
-		count: { type: Number, default: 2 }
+		modelValue: { type: Number, default: 5 }
 	});
 
 	// -- emits 
-	const emits = defineEmits(["end"]);
+	const emits = defineEmits(["update:modelValue", "end"]);
 	// -- state 
 	const state = reactive({
-		v: props.count,
+		v: props.modelValue,
 		statusBarHeight: 0,
 		titleBarHeight: 0,
 		countHeight: 0,
@@ -31,6 +31,7 @@
 		// -- 开始倒计时
 		const timer = setInterval(() => {
 			state.v--;
+			emits("update:modelValue", state.v);
 			if (state.v === 0) {
 				// -- 清除定时器
 				clearInterval(timer);

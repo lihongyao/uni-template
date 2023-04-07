@@ -1,5 +1,8 @@
 // -- 引入常量配置
 import { APP_OSS_HOST, APP_KEY_PHONE, APP_KEY_TOKEN } from '@/constants/index.js';
+// -- 友盟统计
+import uma from "umtrack-wx";
+// -- 加密
 import crypto from 'crypto-js';
 import { Base64 } from 'js-base64';
 
@@ -72,7 +75,7 @@ export default class Utils {
 	static loading(title) {
 		uni.showLoading({
 			title,
-			duration: 20 * 1000,
+			duration: 60 * 1000,
 			mask: true
 		})
 	}
@@ -473,5 +476,14 @@ export default class Utils {
 				})
 			})
 		})
+	}
+
+	/**
+	 * 友盟+统计
+	 * @param {String} eventId 事件ID需在官网申请，长度在128个字符内
+	 * @param {Object} params 附加参数
+	 */
+	static umaTrackEvent(eventId, params) {
+		uma.trackEvent(eventId, params);
 	}
 }

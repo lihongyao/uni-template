@@ -47,6 +47,10 @@ image { box-sizing: content-box; }
 .page { width: 750rpx; min-height: 100%; background: #F3F5F9; }
 .page-bg { background-size: cover !important; background-repeat: no-repeat; background-position: top left;  }
 .hidden { display: none; } 
+.safe-area-bottom {
+	padding-bottom: constant(safe-area-inset-bottom);
+	padding-bottom: env(safe-area-inset-bottom);
+}
 
 .coming-soon { 
 	font-size: 64rpx;
@@ -111,6 +115,7 @@ image { box-sizing: content-box; }
 .p-24 { padding-top: 24rpx; padding-right: 24rpx; padding-bottom: 24rpx; padding-left: 24rpx; }
 .p-26 { padding-top: 26rpx; padding-right: 26rpx; padding-bottom: 26rpx; padding-left: 26rpx; }
 .p-30 { padding-top: 30rpx; padding-right: 30rpx; padding-bottom: 30rpx; padding-left: 30rpx; }
+.p-32 { padding-top: 32rpx; padding-right: 32rpx; padding-bottom: 32rpx; padding-left: 32rpx; }
 
 .px-0 { padding-left:  0rpx;  padding-right: 0rpx; }
 .px-4 { padding-left:  4rpx;  padding-right: 4rpx; }
@@ -149,6 +154,7 @@ image { box-sizing: content-box; }
 .py-6 { padding-top: 6rpx; padding-bottom: 6rpx; }
 
 .py-10 { padding-top: 10rpx; padding-bottom: 10rpx; }
+.py-12 { padding-top: 12rpx; padding-bottom: 12rpx; }
 .py-14 { padding-top: 14rpx; padding-bottom: 14rpx; }
 .py-18 { padding-top: 18rpx; padding-bottom: 18rpx; }
 .py-20 { padding-top: 20rpx; padding-bottom: 20rpx; }
@@ -178,6 +184,7 @@ image { box-sizing: content-box; }
 .pt-38 { padding-top: 38rpx; }
 .pt-40 { padding-top: 40rpx; }
 .pt-54 { padding-top: 54rpx; }
+.pt-60 { padding-top: 60rpx; }
 .pt-70 { padding-top: 70rpx; }
 .pt-76 { padding-top: 76rpx; }
 .pt-80 { padding-top: 80rpx; }
@@ -229,6 +236,7 @@ image { box-sizing: content-box; }
 .pb-42 { padding-bottom: 42rpx; }
 .pb-44 { padding-bottom: 44rpx; }
 .pb-48 { padding-bottom: 48rpx; }
+.pb-52 { padding-bottom: 52rpx; }
 .pb-60 { padding-bottom: 60rpx; }
 .pb-63 { padding-bottom: 63rpx; }
 .pb-74 { padding-bottom: 74rpx; }
@@ -291,6 +299,7 @@ image { box-sizing: content-box; }
 .mt-44 { margin-top: 44rpx; }
 .mt-48 { margin-top: 48rpx; }
 .mt-52 { margin-top: 52rpx; }
+.mt-56 { margin-top: 56rpx; }
 .mt-58 { margin-top: 58rpx; }
 .mt-60 { margin-top: 60rpx; }
 .mt-62 { margin-top: 62rpx; }
@@ -367,9 +376,12 @@ image { box-sizing: content-box; }
 .mb-29 { margin-bottom: 29rpx; }
 .mb-30 { margin-bottom: 30rpx; }
 .mb-32 { margin-bottom: 32rpx; }
+.mb-34 { margin-bottom: 34rpx; }
 .mb-36 { margin-bottom: 36rpx; }
 .mb-38 { margin-bottom: 38rpx; }
 .mb-40 { margin-bottom: 40rpx; }
+.mb-44 { margin-bottom: 42rpx; }
+.mb-44 { margin-bottom: 44rpx; }
 .mb-48 { margin-bottom: 48rpx; }
 .mb-50 { margin-bottom: 50rpx; }
 .mb-54 { margin-bottom: 54rpx; }
@@ -382,7 +394,7 @@ image { box-sizing: content-box; }
 .ml-6 { margin-left: 6rpx; }
 .ml-8 { margin-left: 8rpx; }
 
-.ml-90 { margin-left: 90rpx; }
+
 
 .ml-10 { margin-left: 10rpx; }
 .ml-12 { margin-left: 12rpx; }
@@ -395,6 +407,8 @@ image { box-sizing: content-box; }
 .ml-30 { margin-left: 30rpx; }
 .ml-34 { margin-left: 34rpx; }
 .ml-42 { margin-left: 42rpx; }
+.ml-56 { margin-left: 56rpx; }
+.ml-90 { margin-left: 90rpx; }
 
 .my-12 { margin-top: 12rpx; margin-bottom: 12rpx; }
 .my-16 { margin-top: 16rpx; margin-bottom: 16rpx; }
@@ -443,6 +457,7 @@ image { box-sizing: content-box; }
 .icon-112x112 { width: 112rpx; height: 112rpx; }
 .icon-120x120 { width: 120rpx; height: 120rpx; }
 .icon-160x160 { width: 160rpx; height: 160rpx; }
+.icon-144x144 { width: 144rpx; height: 144rpx; }
 .icon-145x145 { width: 145rpx; height: 145rpx; }
 .icon-148x148 { width: 148rpx; height: 148rpx; }
 .icon-190x190 { width: 190rpx; height: 190rpx; }
@@ -467,6 +482,7 @@ image { box-sizing: content-box; }
 .rounded-24 { border-radius: 24rpx; }
 .rounded-28 { border-radius: 28rpx; }
 .rounded-30 { border-radius: 30rpx; }
+.rounded-32 { border-radius: 32rpx; }
 .rounded-34 { border-radius: 34rpx; }
 .rounded-36 { border-radius: 36rpx; }
 .rounded-38 { border-radius: 38rpx; }

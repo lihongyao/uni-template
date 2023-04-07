@@ -36,7 +36,7 @@ const request = (options) => {
 			url,
 			method,
 			data,
-			timeout: 20 * 1000,
+			timeout: 60 * 1000,
 			header: {
 				"Authorization": 'Bearer ' + token,
 				...headers

@@ -101,7 +101,7 @@
 	.lg-drag-area {
 		margin: 0 auto;
 		overflow: hidden;
-		border: 1rpx solid #EEE;
+		border: 1rpx solid #EEEEEE;
 		display: flex;
 		flex-direction: column;
 

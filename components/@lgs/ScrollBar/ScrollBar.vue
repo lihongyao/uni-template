@@ -20,10 +20,10 @@
 		id: String,
 		/** 默认选中元素的id */
 		defauldSelected: { type: [String, Number], default: '' },
-		/** 间距 */
-		spacing: { type: String, default: '6rpx' },
-		/** 间距 */
-		wrapSpacing: { type: String, default: '24rpx' }
+		/** 元素与元素之间的间距，单位rpx，默认6 */
+		spacing: { type: Number, default: 6 },
+		/** 容器左右两侧的内间距，单位rpx，默认24 */
+		wrapSpacing: { type: Number, default: 24 }
 	});
 	// -- emits 
 	const emits = defineEmits(['change']);
@@ -94,7 +94,7 @@
 <template>
 	<scroll-view scroll-x class="lg-scroll-bar" :scroll-left="state.offset" scroll-with-animation @scroll="onScroll">
 		<block v-for="(item, index) in data" :key="index">
-			<view class="lg-scroll-bar__item" :id="`${id}-item__${item.id}`" @click="onItemTap($event, item)" :style="{'--spacing': spacing,'--wrap-spacing': wrapSpacing}">
+			<view class="lg-scroll-bar__item" :id="`${id}-item__${item.id}`" @click="onItemTap($event, item)" :style="{'--spacing': spacing + 'rpx','--wrap-spacing': wrapSpacing + 'rpx'}">
 				<slot name="content" :item="item"></slot>
 			</view>
 		</block>

@@ -10,9 +10,9 @@
 		/** 背景颜色 */
 		backgroundColor: { type: String, default: "transparent" },
 		/** 渐变颜色 */
-		gradientColor: { type: String },
+		gradientColor: String,
 		/** 是否显示返回按钮 */
-		showBack: { type: Boolean },
+		showBack: Boolean
 	})
 	// -- state 
 	const state = reactive({
@@ -59,6 +59,10 @@
 		}
 	};
 
+	const getHeight = () => {
+		return state.navHeight;
+	}
+
 
 	// -- events 
 	/** 监听点击返回上一页 */
@@ -69,7 +73,8 @@
 	};
 
 	defineExpose({
-		setOpacity
+		setOpacity,
+		getHeight
 	});
 </script>
 
@@ -82,9 +87,10 @@
 			<view class="status-bar" :style="{height: `${state.statusBarHeight}px`}"></view>
 			<view class="title-bar" :style="{height: `${state.titleBarHeight}px`}">
 				<view class="left-btns" :style="{left: `${state.leftSpacing}px`}">
-					<view class="back-button" @click="onBackButtonTap">
+					<view v-if="showBack" class="back-button" @click="onBackButtonTap">
 						<image src="./images/icon_back.png"></image>
 					</view>
+					<slot name="left"></slot>
 				</view>
 				<view class="title">
 					{{title}}

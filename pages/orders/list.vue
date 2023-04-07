@@ -126,7 +126,7 @@
 		<!-- MenuBar End -->
 
 		<!-- List Start -->
-		<ScrollList @refresh="onRefresh" @load="onLoadMore">
+		<ScrollList @refresh="onRefresh" @load="onLoadMore" refresherEnabled>
 			<template v-if="state.list">
 				<template v-if="state.list.length > 0">
 					<view class="px-20">

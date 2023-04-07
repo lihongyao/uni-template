@@ -36,11 +36,20 @@
 	onMounted(() => {
 		const instance = getCurrentInstance();
 		uni.createSelectorQuery().in(instance).select(`#${props.id}`).context(res => {
+			// 1. 获取编辑器上下文
 			state.editor = res.context;
-			state.editor.setContents({
-				html: props.defaultValue
-			});
+			// 2. 触发ready事件
 			emits("ready", res.context);
+			// 3. 判断是否设置默认值
+			if (props.defaultValue) {
+				state.editor.setContents({
+					html: props.defaultValue
+				});
+				// -- 获取字符长度，触发change事件
+				state.editor.getContents().then(({ html, text }) => {
+					emits("change", { html, text: text.trim() });
+				});
+			}
 		}).exec();
 	})
 	// -- methods 
@@ -171,6 +180,14 @@
 
 <style lang="less" scoped>
 	@import url('./iconfont.css');
+
+	/* 修改富文本编辑器的placeholder的默认颜色：字体 */
+	/* 注意：此段代码需拷贝至App.vue才会生效 */
+	.ql-container /deep/ .ql-blank::before {
+		/* 此处设置 placeholder 样式 */
+		color: #C1CBE2;
+		font-style: normal;
+	}
 
 	.lg-editor {
 		flex: 1;
