@@ -1,7 +1,8 @@
 <script setup>
-	import { onLoad, onShow } from "@dcloudio/uni-app";
-	import { onMounted, reactive } from "vue";
+	import { onLoad } from "@dcloudio/uni-app";
+	import { reactive } from "vue";
 	import Utils from "@/utils";
+	import service from '@/service';
 
 	// -- constants
 
@@ -9,12 +10,11 @@
 	const state = reactive({})
 
 	// -- life circles
-	onMounted(() => {})
+	onLoad(() => {})
 
 	// -- methods 
 
 	// -- events
-	
 </script>
 
 <template>

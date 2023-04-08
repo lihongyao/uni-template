@@ -1,8 +1,10 @@
 <script setup>
+	import { onLoad } from '@dcloudio/uni-app';
 	import Utils from '@/utils';
+	import service from '@/service';
 	import SearchBar from '@/components/@lgs/SearchBar/SearchBar.vue';
 	import SlideBar from '@/components/@lgs/SlideBar/SlideBar.vue';
-
+	// -- constants 
 	const searchTexts = ["苹果", "香蕉"];
 </script>
 

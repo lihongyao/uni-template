@@ -20,7 +20,7 @@ export const APP_SCOKET_HOST = APP_SCOKET_HOST_DEV;
  ** Keys for value
  **********************/
 export const APP_KEY_TOKEN = 'UNI_TOKNE'; /** 记录登录token */
-export const APP_KEY_PHONE = 'UNI_HAS_BIND_PHONE'; /** 记录是否绑定手机号 **/
+export const APP_KEY_LOGIN = 'UNI_LOGIN_STATUS'; /** 记录登录状态（判断依据：是否绑定手机号） **/
 export const APP_KEY_SEARCH_HISTORY = 'APP_KEY_SEARCH_HISTORY'; /** 搜索历史记录 */
 
 /**********************

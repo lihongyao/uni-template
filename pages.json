@@ -5,6 +5,42 @@
 			"navigationStyle": "custom"
 		}
 	}, {
+		"path": "pages/auth/login",
+		"style": {
+			"navigationStyle": "custom"
+		}
+	}, {
+		"path": "pages/userinfo/userinfo",
+		"style": {
+			"navigationBarTitleText": "个人信息"
+		}
+	}, {
+		"path": "pages/userinfo/nickname",
+		"style": {
+			"navigationBarTitleText": "设置昵称"
+		}
+	}, {
+		"path": "pages/userinfo/mobile",
+		"style": {
+			"navigationBarTitleText": "设置手机号"
+		}
+	}, {
+		"path": "pages/TabPages/mine",
+		"style": {
+			"navigationBarTitleText": "个人中心",
+			"navigationStyle": "custom"
+		}
+	}, {
+		"path": "pages/fns/sets",
+		"style": {
+			"navigationBarTitleText": "设置"
+		}
+	}, {
+		"path": "pages/auth/auth",
+		"style": {
+			"navigationStyle": "custom"
+		}
+	}, {
 		"path": "pages/address/list",
 		"style": {
 			"navigationBarTitleText": "地址管理"
@@ -13,12 +49,6 @@
 		"path": "pages/address/action",
 		"style": {
 			"navigationBarTitleText": "地址管理"
-		}
-	}, {
-		"path": "pages/TabPages/mine",
-		"style": {
-			"navigationBarTitleText": "个人中心",
-			"navigationStyle": "custom"
 		}
 	}, {
 		"path": "pages/orders/pay-res",
@@ -34,11 +64,6 @@
 		"path": "pages/fns/about-us",
 		"style": {
 			"navigationBarTitleText": "关于我们"
-		}
-	}, {
-		"path": "pages/fns/sets",
-		"style": {
-			"navigationBarTitleText": "设置"
 		}
 	}, {
 		"path": "pages/fns/feedback",
@@ -64,11 +89,6 @@
 		"path": "pages/TabPages/shop-cart",
 		"style": {
 			"navigationBarTitleText": "购物车"
-		}
-	}, {
-		"path": "pages/auth/auth",
-		"style": {
-			"navigationStyle": "custom"
 		}
 	}, {
 		"path": "pages/web-page/web-page",

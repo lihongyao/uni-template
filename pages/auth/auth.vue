@@ -4,7 +4,7 @@
 	import Bus from 'lg-bus';
 	import Utils from '@/utils';
 	import service from '@/service';
-	import { APP_KEY_TOKEN, APP_KEY_PHONE } from '@/constants';
+	import { APP_KEY_TOKEN, APP_KEY_LOGIN } from '@/constants';
 
 	// -- state
 	const state = reactive({
@@ -68,7 +68,7 @@
 		if (/ok/.test(errMsg)) {
 			// -- 更新手机号
 			// Api.user.bindPhone({ code }).then(r => {
-			// uni.setStorageSync(APP_KEY_PHONE, true);
+			// uni.setStorageSync(APP_KEY_LOGIN, true);
 			// Bus.$emit("BINDED_PHONE");
 			// Utils.pop();
 			// });

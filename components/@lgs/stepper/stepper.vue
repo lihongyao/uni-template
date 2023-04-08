@@ -1,8 +1,4 @@
 <script setup>
-	import {
-		defineProps,
-		defineEmits
-	} from 'vue';
 	// -- props
 	const props = defineProps({
 		modelValue: Number,

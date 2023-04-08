@@ -1,5 +1,5 @@
 // -- 引入常量配置
-import { APP_OSS_HOST, APP_KEY_PHONE, APP_KEY_TOKEN } from '@/constants/index.js';
+import { APP_OSS_HOST, APP_KEY_LOGIN, APP_KEY_TOKEN } from '@/constants/index.js';
 // -- 友盟统计
 import uma from "umtrack-wx";
 // -- 加密
@@ -142,7 +142,7 @@ export default class Utils {
 					loginFn && loginFn({ code, shareCode }).then((resp) => {
 						const { isBindPhone, token } = resp.data;
 						uni.setStorageSync(APP_KEY_TOKEN, token);
-						uni.setStorageSync(APP_KEY_PHONE, isBindPhone);
+						uni.setStorageSync(APP_KEY_LOGIN, isBindPhone);
 						resolve(null);
 					})
 				},
@@ -160,11 +160,11 @@ export default class Utils {
 	 */
 	static checkLogin() {
 		return new Promise((resolve, reject) => {
-			if (uni.getStorageSync(APP_KEY_PHONE)) {
+			if (uni.getStorageSync(APP_KEY_LOGIN)) {
 				resolve();
 			} else {
 				uni.navigateTo({
-					url: '/pages/auth/auth'
+					url: '/pages/auth/login'
 				})
 			}
 		})

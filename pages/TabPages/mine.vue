@@ -3,9 +3,9 @@
 	import { reactive, ref } from 'vue';
 	import Tools from 'lg-tools';
 	import Bus from 'lg-bus';
-	import Utils from '@/utils/index.js';
+	import Utils from '@/utils';
 	import Dialog from '@/components/@lgs/Dialog/Dialog.vue';
-	import { APP_KEY_PHONE, APP_MINE_FNS, APP_MINE_ORDERS } from '@/constants/index.js';
+	import { APP_KEY_LOGIN, APP_MINE_FNS, APP_MINE_ORDERS } from '@/constants';
 
 
 	// -- constants
@@ -15,15 +15,15 @@
 
 	// -- state
 	const state = reactive({
-		isLogin: uni.getStorageSync(APP_KEY_PHONE)
+		isLogin: uni.getStorageSync(APP_KEY_LOGIN)
 	});
 
 	// -- life circles
 	onLoad(() => {
 		// 1. 监听绑定手机
-		Bus.$on("BINDED_PHONE", () => {
+		Bus.$on("LOGGED", () => {
 			state.isLogin = true;
-			uni.setStorageSync(APP_KEY_PHONE, true);
+			uni.setStorageSync(APP_KEY_LOGIN, true);
 		});
 		// 2. ...
 	})
@@ -59,6 +59,12 @@
 			Utils.push(path);
 		}
 	}
+
+	const onJumpToUserinfo = () => {
+		if (state.isLogin) {
+			Utils.push('/pages/userinfo/userinfo')
+		}
+	}
 </script>
 
 
@@ -72,7 +78,7 @@
 		<!-- 内容 start -->
 		<view class="contents px-20">
 			<!-- 用户信息 -->
-			<view class="wrap pl-40 flex-h-between rounded-24 bg-FFFFFF">
+			<view class="wrap pl-40 flex-h-between rounded-24 bg-FFFFFF" @click="onJumpToUserinfo">
 				<view class="flex-h-start">
 					<template v-if="state.isLogin">
 						<image class="icon-96x96 rounded-circle" src="../../static/avatar.jpeg">
@@ -84,7 +90,7 @@
 					</template>
 					<template v-else>
 						<image class="icon-96x96 rounded-circle" src="@/static/logo.png" />
-						<view class="f32 f-600 color-202020 ml-24" @click="Utils.push('/pages/auth/auth')">立即登录
+						<view class="f32 f-600 color-202020 ml-24" @click.stop="Utils.push('/pages/auth/login')">立即登录
 						</view>
 					</template>
 				</view>
