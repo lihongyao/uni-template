@@ -94,16 +94,16 @@
 	<view class="lg-collapse-text" :style="{'--rows': maxLine, '--line-height': lineHeight + 'rpx'}">
 		<!-- 富文本 -->
 		<template v-if="type === 'richText'">
-			<view class="__content showArea" :class="{ellipsis: state.ellipsis && state.isTrigger}" :style="{minHeight: state.minHeight + 'px'}" v-html="content" />
-			<view class="__content hideArea" v-html="content" />
+			<view class="__content showArea richText" :class="{ellipsis: state.ellipsis && state.isTrigger}" :style="{minHeight: state.minHeight + 'px'}" v-html="content" />
+			<view class="__content hideArea richText" v-html="content" />
 			<view class="__ios-ellipsis" v-if="state.isiOS && state.ellipsis && state.isTrigger">···</view>
 		</template>
 		<!-- 普通文本 -->
 		<template v-else>
-			<view class="__content showArea" :class="{ellipsis: state.ellipsis && state.isTrigger}">
+			<view class="__content showArea text" :class="{ellipsis: state.ellipsis && state.isTrigger}">
 				{{content}}
 			</view>
-			<view class="__content hideArea">
+			<view class="__content hideArea text">
 				{{content}}
 			</view>
 		</template>
@@ -141,6 +141,9 @@
 			color: #19191960;
 			word-break: break-all;
 
+			&.text {
+				white-space: pre-line;
+			}
 
 			&.ellipsis {
 				-webkit-line-clamp: var(--rows);
