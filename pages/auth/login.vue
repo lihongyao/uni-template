@@ -2,7 +2,6 @@
 	// -- imports 
 	import { reactive, computed } from "vue";
 	import Utils from '@/utils/index.js';
-	import AppHeader from '@/components/@lgs/AppHeader/AppHeader.vue';
 	import IconCheck from '@/components/@lgs/IconCheck/IconCheck.vue';
 	import VerifyCode from '@/components/@lgs/VerifyCode/VerifyCode.vue';
 	import Validator from 'lg-validator';
@@ -10,7 +9,8 @@
 	import Bus from "lg-bus";
 
 	// -- constants
-	const MAX_COUNT = 10;
+	const MAX_COUNT = 60;
+	const placeholderStyles = "font-size: 32rpx; color: rgba(0, 0, 0, .36)"
 	// -- state 
 	const state = reactive({
 		k: 0, // 0-微信快捷登录 1-手机号验证码登录 2-接收验证码
@@ -112,7 +112,6 @@
 <template>
 	<view class="page">
 		<!-- 导航栏 -->
-		<app-header showBack tintColor="#444444" title="登录" />
 		<!-- 1.微信快捷登录 -->
 		<view v-if="state.k === 0" class="loginForAuth">
 			<!-- 产品图 -->
@@ -141,7 +140,7 @@
 			<view class="tips f28 mt-10">新用户登录将自动注册</view>
 			<!-- 输入框 -->
 			<view class="input-wrap pb-30 mt-96">
-				<input :value="state.mobile" class="f32 f-600 ff-DIN-Bold" type="number" @input="onInput" auto-focus placeholder="请输入手机号码" maxlength="11" />
+				<input :value="state.mobile" class="f32 f-600 ff-DIN-Bold" type="number" @input="onInput" auto-focus :placeholder-style="placeholderStyles" placeholder="请输入手机号码" maxlength="11" />
 			</view>
 			<!-- 用户协议 & 隐私正常 -->
 			<view class="protocol flex-h-start f26 mt-20">

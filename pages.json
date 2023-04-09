@@ -1,18 +1,18 @@
 {
-	"pages": [{
+	"pages": [ {
 		"path": "pages/launch/launch",
 		"style": {
 			"navigationStyle": "custom"
 		}
-	}, {
-		"path": "pages/auth/login",
-		"style": {
-			"navigationStyle": "custom"
-		}
-	}, {
+	},{
 		"path": "pages/userinfo/userinfo",
 		"style": {
 			"navigationBarTitleText": "个人信息"
+		}
+	}, {
+		"path": "pages/auth/login",
+		"style": {
+			"navigationBarTitleText": "登录"
 		}
 	}, {
 		"path": "pages/userinfo/nickname",

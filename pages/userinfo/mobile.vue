@@ -8,7 +8,7 @@
 	import Bus from "lg-bus";
 
 	// -- constants
-	const MAX_COUNT = 10;
+	const MAX_COUNT = 60;
 	// -- refs 
 	const popup = ref();
 	// -- constants
@@ -119,6 +119,8 @@
 		<!-- 验证码弹框 -->
 		<uni-popup ref="popup" type="center" :safe-area="false" :is-mask-click="false">
 			<view class="popup-ct">
+				<!-- 标题 -->
+				<view class="f56 color-555555">更换手机号</view>
 				<!-- 提示信息 -->
 				<view class="tips f28 mt-10">
 					<text>验证码已发送至</text>
@@ -126,9 +128,9 @@
 					<text class="link" @click="onModifyMobile">修改</text>
 				</view>
 				<!-- 验证码输入框 -->
-				<VerifyCode v-model="state.code" :length="4" @validate="onValidate" />
+				<VerifyCode v-model="state.code" :length="4" align="left" @validate="onValidate" borderColor="rgba(0, 0, 0, .36)" />
 				<!-- 发送验证码 -->
-				<view class="flex-h-end mt-60">
+				<view class="flex-h-end mt-80">
 					<view v-if="state.count" class="action-button disabled bg-theme flex-h-center color-FFFFFF rounded-45 f26">{{timeString}}s</view>
 					<view v-else class="action-button bg-theme flex-h-center color-FFFFFF rounded-45 f26" @click="onSendCode">重新获取</view>
 				</view>
@@ -175,8 +177,7 @@
 
 	.popup-ct {
 		width: 680rpx;
-		height: 500rpx;
-		padding: 50rpx 30rpx 0;
+		padding: 50rpx 30rpx 100rpx;
 		border-radius: 16rpx;
 		background: #FFFFFF;
 

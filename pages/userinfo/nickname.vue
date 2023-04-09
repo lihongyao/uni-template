@@ -35,7 +35,6 @@
 			state.nickName = '';
 			state.saveEnable = false;
 		}
-		console.log(state.nickName, '哈哈哈哈')
 	}
 	const onSubmit = () => {
 		// 是否合法交由后端处理
