@@ -2,45 +2,50 @@
 <!-- 关于属性 -->
 <!-- @meta：元数据，为了方便操作，建议至少包含如下属性 -->
 <!-- { readStatus, isPlaying, duration } -->
+
 <script setup>
 	// -- imports 
 	import { onMounted, reactive } from "vue";
 
 	// -- props 
 	const props = defineProps({
-		/** 消息内容，仅支持音频/文本格式（必传） */
+		/** 消息内容，仅支持音频/文本/图片格式（必传） */
 		message: String,
+		/** 语音描述 */
+		audioText: String,
 		/** 用户头像（必传） */
 		avatar: String,
 		/** 源数据，事件触发时作为事件参数回传给调用者（必传） */
 		meta: Object,
-		/** 消息框位置：L（左侧）/R（右侧），默认值：R */
+		/** 消息框位置：L（左侧-好友）/R（右侧-自己），默认值：R */
 		align: { type: String, default: "R" },
 		/** 音频时设置：阅读状态，0-未读，1-已读 */
 		readStatus: { type: Number, default: 1 },
-		/** 音频时设置：播放状态 */
+		/** 音频时设置：播放状态，标识音频消息当前是否处于播放中（用于控制音频消息动效） */
 		isPlaying: Boolean,
 		/** 音频时设置：持续时间，单位秒 */
 		duration: { type: Number, default: 0 },
 		/** 音频时设置：最长时间，单位秒，用于动态计算语音消息框的宽度 */
 		maxDuration: { type: Number, default: 60 },
-		/** 聊天框(左侧)颜色 */
-		LBgColor: { type: String, default: "#FFFFFF" },
-		/** 聊天框(右侧)颜色 */
-		RBgColor: { type: String, default: "#A594FF" },
-		/** 前景色(左侧) */
-		LTintColor: { type: String, default: '#1A1A1A' },
-		/** 前景色(右侧) */
-		RTintColor: { type: String, default: '#FFFFFF' },
-		/** 展示Loading动画，只针对消息内容为文本且只显示一行时时有效（显示正常） */
+		/** 音频时设置： 音频播放状态动画类型，可选值：line-线条 horn-喇叭 */
+		aniType: { type: String, default: "horn" },
+		/** 颜色配置项 */
+		colorOptions: {
+			type: Object,
+			default: () => ({})
+		},
+		/** 展示Loading动画，只针对消息内容为文本且只显示一行时有效（显示正常） */
 		showLoading: Boolean,
 		/** 展示icon，只针对消息内容为文本且只显示一行时时有效（显示正常）*/
 		showIcon: Boolean,
 		/** 展示跳过按钮 */
 		showSkip: Boolean,
 		/** 是否启用工具栏（只在align=R时有效） */
-		showToolbar: Boolean
+		showTools: Boolean,
+		/** 进度展示 */
+		progress: { type: Number, default: -1 }
 	});
+
 	// -- emits
 	// -- @play：音频播放（调用者需自行通过Audio实例对象播放）
 	// -- @stop：音频停止（调用者需自行通过Audio实例对象停止）
@@ -62,22 +67,33 @@
 	});
 
 	// -- styles 
+	const mergedColorOptions = {
+		/** 主色，控制跳过/进度等内容的颜色 */
+		primaryColor: "#A594FF",
+		/** 聊天框(左侧)颜色 */
+		LBgColor: "#FFFFFF",
+		/** 聊天框(右侧)颜色 */
+		RBgColor: "#A594FF",
+		/** 文本颜色(左侧) */
+		LTextColor: "#1A1A1A",
+		/** 文本颜色(右侧) */
+		RTextColor: "#FFFFFF",
+		/** 语音动效元素背景颜色（左侧） */
+		LAniBgColor: "#A594FF",
+		/** 语音动效元素背景颜色（右侧） */
+		RAniBgColor: "#FFFFFF"
+	}
+	const colorOptions = Object.assign({}, mergedColorOptions, props.colorOptions);
 	const varStyles = {
-		'--bg-color': props.align === 'L' ? props.LBgColor : props.RBgColor,
-		'--tint-color': props.align === 'L' ? props.LTintColor : props.RTintColor,
+		'--bg-color': props.align === 'L' ? colorOptions.LBgColor : colorOptions.RBgColor,
+		'--ani-color': props.align === 'L' ? colorOptions.LAniBgColor : colorOptions.RAniBgColor,
+		'--text-color': props.align === 'L' ? colorOptions.LTextColor : colorOptions.RTextColor,
+		'--primary-color': colorOptions.primaryColor,
 	}
-	const avatarLStyles = {
-		visibility: props.align === 'L' ? 'visible' : 'hidden'
-	}
-	const avatarRStyles = {
-		visibility: props.align === 'R' ? 'visible' : 'hidden'
-	}
-	const caseStyles = {
-		justifyContent: props.align === 'L' ? 'flex-start' : 'flex-end'
-	}
-	const wrapStyles = {
-		justifyContent: props.align === 'L' ? 'flex-start' : 'flex-end'
-	}
+	const avatarLStyles = { visibility: props.align === 'L' ? 'visible' : 'hidden' }
+	const avatarRStyles = { visibility: props.align === 'R' ? 'visible' : 'hidden' }
+	const caseStyles = { justifyContent: props.align === 'L' ? 'flex-start' : 'flex-end' }
+	const wrapStyles = { justifyContent: props.align === 'L' ? 'flex-start' : 'flex-end' }
 
 	// -- life circles
 	onMounted(() => {
@@ -96,6 +112,11 @@
 	});
 
 	// -- methods 
+	const getAudioCls = () => {
+		const readStatus = props.readStatus ? '' : 'unread';
+		const audioText = props.audioText ? 'hasText' : '';
+		return `__wrap AUDIO ${props.align} ${readStatus} ${audioText}`
+	}
 	const getMessageType = (message) => {
 		if (/\.(mp3|wav|ogg|aac)$/i.test(message)) {
 			return "AUDIO";
@@ -124,7 +145,7 @@
 	}
 	const onLongPress = () => {
 		// -- 长按自己发送的消息时，显示工具栏
-		if (props.align === 'R' && props.showToolbar) {
+		if (props.align === 'R' && props.showTools) {
 			emits("openTools", closeTools);
 			state.openTools = true;
 		}
@@ -132,6 +153,14 @@
 	const onToolItemTap = (eventName) => {
 		state.openTools = false;
 		emits(eventName, props.meta);
+	}
+	const onImagePreview = () => {
+		uni.previewImage({
+			urls: [props.message],
+			current: 0,
+			indicator: "none",
+			longPressActions: true,
+		})
 	}
 </script>
 
@@ -145,99 +174,113 @@
 			<image class="__avatar" :src="avatar" mode="aspectFill" :style="avatarLStyles"></image>
 			<!-- 消息框容器（限制消息框最大宽度） -->
 			<view class="__case" :style="caseStyles">
+
 				<!-- 1.图片 -->
-				<view v-if="state.messageType === 'IMAGE'" class="__wrap IMAGE">
-					<image :src="message" mode="widthFix" @longpress="onLongPress"></image>
+				<view v-if="state.messageType === 'IMAGE'" class="__wrap IMAGE" style="position: relative;">
+					<image :src="message" mode="widthFix" @click="onImagePreview" @longpress="onLongPress"></image>
 					<!-- 工具 -->
 					<view class="__tools" :class="{visible: state.openTools}">
 						<view class="item" @click.stop="onToolItemTap('undo')">撤回</view>
 					</view>
 				</view>
-				<!-- 2.语音消息 -->
-				<view v-if="state.messageType === 'AUDIO'" :class="`__wrap AUDIO ${align} ${readStatus  ? '' : 'unread'}`" :style="{...wrapStyles, width: state.wrapWidth}" @click="onAudioTap" @longpress="onLongPress">
-					<!-- 消息内容 -->
-					<template>
-						<view v-if="align === 'R'" class="__seconds" style="margin-right: 15rpx;">{{duration}}''</view>
-						<view class="__ani" :class="{running: isPlaying}">
-							<view class="item"></view>
-							<view class="item"></view>
-							<view class="item"></view>
-							<view class="item"></view>
-						</view>
-						<view v-if="align === 'L'" class="__seconds" style="margin-left: 15rpx;">{{duration}}''</view>
-					</template>
-					<!-- 角标提示 -->
-					<view :class="`angle ${align}`"></view>
-					<!-- 工具 -->
-					<view class="__tools" :class="{visible: state.openTools}">
-						<view class="item" @click.stop="onToolItemTap('undo')">撤回</view>
-					</view>
-				</view>
-				<!-- 3.文字消息 -->
-				<view v-if="state.messageType === 'TEXT'" :class="`__wrap TEXT ${align}`" :style="{...wrapStyles}" @longpress="onLongPress">
-					<template>
+
+
+
+				<!-- 2. 语音消息 / 文字消息  -->
+				<view v-if="['AUDIO', 'TEXT'].includes(state.messageType) " :class="`__slotWraps ${align}` " :style="{ width: audioText ? 'auto' : state.wrapWidth}">
+
+					<!-- 语音消息 Start -->
+					<view v-if="state.messageType === 'AUDIO'" :class="getAudioCls()" :style="{...wrapStyles}" @click="onAudioTap" @longpress="onLongPress">
 						<!-- 消息内容 -->
-						<text user-select>{{message}}</text>
-						<!-- 展示Loading -->
-						<view v-if="showLoading" class="__loading">
-							<view class="item"></view>
-							<view class="item"></view>
-							<view class="item"></view>
-						</view>
-						<!-- 展示Icon -->
-						<image v-if="showIcon" class="__icon" src="./images/icon_complete.png"></image>
-					</template>
-					<!-- 角标提示 -->
-					<view :class="`angle ${align}`"></view>
+						<template>
+							<!-- 持续时间：展示条件 → 右侧且语音文本不存在时 -->
+							<view v-if="align === 'R'" class="__seconds" style="margin-right: 15rpx;">{{duration}}''</view>
+
+							<!-- 语音动画 Satrt -->
+							<!-- 喇叭效果 -->
+							<view v-if="aniType === 'horn' " class="__aniHorn" :class="{running: isPlaying, R: align === 'R'}">
+								<view class="item"></view>
+								<view class="item"></view>
+								<view class="item"></view>
+							</view>
+							<!-- 线条效果 -->
+							<view v-else class="__aniLine" :class="{running: isPlaying}">
+								<view class="item"></view>
+								<view class="item"></view>
+								<view class="item"></view>
+								<view class="item"></view>
+							</view>
+							<!-- 语音动画 End -->
+
+							<!-- 语音文本 -->
+							<view v-if="audioText && align === 'L'" style="margin-left: 15rpx;">{{audioText}}</view>
+
+							<!-- 持续时间：展示条件 → 左侧且语音文本不存在时 -->
+							<view v-if="!audioText && align === 'L'" class="__seconds" style="margin-left: 15rpx;">{{duration}}''</view>
+						</template>
+
+					</view>
+					<!-- 语音消息 End -->
+
+					<!-- 文字消息 Start -->
+					<view v-if="state.messageType === 'TEXT'" :class="`__wrap TEXT `" :style="{...wrapStyles}" @longpress.stop="onLongPress">
+						<template>
+							<!-- 消息内容 -->
+							<text>{{message}}</text>
+							<!-- 展示Loading -->
+							<view v-if="showLoading" class="__loading">
+								<view class="item"></view>
+								<view class="item"></view>
+								<view class="item"></view>
+							</view>
+							<!-- 插槽：后缀 -->
+							<slot name="suffix"></slot>
+							<!-- 展示Icon -->
+							<image v-if="showIcon" class="__icon" src="./images/icon_complete.png"></image>
+							<!-- 展示进度数值 -->
+							<text v-if="progress !== -1" class="__progress-v">{{progress}}%</text>
+						</template>
+						<!-- 进度条 -->
+						<view v-if="progress !== -1" class="__progress" :style="{'--progress-percent': progress + '%'}"></view>
+					</view>
+					<!-- 文字消息 End -->
+
+					<!-- 杂项元素 Start -->
 					<!-- 工具 -->
 					<view class="__tools" :class="{visible: state.openTools}">
 						<view class="item" @click.stop="onToolItemTap('undo')">撤回</view>
 					</view>
+					<!-- 角标提示 -->
+					<view :class="`angle ${align}`"></view>
+					<!-- 跳过按钮 -->
+					<template v-if="align === 'L' && showSkip">
+						<view class="__skip" @click.stop="emits('skip')">跳过</view>
+					</template>
+					<!-- 杂项元素 End -->
+
+					<!-- 自定义插槽 -->
+					<slot name="bottom"></slot>
+
 				</view>
 			</view>
 			<!-- 头像（右侧） -->
 			<image class="__avatar" :src="avatar" mode="aspectFill" :style="avatarRStyles"></image>
-			<!-- 跳过按钮 -->
-			<template v-if="align === 'L' && showSkip">
-				<view class="__skip" @click.stop="emits('skip')">跳过</view>
-			</template>
+
 		</view>
 	</view>
 </template>
 
 
 <style lang="less" scoped>
-	@keyframes line-scale-pulse-out {
-		0% {
-			transform: scaleY(1);
-		}
-
-		50% {
-			transform: scaleY(0.3);
-		}
-
-		100% {
-			transform: scaleY(1);
-		}
-	}
-
-	@keyframes ani-loading {
-
-		0%,
-		40%,
-		100% {
-			transform: scaleY(.4);
-		}
-
-		20% {
-			transform: scaleY(1);
-		}
-	}
+	
+	@import url("./anis/ani.css");
 
 	.lg-message-box {
-		padding: 15rpx 16rpx;
+		padding: 12rpx 16rpx;
 		font-size: 30rpx;
-		color: var(--tint-color);
+		line-height: 38rpx;
+		word-break: break-all;
+		color: var(--text-color);
 
 		&__ct {
 			display: flex;
@@ -301,26 +344,18 @@
 				.__wrap {
 					display: flex;
 					align-items: center;
-					position: relative;
 				}
 
-				/** 图片样式 */
-				.IMAGE {
-					width: 60%;
-
-					image {
-						width: 100%;
-					}
-				}
-
-				/** 语音/文本公共样式 */
-				.AUDIO,
-				.TEXT {
-					min-height: 80rpx;
+				/** 语音/文字容器(支持自定义插槽) */
+				.__slotWraps {
 					background: var(--bg-color);
+					box-sizing: border-box;
+					min-height: 80rpx;
 					border-radius: 12rpx;
-					padding: 0 30rpx;
+					padding: 21rpx 30rpx;
+					position: relative;
 
+					/** 角标（三角形） */
 					.angle {
 						width: 0;
 						height: 0;
@@ -341,17 +376,88 @@
 					}
 				}
 
+
+				/** 图片样式 */
+				.IMAGE {
+					width: 60%;
+
+					image {
+						width: 100%;
+					}
+				}
+
 				/** 语音样式 */
 				.AUDIO {
-					.__ani {
+					.__aniHorn {
+						width: 32rpx;
+						height: 36rpx;
+						flex-shrink: 0;
+						overflow: hidden;
+						position: relative;
+
+						&.R {
+							transform: rotate(180deg);
+						}
+
+						.item {
+							box-sizing: content-box;
+							position: absolute;
+							top: 50%;
+
+							&:nth-child(1) {
+								border-top: 8rpx solid transparent;
+								border-right: 8rpx solid var(--ani-color);
+								border-bottom: 8rpx solid transparent;
+								border-radius: 50%;
+								left: 8rpx;
+								transform: translate(-50%, -50%);
+							}
+
+							&:nth-child(2) {
+								width: 20rpx;
+								height: 20rpx;
+								border-radius: 50%;
+								border: 4rpx solid transparent;
+								border-right-color: var(--ani-color);
+								right: calc(50% - 6rpx);
+								transform: translateY(-50%);
+							}
+
+							&:nth-child(3) {
+								width: 36rpx;
+								height: 36rpx;
+								border-radius: 50%;
+								border: 4rpx solid transparent;
+								border-right-color: var(--ani-color);
+								right: 0;
+								transform: translateY(-50%);
+							}
+						}
+
+						&.running .item {
+							&:nth-child(2) {
+								opacity: 0;
+								animation: ani-horn-1 linear 1s infinite;
+							}
+
+							&:nth-child(3) {
+								opacity: 0;
+								animation: ani-horn-2 linear 1s infinite;
+							}
+						}
+					}
+
+					.__aniLine {
 						display: flex;
 						justify-content: center;
 						align-items: center;
+						flex-shrink: 0;
+						position: relative;
 
 						.item {
 							width: 4rpx;
 							height: 28rpx;
-							background-color: var(--tint-color);
+							background-color: var(--ani-color);
 
 							&:not(:last-child) {
 								margin-right: 6rpx;
@@ -407,17 +513,59 @@
 						transform: translateY(-50%);
 						right: -40rpx;
 					}
+
+					/** 语音+文本时 */
+					&.hasText {
+						align-items: flex-start;
+
+						/** 微调语音动效元素的位置 */
+						.__aniHorn {
+							top: 2rpx;
+						}
+
+						.__aniLine {
+							top: 6rpx;
+						}
+					}
 				}
 
 				/** 文本样式 */
 				.TEXT {
-					padding: 18rpx 28rpx;
-					word-break: break-all;
 
 					.__icon {
 						width: 34rpx;
 						height: 34rpx;
 						margin-left: 15rpx;
+					}
+
+					.__progress-v {
+						width: 80rpx;
+						text-align: right;
+						color: var(--primary-color);
+						margin-left: 15rpx;
+					}
+
+					.__progress {
+						width: 100%;
+						height: 100%;
+						border-radius: 12rpx;
+						overflow: hidden;
+						background: transparent;
+						position: absolute;
+						top: 0;
+						left: 0;
+
+						&::after {
+							content: '';
+							display: block;
+							transition: width .25s linear;
+							width: var(--progress-percent);
+							height: 2rpx;
+							background-color: var(--primary-color);
+							position: absolute;
+							left: 0;
+							bottom: 0;
+						}
 					}
 
 					.__loading {
@@ -427,20 +575,30 @@
 						margin-left: 15rpx;
 
 						.item {
-							display: inline-block;
-							width: 6rpx;
-							height: 20rpx;
-							background-color: #A594FF;
-							margin-right: 8rpx;
-							animation: ani-loading 1s linear infinite;
-							border-radius: 3rpx;
+							background: var(--primary-color);
+							vertical-align: middle;
+							opacity: 0;
+
+							&:nth-child(1) {
+								width: 8rpx;
+								height: 8rpx;
+								border-radius: 50%;
+								animation: ani-loading-1 2s linear infinite;
+							}
 
 							&:nth-child(2) {
-								animation-delay: -0.8s;
+								width: 8rpx;
+								height: 16rpx;
+								border-radius: 4rpx;
+								margin: 0 6rpx;
+								animation: ani-loading-2 2s linear infinite;
 							}
 
 							&:nth-child(3) {
-								animation-delay: -0.6s;
+								width: 8rpx;
+								height: 24rpx;
+								border-radius: 4rpx;
+								animation: ani-loading-3 2s linear infinite;
 							}
 						}
 					}
@@ -452,9 +610,9 @@
 			.__skip {
 				font-size: 32rpx;
 				line-height: 44rpx;
-				color: #A594FF;
+				color: var(--primary-color);
 				position: absolute;
-				right: 10rpx;
+				right: -84rpx;
 				bottom: 0;
 			}
 		}

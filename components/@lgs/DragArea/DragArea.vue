@@ -93,6 +93,8 @@
 				<image mode="widthFix" :src="uri" @load="onLoadImage"></image>
 			</movable-view>
 		</movable-area>
+		<!-- 自定义插槽 -->
+		<slot></slot>
 	</view>
 </template>
 
@@ -104,6 +106,7 @@
 		border: 1rpx solid #EEEEEE;
 		display: flex;
 		flex-direction: column;
+		position: relative;
 
 		&__action {
 			width: 100%;

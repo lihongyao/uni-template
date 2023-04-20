@@ -1,7 +1,18 @@
 <!-- 
- 注意：使用时需固定高度
- :deep(.lg-scroll-list) {
-		height: calc(100vh - 50px);
+ 注意：
+ 使用时需固定高度，建议调用者外层容器使用弹性垂直布局
+ 1. 标签
+ <scroll-list class="scroll" />
+ 2. 样式
+ .page {
+	 /** 外层容器必须使用弹性布局才生效 */
+	 display: flex;
+	 flex-direction: column;
+ }
+ .scroll {
+	  flex: 1;
+		/** 此属性必须设置 */
+		position: relative; 
  }
 -->
 
@@ -23,7 +34,8 @@
 	// -- emits 
 	// -- @refresh：触发下拉刷新，调用者需回调next函数处理后续逻辑
 	// -- @load：触发上拉加载
-	const emits = defineEmits(['refresh', "load"]);
+	// -- @scroll：滚动时触发
+	const emits = defineEmits(['refresh', "load", "scroll"]);
 
 	// -- state 
 	const state = reactive({
@@ -38,10 +50,9 @@
 		/** 滚动距离（在滚动至底部时用） */
 		scrollTop: 0,
 		/** 滚动至指定元素的ID值 */
-		scrollId: '',
+		scrollID: '',
 		/** 当前组件实例，用于调用query API */
 		instance: null,
-		
 	});
 
 	// -- life circles
@@ -96,17 +107,17 @@
 				return "刷新成功";
 		}
 	}
-	
+
 	/**
 	 * 滚动至指定元素/位置
 	 * @param {String|Number} v 
 	 */
 	const scrollTo = (v) => {
-		if(typeof v === 'number') {
+		if (typeof v === 'number') {
 			state.scrollTop = v;
-		}else if(typeof v === "string") {
-			state.scrollId = v;
-		}	
+		} else if (typeof v === "string") {
+			state.scrollID = v;
+		}
 	}
 
 	/**
@@ -124,6 +135,8 @@
 					// 计算出二者的差值就是需要滚动的距离
 					state.scrollTop = contentHeight - wrapHeight;
 					console.log(`wrapHeight=${wrapHeight}，contentHeight=${contentHeight}，scrollTop=${contentHeight - wrapHeight}`);
+				} else {
+					state.scrollTop = 0;
 				}
 			}
 		}).exec();
@@ -168,6 +181,11 @@
 		emits("load");
 	}
 
+	// 6. 滚动
+	const onScroll = (e) => {
+		emits("scroll", e);
+	}
+
 	// -- exposes
 	defineExpose({
 		scrollTo,
@@ -177,22 +195,7 @@
 
 
 <template>
-	<scroll-view 
-		scroll-y 
-		scroll-with-animation 
-		refresher-default-style="none" 
-		:class="`lg-scroll-list ${cls}`" 
-		:scroll-top="state.scrollTop" 
-		:lower-threshold="lowerThreshold" 
-		:refresher-enabled="refresherEnabled" 
-		:refresher-threshold="state.threshold" 
-		:refresher-triggered="state.triggered" 
-		@scrolltolower="onLoad" 
-		@refresherrefresh="onRefresh" 
-		@refresherrestore="onRestore" 
-		@refresherpulling="onPulling" 
-		@refresherabort="onAbort"
-	>
+	<scroll-view scroll-y scroll-with-animation refresher-default-style="none" :class="`lg-scroll-list ${cls}`" :scroll-top="state.scrollTop" :lower-threshold="lowerThreshold" :refresher-enabled="refresherEnabled" :refresher-threshold="state.threshold" :refresher-triggered="state.triggered" @scroll="onScroll" @scrolltolower="onLoad" @refresherrefresh="onRefresh" @refresherrestore="onRestore" @refresherpulling="onPulling" @refresherabort="onAbort">
 		<view class="lg-scroll-list__refresh-bar" :style="{'--refresher-bg-color': props.refresherBackground, '--refresher-top': `-${state.threshold}px`, '--refresher-height':`${state.threshold}px`}">{{renderRefreshText()}}</view>
 		<view class="lg-scroll-list__wrap">
 			<slot></slot>
@@ -206,8 +209,12 @@
 
 <style lang="less" scoped>
 	.lg-scroll-list {
-		position: relative;
+		position: absolute;
+		height: 100%;
 
+		/** 非自定义组件弹性布局自适应高度技巧 */
+		// flex: 1;
+		// height: 0;
 		&__refresh-bar {
 			width: 100%;
 			height: var(--refresher-height);

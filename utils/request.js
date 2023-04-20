@@ -75,16 +75,18 @@ const request = (options) => {
 							// }
 							break;
 						default:
+							reject(msg);
 							uni.showToast({ title: msg || '服务器忙，请稍后再试！', icon: 'none' });
 					}
 				} else {
+					reject(response.data.error);
 					uni.showToast({ title: response.data.error, icon: 'none' })
 				}
 			},
 			fail: (err) => {
+				reject(err);
 				console.log('AJAX_ERROR：', err)
-			},
-			complete: () => {}
+			}
 		})
 	});
 };

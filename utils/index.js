@@ -225,7 +225,7 @@ export default class Utils {
 				name: 'file',
 				formData,
 				header: {
-					"Authorization": 'Bearer ' + token.token,
+					"Authorization": 'Bearer ' + token,
 				},
 				success: (res) => {
 					if ([200, 204].includes(res.statusCode)) {
@@ -484,6 +484,54 @@ export default class Utils {
 	 * @param {Object} params 附加参数
 	 */
 	static umaTrackEvent(eventId, params) {
+		console.log('-------------------------------------------------');
+		console.log("友盟统计");
+		console.log("eventId：", eventId);
+		console.log("params：", JSON.stringify(params))
+		console.log('-------------------------------------------------');
 		uma.trackEvent(eventId, params);
 	}
+
+	/**
+	 * 拾取头像
+	 * 1. 从本地相册拾取/摄像头拍照
+	 * 2. 支持裁剪 → 1:1
+	 */
+	static chooseAvatar() {
+		return new Promise((resolve, reject) => {
+			// 1. 选择图片
+			uni.chooseMedia({
+				count: 1,
+				mediaType: ['image'],
+				sourceType: ['album', 'camera'],
+				camera: "front",
+				success({ errMsg, tempFiles }) {
+					if (/ok/.test(errMsg)) {
+						const { tempFilePath } = tempFiles[0];
+						// 2. 裁剪图片
+						uni.cropImage({
+							src: tempFilePath,
+							cropScale: '1:1',
+							success({ errMsg, tempFilePath }) {
+								if (/ok/.test(errMsg)) {
+									resolve(tempFilePath);
+								} else {
+									console.log(errMsg);
+								}
+							},
+							fail(error) {
+								console.log(error);
+							}
+						})
+					} else {
+						console.log(errMsg);
+					}
+				},
+				fail(error) {
+					console.log(error);
+				}
+			})
+		})
+	}
+
 }

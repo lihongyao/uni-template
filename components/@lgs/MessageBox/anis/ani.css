@@ -1,0 +1,110 @@
+/* 语音动画-线条 */
+@keyframes line-scale-pulse-out {
+	0% {
+		transform: scaleY(1);
+	}
+
+	50% {
+		transform: scaleY(0.3);
+	}
+
+	100% {
+		transform: scaleY(1);
+	}
+}
+
+
+
+/* 语音动画-喇叭 */
+/* 计算方式：3帧显示，100/3=33.33%，关键帧位置：0% 33.33% 66.66% 99.99% */
+@keyframes ani-horn-1 {
+	0% {
+		opacity: 0;
+	}
+
+	32% {
+		opacity: 0;
+	}
+
+	33.33% {
+		opacity: 1;
+	}
+
+	100% {
+		opacity: 1;
+	}
+}
+
+/* 语音动画-喇叭 */
+@keyframes ani-horn-2 {
+	0% {
+		opacity: 0;
+	}
+
+	65% {
+		opacity: 0;
+	}
+
+	66.66% {
+		opacity: 1;
+	}
+
+	100% {
+		opacity: 1;
+	}
+}
+
+
+
+
+/* 加载中 */
+/* 计算方式：4帧显示，100/4=25%，关键帧位置：0% 25% 50% 75% 100%*/
+@keyframes ani-loading-1 {
+	0% {
+		opacity: 1;
+	}
+
+	74% {
+		opacity: 1;
+	}
+
+	75% {
+		opacity: 0;
+	}
+}
+
+@keyframes ani-loading-2 {
+	24% {
+		opacity: 0;
+	}
+
+	25% {
+		opacity: 1;
+	}
+
+	74% {
+		opacity: 1;
+	}
+
+	75% {
+		opacity: 0;
+	}
+}
+
+@keyframes ani-loading-3 {
+	49% {
+		opacity: 0;
+	}
+
+	50% {
+		opacity: 1;
+	}
+
+	74% {
+		opacity: 1;
+	}
+
+	75% {
+		opacity: 0;
+	}
+}

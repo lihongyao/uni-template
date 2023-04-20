@@ -1,5 +1,5 @@
 /**********************
- ** Define Fonts
+ ** Define Custom Fonts
  **********************/
 @font-face {
 	font-family: "DIN-Bold";
@@ -11,27 +11,16 @@
 /**********************
  ** Define Animations
  **********************/
-@keyframes ani-cursor {
-	from { opacity: 0;}
-	to { opacity: 1;}
-}
-@keyframes ani-routate-Z {
-	from { transform: rotateZ(0);}
-	to { transform: rotateZ(360deg);}
-}
-@keyframes ani-float {
-	from { transform: translateY(-60rpx);}
-	to { transform: translateY(0);}
-}
-@keyframes ani-move-to-right  {
-	0%, 80% { left: -100%; }
-	100% { left: 100%; }
-}
+@keyframes ani-breathing { from { transform: scale(.97);} to { transform: scale(1);} }
+@keyframes ani-cursor { from { opacity: 0;} to { opacity: 1;} }
+@keyframes ani-routate-Z { from { transform: rotateZ(0);} to { transform: rotateZ(360deg);} }
+@keyframes ani-float { from { transform: translateY(-60rpx);} to { transform: translateY(0);} }
+@keyframes ani-move-to-right  { 0%, 80% { left: -100%; } 100% { left: 100%; } }
 
+.ani-breathing { animation: ani-breathing .6s ease-out alternate infinite; }
 .ani-move-to-right { animation: ani-move-to-right 5s ease-in-out infinite; }
 .ani-rotate-Z { animation: ani-routate-Z 4s linear infinite; }
 .ani-float { animation: ani-float 1s linear infinite alternate; }
-
 
 
 /**********************
@@ -103,8 +92,6 @@ image { box-sizing: content-box; }
 .color-B8BDC8 { color: #B8BDC8; } 
 .color-BFBFBF { color: #BFBFBF; } 
 
-
-
 /**********************
  ** Spacings...
  **********************/
@@ -135,6 +122,7 @@ image { box-sizing: content-box; }
 .px-28 { padding-left: 28rpx; padding-right: 28rpx; }
 .px-30 { padding-left: 30rpx; padding-right: 30rpx; }
 .px-32 { padding-left: 32rpx; padding-right: 32rpx; }
+.px-33 { padding-left: 33rpx; padding-right: 33rpx; }
 .px-36 { padding-left: 36rpx; padding-right: 36rpx; }
 .px-38 { padding-left: 38rpx; padding-right: 38rpx; }
 .px-40 { padding-left: 40rpx; padding-right: 40rpx; }
@@ -152,8 +140,10 @@ image { box-sizing: content-box; }
 .py-2 { padding-top: 2rpx; padding-bottom: 2rpx; }
 .py-4 { padding-top: 4rpx; padding-bottom: 4rpx; }
 .py-6 { padding-top: 6rpx; padding-bottom: 6rpx; }
+.py-8 { padding-top: 8rpx; padding-bottom: 8rpx; }
 
 .py-10 { padding-top: 10rpx; padding-bottom: 10rpx; }
+.py-11 { padding-top: 11rpx; padding-bottom: 11rpx; }
 .py-12 { padding-top: 12rpx; padding-bottom: 12rpx; }
 .py-14 { padding-top: 14rpx; padding-bottom: 14rpx; }
 .py-18 { padding-top: 18rpx; padding-bottom: 18rpx; }
@@ -162,6 +152,7 @@ image { box-sizing: content-box; }
 .py-26 { padding-top: 26rpx; padding-bottom: 26rpx; }
 .py-28 { padding-top: 28rpx; padding-bottom: 28rpx; }
 .py-30 { padding-top: 30rpx; padding-bottom: 30rpx; }
+.py-32 { padding-top: 32rpx; padding-bottom: 32rpx; }
 .py-34 { padding-top: 34rpx; padding-bottom: 34rpx; }
 .py-36 { padding-top: 36rpx; padding-bottom: 36rpx; }
 .py-40 { padding-top: 40rpx; padding-bottom: 40rpx; }
@@ -220,6 +211,8 @@ image { box-sizing: content-box; }
 .pr-42 { padding-right: 42rpx; }
 .pr-46 { padding-right: 46rpx; }
 
+
+.pb-4  { padding-bottom: 4rpx;  } 
 .pb-10 { padding-bottom: 10rpx; }
 .pb-12 { padding-bottom: 12rpx; }
 .pb-14 { padding-bottom: 14rpx; }
@@ -405,6 +398,7 @@ image { box-sizing: content-box; }
 .ml-24 { margin-left: 24rpx; }
 .ml-28 { margin-left: 28rpx; }
 .ml-30 { margin-left: 30rpx; }
+.ml-32 { margin-left: 32rpx; }
 .ml-34 { margin-left: 34rpx; }
 .ml-42 { margin-left: 42rpx; }
 .ml-56 { margin-left: 56rpx; }
@@ -448,6 +442,7 @@ image { box-sizing: content-box; }
 .icon-72x72 { width: 72rpx; height: 72rpx; }
 .icon-76x76 { width: 76rpx; height: 76rpx; }
 .icon-80x80 { width: 80rpx; height: 80rpx; }
+.icon-88x88 { width: 88rpx; height: 88rpx; }
 .icon-92x92 { width: 92rpx; height: 92rpx; }
 .icon-96x96 { width: 96rpx; height: 96rpx; }
 
@@ -456,10 +451,11 @@ image { box-sizing: content-box; }
 .icon-108x108 { width: 108rpx; height: 108rpx; }
 .icon-112x112 { width: 112rpx; height: 112rpx; }
 .icon-120x120 { width: 120rpx; height: 120rpx; }
-.icon-160x160 { width: 160rpx; height: 160rpx; }
+.icon-136x136 { width: 136rpx; height: 136rpx; }
 .icon-144x144 { width: 144rpx; height: 144rpx; }
 .icon-145x145 { width: 145rpx; height: 145rpx; }
 .icon-148x148 { width: 148rpx; height: 148rpx; }
+.icon-160x160 { width: 160rpx; height: 160rpx; }
 .icon-190x190 { width: 190rpx; height: 190rpx; }
 .icon-238x238 { width: 238rpx; height: 238rpx; }
 .icon-438x438 { width: 438rpx; height: 438rpx; }
@@ -488,7 +484,6 @@ image { box-sizing: content-box; }
 .rounded-38 { border-radius: 38rpx; }
 .rounded-42 { border-radius: 42rpx; }
 .rounded-44 { border-radius: 44rpx; }
-.rounded-45 { border-radius: 45rpx; }
 .rounded-46 { border-radius: 46rpx; }
 .rounded-48 { border-radius: 48rpx; }
 .rounded-50 { border-radius: 50rpx; }
@@ -692,6 +687,3 @@ image { box-sizing: content-box; }
 .space-200 { height: 200rpx; }
 .space-236 { height: 236rpx; }
 .space-400 { height: 400rpx; }
-
-
-

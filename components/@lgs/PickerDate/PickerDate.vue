@@ -1,5 +1,5 @@
 <script setup>
-	import { nextTick, onMounted, reactive } from "vue";
+	import { nextTick, reactive } from "vue";
 	import { getYears, getMonths, getDays, getDateMeta, isLeapYear } from "./helper.js";
 
 	// -- props 
@@ -11,7 +11,9 @@
 		/** 细粒度，有效值 YEAR/MONTH/DAY，默认为DAY */
 		fields: { type: String, default: "DAY" },
 		/** 是否展示至今项 */
-		showNow: { type: Boolean, default: false }
+		showNow: { type: Boolean, default: false },
+		/** 日期格式 */
+		format: { type: String, default: 'YYYY-MM-DD' }
 	})
 	// -- emits 
 	const emits = defineEmits(["change"]);
@@ -50,6 +52,7 @@
 		days: props.showNow ? [] : __days, // 日期集合
 		visible: false // 是否显示
 	});
+
 
 	// -- methods
 	// 1. 获取当前选中的日期
@@ -95,12 +98,14 @@
 
 	// -- events 
 	const onSure = () => {
-		const { year, month, day } = getValueMeta();
+		const { year, month = '01', day = '01' } = getValueMeta();
 		if (year === "至今") {
 			emits("change", generateValue("至今"));
 		} else {
 			// 根据细粒度返回值
-			switch (props.fields) {
+			const v = props.format.replace(/YYYY/, year).replace(/MM/, month).replace(/DD/, day);
+			emits("change", generateValue(v));
+			/*switch (props.fields) {
 				case "YEAR":
 					emits("change", generateValue(year))
 					break;
@@ -108,11 +113,11 @@
 					emits("change", generateValue(`${year}-${month}`));
 					break;
 				case "DAY":
-					emits("change", generateValue(`${year}-${month}-${day || '01'}`))
+					emits("change", generateValue(`${year}-${month}-${day}`))
 					break;
 				default:
 					emits("change", "——————");
-			}
+			}*/
 		}
 		state.visible = false;
 	}

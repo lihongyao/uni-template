@@ -1,6 +1,7 @@
 <script setup>
 	import { nextTick, onMounted, reactive, ref } from "vue";
-	import MessageBox from '@/components/@lgs/MessageBox/MessageBoxBac.vue'
+	import AppHeader from '@/components/@lgs/AppHeader/AppHeader.vue';
+	import MessageBox from '@/components/@lgs/MessageBox/MessageBox.vue'
 	import ScrollList from '@/components/@lgs/ScrollList/ScrollList.vue';
 	import VoiceBar from '@/components/@lgs/VoiceBar/VoiceBar.vue';
 
@@ -10,6 +11,8 @@
 	// -- constants
 	const avatarAi = 'https://ai-resume.oss-cn-shenzhen.aliyuncs.com/resume/images/icon/20230331/1680245672803/icon_ai.png';
 	const avatarUser = 'https://img2.baidu.com/it/u=1310500653,368013655&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500';
+	const iconRefresh = 'https://ai-resume.oss-cn-shenzhen.aliyuncs.com/resume/images/icon/20230419/1681874998718/icon_shuaxin@2x.png';
+	const iconComplete = 'https://ai-resume.oss-cn-shenzhen.aliyuncs.com/resume/images/icon/20230419/1681875229488/icon_wancheng@2x.png';
 	// -- APIs 
 	const audio = uni.createInnerAudioContext();
 	const recorder = uni.getRecorderManager();
@@ -22,12 +25,16 @@
 		queue: [],
 		/** 当前播放对象 */
 		current: null,
+		/** 当前进度 */
+		progress: -1,
+		/** 刷新文本 */
+		refreshText: "简历有更新,是否更新",
 		/** 源数据列表 */
 		list: [{
 				id: 1,
 				align: "L",
 				voiceDataUrl: 'https://ai-resume.oss-cn-shenzhen.aliyuncs.com/resume/file/promptTone/20230403/1680504824199/1_welcome_defaultwoman.mp3',
-				duration: 60,
+				duration: 30,
 				readStatus: 0,
 				isPlaying: false,
 			},
@@ -38,15 +45,18 @@
 				duration: 30,
 				readStatus: 0,
 				isPlaying: false,
-			}, {
+				audioText: '你只需要跟我说6句话，我就能给你生成十分的简历'
+			},
+			{
 				id: 3,
 				align: "R",
-				voiceDataTxt: "今天天气怎么样？"
+				voiceDataTxt: "今天天气怎么样？",
 			},
 			{
 				id: 4,
 				align: "L",
 				voiceDataTxt: "今天天气很不错",
+				showSkip: true
 			},
 			{
 				id: 5,
@@ -113,16 +123,18 @@
 		});
 		// @录音结束
 		recorder.onStop(({ duration, tempFilePath }) => {
-			state.list.push({
-				align: "R",
-				voiceDataUrl: tempFilePath,
-				duration: parseInt(duration / 1000),
-				readStatus: 0,
-				isPlaying: false,
-			});
-			nextTick(() => {
-				scroll.value.scrollToBottom();
-			})
+			if (state.recorderAction === "SEND") {
+				state.list.push({
+					align: "R",
+					voiceDataUrl: tempFilePath,
+					duration: parseInt(duration / 1000),
+					readStatus: 0,
+					isPlaying: false,
+				});
+				nextTick(() => {
+					scroll.value.scrollToBottom();
+				})
+			}
 		})
 	}
 
@@ -174,7 +186,7 @@
 	/**
 	 * 开始录音
 	 */
-	const onRecorderStart = (next) => {
+	const onRecorderStart = ({ next }) => {
 		if (state.current) {
 			stopAudio(state.current);
 		}
@@ -191,26 +203,93 @@
 		next();
 		recorder.stop();
 	}
+	const onHeightChange = (height) => {
+		setTimeout(() => {
+			scroll.value.scrollToBottom();
+		}, 250)
+	}
+	const onSendMessage = (message) => {
+		state.list.push({
+			id: Date.now(),
+			align: "R",
+			voiceDataTxt: message,
+		});
+	}
+	const onRefresh = () => {
+		state.refreshText = "简历更新中...";
+		state.progress = 0;
+		// 1. 匀速至80
+		const timer = setInterval(() => {
+			state.progress += 1;
+			if (state.progress === 80) {
+				// 2. 模拟请求成功2s后出发
+				setTimeout(() => {
+					state.progress = 100;
+					setTimeout(() => {
+						state.refreshText = "简历更新完成"
+						state.progress = -1;
+					}, 100);
+				}, 2000);
+				clearInterval(timer);
+			}
+		}, 50);
+
+
+	}
 </script>
 
 
 <template>
 	<view class="page">
+		<!-- 导航栏 -->
+		<app-header title="消息列表"></app-header>
 		<!-- 消息栏 -->
-		<scroll-list ref="scroll">
+		<scroll-list ref="scroll" class="scroll">
+			<!-- 测试插槽#suffix -->
+			<message-box align="L" :avatar="avatarAi" :message="state.refreshText" :progress="state.progress">
+				<template #suffix>
+					<view class="flex-h-center">
+						<image v-if="state.refreshText === '简历有更新,是否更新'" :src="iconRefresh" class="icon-34x34 ml-16" @click="onRefresh"></image>
+						<image v-if="state.refreshText === '简历更新完成'" :src="iconComplete" class="icon-34x34 ml-16"></image>
+					</view>
+				</template>
+			</message-box>
+			<!-- 测试插槽：#bottom -->
+			<message-box align="L" :avatar="avatarAi" message="你好,我是耀哥,欢迎来到耀哥课堂,在开始之前请您做一个简单的自我介绍">
+				<template #bottom>
+					<view class="flex-h-end f32 " style="color: #8061FF;">
+						<view class="flex-h-center">
+							<image class="icon-32x32" src="https://ai-resume.oss-cn-shenzhen.aliyuncs.com/resume/images/icon/20230420/1681979586521/icon_tiaoguo@2x.png"></image>
+							<text class="ml-8">跳过</text>
+						</view>
+					</view>
+				</template>
+			</message-box>
+			<!-- 列表消息 -->
 			<block v-for="(item, index) in state.list" :key="index">
-				<message-box :align="item.align" :meta="item" :avatar="avatarAi" :showIcon="item.showIcon" :showLoading="item.showLoading" :isPlaying="item.isPlaying" :readStatus="item.readStatus" :message="item.voiceDataTxt || item.voiceDataUrl" :duration="item.duration" @play="playAudio" @stop="stopAudio" />
+				<message-box :align="item.align" showTools :meta="item" :avatar="avatarAi" :showSkip="item.showSkip" :audioText="item.audioText" :showIcon="item.showIcon" :showLoading="item.showLoading" :isPlaying="item.isPlaying" :readStatus="item.readStatus" :message="item.voiceDataTxt || item.voiceDataUrl" :duration="item.duration" @play="playAudio" @stop="stopAudio" />
 			</block>
+			<view class="space-400"></view>
 		</scroll-list>
 		<!-- 底部栏 -->
-		<voice-bar @start="onRecorderStart" @stop="onRecorderStop"></voice-bar>
+		<voice-bar useDrawer userTips="长按可以发送语音哟~" @start="onRecorderStart" @stop="onRecorderStop" @sendMsg="onSendMessage" @heightChange="onHeightChange">
+			<template #left>
+				<image src="@/static/logo.png" class="icon-64x64"></image>
+			</template>
+		</voice-bar>
 	</view>
 </template>
 
 
 <style lang="less" scoped>
-	:deep(.lg-scroll-list) {
-		height: calc(100vh - 130rpx - constant(safe-area-inset-bottom));
-		height: calc(100vh - 130rpx - env(safe-area-inset-bottom));
+	.page {
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.scroll {
+		flex: 1;
+		position: relative;
 	}
 </style>

@@ -6,9 +6,9 @@
 		/** 标题文本 */
 		title: { type: String, default: 'uni-app' },
 		/** 标题颜色 */
-		tintColor: { type: String, default: "#FFFFFF" },
+		tintColor: { type: String, default: "#444444" },
 		/** 背景颜色 */
-		backgroundColor: { type: String, default: "transparent" },
+		backgroundColor: { type: String, default: "#FFFFFF" },
 		/** 渐变颜色 */
 		gradientColor: String,
 		/** 是否显示返回按钮 */
@@ -84,9 +84,11 @@
 		<view v-if="!gradientColor" class="app-header__place" :style="{height: `${state.navHeight}px` }"></view>
 		<!-- 内容 -->
 		<view class="app-header__wrap" :style="{height:  `${state.navHeight}px`, backgroundColor}">
-			<view class="status-bar" :style="{height: `${state.statusBarHeight}px`}"></view>
-			<view class="title-bar" :style="{height: `${state.titleBarHeight}px`}">
-				<view class="left-btns" :style="{left: `${state.leftSpacing}px`}">
+			<!-- 状态栏 -->
+			<view class="__statusBar" :style="{height: `${state.statusBarHeight}px`}"></view>
+			<!-- 标题栏 -->
+			<view class="__titleBar" :style="{height: `${state.titleBarHeight}px`}">
+				<view class="__btns" :style="{left: `${state.leftSpacing}px`}">
 					<view v-if="showBack" class="back-button" @click="onBackButtonTap">
 						<image src="./images/icon_back.png"></image>
 					</view>
@@ -96,6 +98,7 @@
 					{{title}}
 				</view>
 			</view>
+			<!-- 遮罩（渐变标题背景） -->
 			<view v-if="props.gradientColor" class="mask" :style="{backgroundColor: props.gradientColor, opacity: state.opacity}"></view>
 		</view>
 	</view>
@@ -115,14 +118,22 @@
 			position: fixed;
 			top: 0;
 			left: 0;
+			z-index: 999;
 
-			.title-bar {
+			.__titleBar {
 				display: flex;
 				justify-content: center;
 				align-items: center;
 				position: relative;
 
-				.left-btns {
+				.title {
+					font-size: 32rpx;
+					font-family: PingFangSC-Medium, PingFang SC;
+					font-weight: 500;
+					color: #171717;
+				}
+
+				.__btns {
 					position: absolute;
 					top: 50%;
 					transform: translateY(-50%);

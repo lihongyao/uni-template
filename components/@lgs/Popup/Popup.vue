@@ -43,7 +43,7 @@
 
 
 <template>
-	<view class="lg-popup" :class="{visible: state.visible}" :style="{'--bg-color': backgroundColor, '--radius': radius }" @click="onMaskTap">
+	<view class="lg-popup" catchtouchmove :class="{visible: state.visible}" :style="{'--bg-color': backgroundColor, '--radius': radius }" @click="onMaskTap">
 		<view class="lg-popup__content" :class="{__safe: safeArea}" @click.stop="">
 			<slot></slot>
 		</view>
