@@ -546,4 +546,131 @@ export default class Utils {
       });
     });
   }
+
+  /**
+	 * 伪进度条：渲染进度
+	 * @param {Function} callback 回调函数，返回当前进度，格式为：({ progress: Number, ended: Boolean, completed: Boolean  }) => {}
+	 * 1. progress 进度值
+	 * 2. ended 定时器结束，超过最大区间阈值，更新UI（抱歉，可能需要等待一会儿）
+	 * 3. completed 实际加载完成时回调
+	 * 
+	 * 
+	 * @returns { clearTimers: Function,  complete: Function }
+	 * 1. clearTimers：清除定时器，使用者在页面或组件销毁时调用该函数
+	 * 2. done：当实际加载完成时调用该函数可触发从当前值-过渡到100%
+	 * 
+	 * 📒 请求持续时间和进度条之间渲染公式（区间单位-秒）：
+	 * [1-20] ：百分比从 0%匀速(10秒内)增长至40%，请求成功，匀速加载到100%。
+	 * [20-40]：百分比从40%匀速(10秒内)增长至60%，请求成功，匀速加载到100%。
+	 * [40-60]：百分比从60%匀速(10秒内)增长至80%，请求成功，匀速加载到100%。
+	 * [60-90]：百分比从80%匀速(10秒内)增长至95%，请求成功，匀速加载到100%。
+	 * [90, ] ：提示文案：抱歉，可能需要等待一会儿
+	 *  
+	 * 📌 代码调用示例
+		const { clearTimers, done } = Utils.renderProgress(({ progress, ended, completed }) => {
+			if (completed) {
+				console.log("实际加载完成");
+			} else if (ended) {
+				console.log("定时器伪加载结束，更新UI，提示用户：抱歉，可能需要等待一会儿");
+			} else {
+				state.progress = progress;
+			}
+		});
+	 *
+	 */
+  static renderProgress = (callback) => {
+    // 1. 定义变量，记录相关值
+    let timerOuter = null; // 定时器：记录持续时间，用于计算区间
+    let timerInner = null; // 定时器：触发进度更新
+    let timeStamp = 0; // 记录持续时间
+    let progress = 0; // 当前进度
+    let map = {}; // 标识某一区间是否已经出发进度更新定时器（每个区间只触发1次）
+    // 2. 调用时，将进度置为0
+    callback({ progress });
+    // 3. 启用外部定时器计算区间
+    timerOuter = setInterval(() => {
+      timeStamp++;
+      // console.log(timeStamp);
+      switch (true) {
+        case timeStamp >= 90:
+          // [90, ]
+          console.log('触发区间：[90, )');
+          clearInterval(timerOuter);
+          timerOuter = null;
+          callback({ ended: true });
+          break;
+        case timeStamp >= 60:
+          // [60, 90)
+          if (!map._60To90) {
+            console.log('触发区间：[60, 90)');
+            map._60To90 = true;
+            __startTimerInner(1200, 95);
+          }
+          break;
+        case timeStamp >= 40:
+          // [40, 60)
+          if (!map._40To60) {
+            console.log('触发区间：[40, 60)');
+            map._40To60 = true;
+            __startTimerInner(800, 80);
+          }
+          break;
+        case timeStamp >= 20:
+          // [20, 40)
+          if (!map._20To40) {
+            console.log('触发区间：[20, 40)');
+            map._20To40 = true;
+            __startTimerInner(800, 60);
+          }
+          break;
+        case timeStamp >= 0:
+          // [0, 20)
+          if (!map._0T20) {
+            console.log('触发区间：[0, 20)');
+            map._0T20 = true;
+            __startTimerInner(300, 40);
+          }
+          break;
+      }
+    }, 1000);
+
+    // 4. 启用内部定时器计算百分比进度
+    const __startTimerInner = (interval, threshold) => {
+      timerInner = setInterval(() => {
+        progress += 1;
+        callback({ progress });
+        if (progress === threshold) {
+          clearInterval(timerInner);
+          timerInner = null;
+        }
+      }, interval);
+    };
+    // 5. 销毁定时器
+    const __clearTimers = () => {
+      clearInterval(timerOuter);
+      clearInterval(timerInner);
+      timerOuter = null;
+      timerInner = null;
+    };
+    // 6. 定义返回值
+    return {
+      /** 销毁定时器 */
+      clearTimers: () => {
+        __clearTimers();
+      },
+      /** 加载完成 */
+      done: () => {
+        __clearTimers();
+        let t = setInterval(() => {
+          progress += 1;
+          callback({ progress });
+          if (progress === 100) {
+            callback({ completed: true });
+            clearInterval(t);
+            t = null;
+          }
+        }, 16.7 * 3);
+      },
+    };
+  };
 }
