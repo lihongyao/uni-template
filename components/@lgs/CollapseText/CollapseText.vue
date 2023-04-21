@@ -153,8 +153,9 @@
 			}
 
 			&.hideArea {
-				position: absolute;
 				width: 100%;
+				visibility: hidden;
+				position: absolute;
 				top: 0;
 				left: 0;
 				z-index: -1;
