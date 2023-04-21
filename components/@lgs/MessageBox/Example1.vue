@@ -258,9 +258,9 @@
 			<message-box align="L" :avatar="avatarAi" message="你好,我是耀哥,欢迎来到耀哥课堂,在开始之前请您做一个简单的自我介绍">
 				<template #bottom>
 					<view class="flex-h-end f32 " style="color: #8061FF;">
-						<view class="flex-h-center">
+						<view class="flex-h-center mt-20">
 							<image class="icon-32x32" src="https://ai-resume.oss-cn-shenzhen.aliyuncs.com/resume/images/icon/20230420/1681979586521/icon_tiaoguo@2x.png"></image>
-							<text class="ml-8">跳过</text>
+							<text class="ml-8 ">跳过</text>
 						</view>
 					</view>
 				</template>

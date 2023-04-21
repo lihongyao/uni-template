@@ -170,8 +170,10 @@
 	<view class="lg-message-box" :style="varStyles" :id="Date.now()">
 		<!-- 内层框容器（考虑到后期拓展/比如消息框底部添加其他数据展示，所以这里套了一层容器） -->
 		<view class="lg-message-box__ct">
+
 			<!-- 头像（左侧） -->
 			<image class="__avatar" :src="avatar" mode="aspectFill" :style="avatarLStyles"></image>
+
 			<!-- 消息框容器（限制消息框最大宽度） -->
 			<view class="__case" :style="caseStyles">
 
@@ -213,7 +215,7 @@
 							<!-- 语音动画 End -->
 
 							<!-- 语音文本 -->
-							<view v-if="audioText && align === 'L'" style="margin-left: 15rpx;">{{audioText}}</view>
+							<view v-if="audioText && align === 'L'" class="__audioText" style="margin-left: 15rpx;">{{audioText}}</view>
 
 							<!-- 持续时间：展示条件 → 左侧且语音文本不存在时 -->
 							<view v-if="!audioText && align === 'L'" class="__seconds" style="margin-left: 15rpx;">{{duration}}''</view>
@@ -272,19 +274,17 @@
 
 
 <style lang="less" scoped>
-	
 	@import url("./anis/ani.css");
 
 	.lg-message-box {
 		padding: 12rpx 16rpx;
-		font-size: 30rpx;
-		line-height: 38rpx;
+		font-size: 32rpx;
+		line-height: 40rpx;
 		word-break: break-all;
 		color: var(--text-color);
 
 		&__ct {
 			display: flex;
-			justify-content: flex-end;
 			align-items: flex-start;
 			position: relative;
 
@@ -292,7 +292,6 @@
 			.__avatar {
 				width: 80rpx;
 				height: 80rpx;
-				box-sizing: border-box;
 				background: #EEEEEE;
 				border-radius: 12rpx;
 				flex-shrink: 0;
@@ -352,8 +351,12 @@
 					box-sizing: border-box;
 					min-height: 80rpx;
 					border-radius: 12rpx;
-					padding: 21rpx 30rpx;
+					padding: 20rpx 30rpx;
 					position: relative;
+					/** 处理__wrap小于80rpx时，用于垂直居中 */
+					display: flex;
+					flex-direction: column;
+					justify-content: center;
 
 					/** 角标（三角形） */
 					.angle {
@@ -388,6 +391,7 @@
 
 				/** 语音样式 */
 				.AUDIO {
+
 					.__aniHorn {
 						width: 32rpx;
 						height: 36rpx;
@@ -539,7 +543,7 @@
 					}
 
 					.__progress-v {
-						width: 80rpx;
+						width: 90rpx;
 						text-align: right;
 						color: var(--primary-color);
 						margin-left: 15rpx;
