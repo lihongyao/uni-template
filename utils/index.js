@@ -224,6 +224,7 @@ export default class Utils {
 				filePath,
 				name: 'file',
 				formData,
+				timeout: 60 * 1000,
 				header: {
 					"Authorization": 'Bearer ' + token,
 				},
@@ -277,6 +278,7 @@ export default class Utils {
 				filePath,
 				name: 'file',
 				formData,
+				timeout: 60 * 1000,
 				success: (res) => {
 					if (res.statusCode === 204) {
 						resolve(`${APP_OSS_HOST}/${key}`);
