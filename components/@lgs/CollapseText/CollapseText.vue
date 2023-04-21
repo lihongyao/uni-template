@@ -21,6 +21,8 @@
 		onFoldText: { type: String, default: "展开" },
 		/** 展开时显示的文本*/
 		unFoldText: { type: String, default: "收起" },
+		/** 收起时置灰 */
+		greyInFold: Boolean
 	});
 
 	// -- state 
@@ -91,7 +93,7 @@
 	}
 </script>
 <template>
-	<view class="lg-collapse-text" :style="{'--rows': maxLine, '--line-height': lineHeight + 'rpx'}">
+	<view class="lg-collapse-text" :style="{'--rows': maxLine, '--line-height': lineHeight + 'rpx', '--opacity': greyInFold ? .75 : 1}">
 		<!-- 富文本 -->
 		<template v-if="type === 'richText'">
 			<view class="__content showArea richText" :class="{ellipsis: state.ellipsis && state.isTrigger}" :style="{minHeight: state.minHeight + 'px'}" v-html="content" />
@@ -109,9 +111,9 @@
 		</template>
 		<!-- 展开收起 -->
 		<view class="__action-btn" v-if="state.showActionButton">
-			<view @click="onToggle">
+			<view class="btn" @click="onToggle">
 				<text>{{ state.ellipsis ? onFoldText : unFoldText }}</text>
-				<image :class="{'un-ellipsis': !state.ellipsis}" src="./images/icon_collapse.png"></image>
+				<image class="__arrows" :class="{'un-ellipsis': !state.ellipsis}" src="./images/icon_arrows.png"></image>
 			</view>
 		</view>
 	</view>
@@ -126,7 +128,7 @@
 
 		.__ios-ellipsis {
 			color: #19191960;
-			opacity: .75;
+			opacity: var(--opacity);
 		}
 
 		.__content {
@@ -138,7 +140,7 @@
 
 			font-size: 28rpx;
 			line-height: var(--line-height);
-			color: #19191960;
+			color: #191919;
 			word-break: break-all;
 
 			&.text {
@@ -147,7 +149,7 @@
 
 			&.ellipsis {
 				-webkit-line-clamp: var(--rows);
-				opacity: .75
+				opacity: var(--opacity)
 			}
 
 			&.hideArea {
@@ -163,17 +165,31 @@
 
 		.__action-btn {
 			display: flex;
-			justify-content: flex-start;
+			justify-content: flex-end;
 			align-items: center;
 			margin-top: 20rpx;
 			font-size: 30rpx;
 			color: #A594FF;
 
+			.btn {
+				width: 148rpx;
+				height: 64rpx;
+				background: #F0F1F5;
+				border-radius: 34rpx;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				font-size: 28rpx;
+				font-family: PingFangSC-Regular, PingFang SC;
+				font-weight: 400;
+				color: #262626;
+			}
 
-			image {
-				width: 32rpx;
-				height: 32rpx;
-				margin-left: 6rpx;
+			.__arrows {
+				width: 26rpx;
+				height: 30rpx;
+				margin-left: 10rpx;
+				transition: transform .3s ease;
 
 				&.un-ellipsis {
 					transform: rotateZ(180deg);
