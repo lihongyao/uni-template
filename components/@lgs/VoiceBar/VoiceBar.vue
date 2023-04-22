@@ -1,6 +1,9 @@
 <script setup>
-	import { onMounted, reactive, onBeforeUnmount, nextTick, getCurrentInstance } from "vue";
+	import { onMounted, reactive, onBeforeUnmount, nextTick, getCurrentInstance, computed } from "vue";
 	import Utils from '@/utils/index.js';
+
+
+
 
 	// -- props 
 	const props = defineProps({
@@ -58,6 +61,15 @@
 		const { screenHeight, windowHeight } = uni.getSystemInfoSync();
 		state.threshold = windowHeight - state.arcHeight;
 	});
+
+
+	// -- computeds
+	const format = (n) => n < 10 ? `0${n}` : n.toString()
+	const timeString = computed(() => {
+		const minutes = format(Math.floor((state.duration / 1000 / 60) % 60));
+		const seconds = format(Math.floor((state.duration / 1000) % 60));
+		return `${minutes}:${seconds}`
+	})
 
 
 	// -- events
@@ -290,7 +302,7 @@
 			<!-- 动态加载 -->
 			<view class="__loading">
 				<view class="__item" v-for="item in 18" :key="item"></view>
-				<view class="__duration">{{state.duration / 1000}}s</view>
+				<view class="__duration">{{timeString}}</view>
 			</view>
 			<!-- 文案提示：取消 -->
 			<view class="__tips cancel-txt" :class="{hidden_: state.k === 'SEND'}">松开取消</view>
