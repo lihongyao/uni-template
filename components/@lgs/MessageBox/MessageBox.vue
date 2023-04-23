@@ -34,10 +34,12 @@
 			type: Object,
 			default: () => ({})
 		},
-		/** 展示Loading动画，只针对消息内容为文本且只显示一行时有效（显示正常） */
+		/** 是否展示Loading动画（文本消息时有效） */
 		showLoading: Boolean,
-		/** 展示icon，只针对消息内容为文本且只显示一行时时有效（显示正常）*/
-		showIcon: Boolean,
+		/** 是否展示完成图标（文本消息时有效）*/
+		showIconComplete: Boolean,
+		/** 是否展示文本图标（文本消息时有效）*/
+		showIconText: Boolean,
 		/** 展示跳过按钮 */
 		showSkip: Boolean,
 		/** 是否启用工具栏（只在align=R时有效） */
@@ -117,6 +119,10 @@
 		const audioText = props.audioText ? 'hasText' : '';
 		return `__wrap AUDIO ${props.align} ${readStatus} ${audioText}`
 	}
+	const getTextCls = () => {
+		const showIconText = props.showIconText && props.align === 'L' ? 'showIconText' : '';
+		return `__wrap TEXT ${showIconText}`
+	}
 	const getMessageType = (message) => {
 		if (/\.(mp3|wav|ogg|aac)$/i.test(message)) {
 			return "AUDIO";
@@ -177,6 +183,7 @@
 			<!-- 消息框容器（限制消息框最大宽度） -->
 			<view class="__case" :style="caseStyles">
 
+
 				<!-- 1.图片 -->
 				<view v-if="state.messageType === 'IMAGE'" class="__wrap IMAGE" style="position: relative;">
 					<image :src="message" mode="widthFix" @click="onImagePreview" @longpress="onLongPress"></image>
@@ -225,8 +232,11 @@
 					<!-- 语音消息 End -->
 
 					<!-- 文字消息 Start -->
-					<view v-if="state.messageType === 'TEXT'" :class="`__wrap TEXT `" :style="{...wrapStyles}" @longpress.stop="onLongPress">
-						<template>
+					<view v-if="state.messageType === 'TEXT'" :class="getTextCls()" :style="{...wrapStyles}" @longpress.stop="onLongPress">
+						<!-- 插槽：前缀 -->
+						<image v-if="showIconText && align === 'L'" class="__iconText" src="./images/icon_text.jpg"></image>
+						<!-- 内容 -->
+						<view style="display: flex; align-items: center; flex: 1;">
 							<!-- 消息内容 -->
 							<text>{{message}}</text>
 							<!-- 展示Loading -->
@@ -238,12 +248,13 @@
 							<!-- 插槽：后缀 -->
 							<slot name="suffix"></slot>
 							<!-- 展示Icon -->
-							<image v-if="showIcon" class="__icon" src="./images/icon_complete.png"></image>
-							<!-- 展示进度数值 -->
-							<text v-if="progress !== -1" class="__progress-v">{{progress}}%</text>
-						</template>
-						<!-- 进度条 -->
-						<view v-if="progress !== -1" class="__progress" :style="{'--progress-percent': progress + '%'}"></view>
+							<image v-if="showIconComplete" class="__iconComplete" src="./images/icon_complete.png"></image>
+							<!-- 进度条相关 -->
+							<template v-if="progress !== -1">
+								<text class="__progress-v">{{progress}}%</text>
+								<view class="__progress" :style="{'--progress-percent': progress + '%'}"></view>
+							</template>
+						</view>
 					</view>
 					<!-- 文字消息 End -->
 
@@ -262,7 +273,6 @@
 
 					<!-- 自定义插槽 -->
 					<slot name="bottom"></slot>
-
 				</view>
 			</view>
 			<!-- 头像（右侧） -->
@@ -280,8 +290,10 @@
 		padding: 12rpx 16rpx;
 		font-size: 32rpx;
 		line-height: 40rpx;
-		word-break: break-all;
 		color: var(--text-color);
+		/** 解决标点符号导致断行的关键代码 */
+		word-break: break-all;
+		line-break: anywhere;
 
 		&__ct {
 			display: flex;
@@ -391,7 +403,6 @@
 
 				/** 语音样式 */
 				.AUDIO {
-
 					.__aniHorn {
 						width: 32rpx;
 						height: 36rpx;
@@ -536,7 +547,14 @@
 				/** 文本样式 */
 				.TEXT {
 
-					.__icon {
+					.__iconText {
+						width: 40rpx;
+						height: 40rpx;
+						flex-shrink: 0;
+						margin-right: 15rpx;
+					}
+
+					.__iconComplete {
 						width: 34rpx;
 						height: 34rpx;
 						margin-left: 15rpx;
@@ -605,6 +623,10 @@
 								animation: ani-loading-3 2s linear infinite;
 							}
 						}
+					}
+
+					&.showIconText {
+						align-items: flex-start;
 					}
 				}
 			}

@@ -12,7 +12,7 @@
 		/** 距离顶部的距离　*/
 		top: { type: Number, default: 500 },
 		/** 边框颜色 */
-		borderColor: { type: String, default: "#42b983" }
+		borderColor: { type: String, default: "#8176F6" }
 	})
 </script>
 

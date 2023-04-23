@@ -153,11 +153,11 @@
 			}
 
 			&.hideArea {
-				width: 100%;
-				visibility: hidden;
 				position: absolute;
+				width: 100%;
 				top: 0;
 				left: 0;
+				visibility: hidden;
 				z-index: -1;
 			}
 		}

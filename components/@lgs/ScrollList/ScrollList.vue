@@ -5,7 +5,7 @@
  <scroll-list class="scroll" />
  2. 样式
  .page {
-	 /** 外层容器必须使用弹性布局才生效 */
+	 /** 外层容易必须使用弹性布局才生效 */
 	 display: flex;
 	 flex-direction: column;
  }

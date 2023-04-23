@@ -4,6 +4,7 @@
 	import MessageBox from '@/components/@lgs/MessageBox/MessageBox.vue'
 	import ScrollList from '@/components/@lgs/ScrollList/ScrollList.vue';
 	import VoiceBar from '@/components/@lgs/VoiceBar/VoiceBar.vue';
+	import Utils from "@/utils";
 
 
 	// -- refs 
@@ -27,8 +28,9 @@
 		current: null,
 		/** 当前进度 */
 		progress: -1,
-		/** 刷新文本 */
-		refreshText: "简历有更新,是否更新",
+		clearTimers: null,
+		showWaitAgain: false,
+		showIconComplete: false,
 		/** 源数据列表 */
 		list: [{
 				id: 1,
@@ -97,6 +99,9 @@
 		listener();
 		// 2. 自动播放
 		// onPlay(state.list[0]);
+		if (uni.getStorageSync('__kPROGRESS_')) {
+			onStartProgress();
+		}
 	});
 
 	// -- methods
@@ -215,26 +220,28 @@
 			voiceDataTxt: message,
 		});
 	}
-	const onRefresh = () => {
-		state.refreshText = "简历更新中...";
-		state.progress = 0;
-		// 1. 匀速至80
-		const timer = setInterval(() => {
-			state.progress += 1;
-			if (state.progress === 80) {
-				// 2. 模拟请求成功2s后出发
-				setTimeout(() => {
-					state.progress = 100;
-					setTimeout(() => {
-						state.refreshText = "简历更新完成"
-						state.progress = -1;
-					}, 100);
-				}, 2000);
-				clearInterval(timer);
+
+	const onStartProgress = () => {
+		const { clearTimers, done } = Utils.renderProgress({
+			pending: (progress) => {
+				state.progress = progress;
+			},
+			ended: (progress) => {
+				console.log("定时器伪加载结束，更新UI，提示用户：抱歉，可能需要等待一会儿");
+				state.showWaitAgain = true;
+				state.progress = progress;
+			},
+			complete: () => {
+				state.progress = -1;
+				state.showWaitAgain = false;
+				state.showIconComplete = true;
+				console.log("实际加载完成");
 			}
-		}, 50);
-
-
+		});
+		setTimeout(() => {
+			console.log("手动触发请求完成");
+			done();
+		}, 20 * 1000);
 	}
 </script>
 
@@ -245,17 +252,14 @@
 		<app-header title="消息列表"></app-header>
 		<!-- 消息栏 -->
 		<scroll-list ref="scroll" class="scroll">
+			<!-- 生成简历 -->
+			<view class="btn flex-h-center mx-auto rounded-12 mt-20" @click="onStartProgress">生成简历</view>
 			<!-- 测试插槽#suffix -->
-			<message-box align="L" :avatar="avatarAi" :message="state.refreshText" :progress="state.progress">
-				<template #suffix>
-					<view class="flex-h-center">
-						<image v-if="state.refreshText === '简历有更新,是否更新'" :src="iconRefresh" class="icon-34x34 ml-16" @click="onRefresh"></image>
-						<image v-if="state.refreshText === '简历更新完成'" :src="iconComplete" class="icon-34x34 ml-16"></image>
-					</view>
-				</template>
-			</message-box>
+			<message-box v-if="state.progress !== -1" align="L" :avatar="avatarAi" message="简历生成中，请稍后" :progress="state.progress" />
+			<message-box v-if="state.showWaitAgain" align="L" :avatar="avatarAi" message="抱歉，可能需要等待一会儿" />
+			<message-box v-if="state.showIconComplete" align="L" :avatar="avatarAi" message="简历已生成" showIconComplete />
 			<!-- 测试插槽：#bottom -->
-			<message-box align="L" :avatar="avatarAi" message="你好,我是耀哥,欢迎来到耀哥课堂,在开始之前请您做一个简单的自我介绍">
+			<message-box align="L" showIconText :avatar="avatarAi" message="你好,我是耀哥,欢迎来到耀哥课堂,在开始之前请您做一个简单的自我介绍">
 				<template #bottom>
 					<view class="flex-h-end f32 " style="color: #8061FF;">
 						<view class="flex-h-center mt-20">
@@ -267,12 +271,15 @@
 			</message-box>
 			<!-- 列表消息 -->
 			<block v-for="(item, index) in state.list" :key="index">
-				<message-box :align="item.align" showTools :meta="item" :avatar="avatarAi" :showSkip="item.showSkip" :audioText="item.audioText" :showIcon="item.showIcon" :showLoading="item.showLoading" :isPlaying="item.isPlaying" :readStatus="item.readStatus" :message="item.voiceDataTxt || item.voiceDataUrl" :duration="item.duration" @play="playAudio" @stop="stopAudio" />
+				<message-box :align="item.align" showTools :meta="item" :showIconText="item.showIconText" :avatar="avatarAi" :showSkip="item.showSkip" :audioText="item.audioText" :showIconComplete="item.showIcon" :showLoading="item.showLoading" :isPlaying="item.isPlaying" :readStatus="item.readStatus" :message="item.voiceDataTxt || item.voiceDataUrl" :duration="item.duration" @play="playAudio" @stop="stopAudio" />
 			</block>
 			<view class="space-400"></view>
 		</scroll-list>
+
+
 		<!-- 底部栏 -->
 		<voice-bar useDrawer userTips="长按可以发送语音哟~" @start="onRecorderStart" @stop="onRecorderStop" @sendMsg="onSendMessage" @heightChange="onHeightChange">
+			<!-- 自定义左侧 -->
 			<template #left>
 				<image src="@/static/logo.png" class="icon-64x64"></image>
 			</template>
@@ -291,5 +298,10 @@
 	.scroll {
 		flex: 1;
 		position: relative;
+	}
+	.btn {
+		width: 200rpx;
+		height: 80rpx;
+		border: 2rpx solid cornflowerblue;
 	}
 </style>

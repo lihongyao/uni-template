@@ -546,14 +546,13 @@ export default class Utils {
       });
     });
   }
-
   /**
 	 * 伪进度条：渲染进度
-	 * @param {Function} callback 回调函数，返回当前进度，格式为：({ progress: Number, ended: Boolean, completed: Boolean  }) => {}
-	 * 1. progress 进度值
-	 * 2. ended 定时器结束，超过最大区间阈值，更新UI（抱歉，可能需要等待一会儿）
-	 * 3. completed 实际加载完成时回调
-	 * 
+	 * @param {Object} options 可选项
+	 * @param {String} options.id  用于构造存储键（当有多个伪进度条时可区分）
+	 * @param {Function} options.pending  进度变化时触发 (progress) => void
+	 * @param {Function} options.ended  进度停止更新时触发 (progress) => void
+	 * @param {Function} options.complete 加载完成时触发 () => void
 	 * 
 	 * @returns { clearTimers: Function,  complete: Function }
 	 * 1. clearTimers：清除定时器，使用者在页面或组件销毁时调用该函数
@@ -567,43 +566,68 @@ export default class Utils {
 	 * [90, ] ：提示文案：抱歉，可能需要等待一会儿
 	 *  
 	 * 📌 代码调用示例
-		const { clearTimers, done } = Utils.renderProgress(({ progress, ended, completed }) => {
-			if (completed) {
-				console.log("实际加载完成");
-			} else if (ended) {
-				console.log("定时器伪加载结束，更新UI，提示用户：抱歉，可能需要等待一会儿");
-			} else {
-				state.progress = progress;
-			}
-		});
+			const { clearTimers, done } = Utils.renderProgress({
+				pending: (progress) => {
+					console.log('当前进度：', progress);
+				},
+				ended: (progress) => {
+					console.log('当前进度：', progress);
+					console.log("定时器伪加载结束，更新UI，提示用户：抱歉，可能需要等待一会儿");
+				},
+				complete: () => {
+					console.log("实际加载完成");
+				}
+			});
+			setTimeout(() => {
+				console.log("手动触发请求完成");
+				done();
+			}, 30 * 1000);
 	 *
 	 */
-  static renderProgress = (callback) => {
+  static renderProgress = ({ id = '', pending, ended, complete }) => {
     // 1. 定义变量，记录相关值
-    let timerOuter = null; // 定时器：记录持续时间，用于计算区间
-    let timerInner = null; // 定时器：触发进度更新
-    let timeStamp = 0; // 记录持续时间
+    let localTimes = Date.now(); // 当前时间戳
+    let timerOuter = null; // 区间定时器
+    let timerInner = null; // 进度定时器
+    let timeStamp = 0; // 记录持续时间，用于计算区间
     let progress = 0; // 当前进度
-    let map = {}; // 标识某一区间是否已经出发进度更新定时器（每个区间只触发1次）
-    // 2. 调用时，将进度置为0
-    callback({ progress });
+    let map = {}; // 标识某一区间是否已经触发进度更新定时器（每个区间只触发1次）
+
+    // 2. 由于是伪进度，当用户切换页面或退出程序再次进入当前页面时应恢复进度展示
+    // - 获取存储键
+    const k = `__kPROGRESS_${id}`;
+    // - 读取本地数据
+    const locals = uni.getStorageSync(k);
+    // - 判断本地是否存在数据
+    if (locals) {
+      const { t, v } = JSON.parse(locals); // 解构 t-时间戳，v-当前进度
+      localTimes = +t; // 更新当前时间戳
+      progress = +v; // 更新进度
+      timeStamp = parseInt((Date.now() - t) / 1000); // 计算当前持续时间
+    }
+
+    console.log(`持续时间：${timeStamp}，当前进度值：${progress}`);
     // 3. 启用外部定时器计算区间
     timerOuter = setInterval(() => {
-      timeStamp++;
-      // console.log(timeStamp);
       switch (true) {
         case timeStamp >= 90:
           // [90, ]
           console.log('触发区间：[90, )');
           clearInterval(timerOuter);
           timerOuter = null;
-          callback({ ended: true });
+          if (progress < 95) {
+            progress = 95;
+          }
+          ended && ended(progress);
           break;
         case timeStamp >= 60:
           // [60, 90)
           if (!map._60To90) {
             console.log('触发区间：[60, 90)');
             map._60To90 = true;
+            if (progress < 80) {
+              progress = 80;
+            }
             __startTimerInner(1200, 95);
           }
           break;
@@ -612,6 +636,9 @@ export default class Utils {
           if (!map._40To60) {
             console.log('触发区间：[40, 60)');
             map._40To60 = true;
+            if (progress < 60) {
+              progress = 60;
+            }
             __startTimerInner(800, 80);
           }
           break;
@@ -620,6 +647,9 @@ export default class Utils {
           if (!map._20To40) {
             console.log('触发区间：[20, 40)');
             map._20To40 = true;
+            if (progress < 40) {
+              progress = 40;
+            }
             __startTimerInner(800, 60);
           }
           break;
@@ -632,27 +662,45 @@ export default class Utils {
           }
           break;
       }
+      timeStamp++;
+      console.log('区间定时器运行中... ', timeStamp);
     }, 1000);
 
     // 4. 启用内部定时器计算百分比进度
     const __startTimerInner = (interval, threshold) => {
+      // -- 每次启动内部定时器之前，清除上一次的定时操作
+      // -- 场景：上次退出时进度在30%，再次进入时在第1区间进度没执行完时，可能已经进入第2区间了，此时会同时触发多个定时器
+      clearInterval(timerInner);
+      timerInner = null;
+      // -- 启用内部定时器
       timerInner = setInterval(() => {
         progress += 1;
-        callback({ progress });
+        pending && pending(progress);
+        __updateLocals();
         if (progress === threshold) {
           clearInterval(timerInner);
           timerInner = null;
         }
       }, interval);
     };
-    // 5. 销毁定时器
+    // 5. 更新本地存储数据（每次进度更新时触发）
+    const __updateLocals = () => {
+      uni.setStorageSync(
+        k,
+        JSON.stringify({
+          t: localTimes,
+          v: progress,
+        })
+      );
+    };
+    // 6. 销毁定时器
     const __clearTimers = () => {
       clearInterval(timerOuter);
       clearInterval(timerInner);
       timerOuter = null;
       timerInner = null;
     };
-    // 6. 定义返回值
+    // 7. 定义返回值
     return {
       /** 销毁定时器 */
       clearTimers: () => {
@@ -663,9 +711,10 @@ export default class Utils {
         __clearTimers();
         let t = setInterval(() => {
           progress += 1;
-          callback({ progress });
+          pending && pending(progress);
           if (progress === 100) {
-            callback({ completed: true });
+            uni.removeStorageSync(k);
+            complete && complete();
             clearInterval(t);
             t = null;
           }

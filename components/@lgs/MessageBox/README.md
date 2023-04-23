@@ -4,23 +4,24 @@
 
 # Properties
 
-| 属性名       | 类型         | 默认值 | 描述                                                         |
-| ------------ | ------------ | ------ | ------------------------------------------------------------ |
-| message      | String       | N      | 消息内容，仅支持音频/文本/图片格式（必传）                   |
-| avatar       | String       | N      | 用户头像（必传）                                             |
-| meta         | Object       | N      | 源数据，事件触发时作为事件参数回传给调用者（必传）           |
-| align        | String       | R      | 消息框位置：L（左侧-好友）/R（右侧-自己）                    |
-| readStatus   | Number       | 1      | 音频时设置：阅读状态，0-未读，1-已读                         |
-| isPlaying    | Boolean      | false  | 音频时设置：播放状态<br />标识音频消息当前是否处于播放中（用于控制音频消息动效） |
-| duration     | Number       | 0      | 音频时设置：持续时间，单位秒                                 |
-| maxDuration  | Number       | 60     | 音频时设置：最长时间，单位秒，用于动态计算语音消息框的宽度   |
-| aniType      | String       | horn   | 音频时设置： 音频播放状态动画类型<br />可选值：line-线条 horn-喇叭 |
-| colorOptions | ColorOptions | N      | 颜色配置项                                                   |
-| showLoading  | Boolean      | N      | 展示Loading动画<br />只针对消息内容为文本且只显示一行时有效（显示正常 |
-| showIcon     | Boolean      | N      | 展示icon<br />只针对消息内容为文本且只显示一行时时有效（显示正常） |
-| showSkip     | Boolean      | N      | 展示跳过按钮                                                 |
-| showTools    | Boolean      | N      | 是否启用工具栏（只在align=R时有效）                          |
-| progress     | Number       | -1     | 进度展示，当该值>=0时，触发进度效果                          |
+| 属性名           | 类型         | 默认值 | 描述                                                         |
+| ---------------- | ------------ | ------ | ------------------------------------------------------------ |
+| message          | String       | N      | 消息内容，仅支持音频/文本/图片格式（必传）                   |
+| avatar           | String       | N      | 用户头像（必传）                                             |
+| meta             | Object       | N      | 源数据，事件触发时作为事件参数回传给调用者（必传）           |
+| align            | String       | R      | 消息框位置：L（左侧-好友）/R（右侧-自己）                    |
+| readStatus       | Number       | 1      | 音频时设置：阅读状态，0-未读，1-已读                         |
+| isPlaying        | Boolean      | false  | 音频时设置：播放状态<br />标识音频消息当前是否处于播放中（用于控制音频消息动效） |
+| duration         | Number       | 0      | 音频时设置：持续时间，单位秒                                 |
+| maxDuration      | Number       | 60     | 音频时设置：最长时间，单位秒，用于动态计算语音消息框的宽度   |
+| aniType          | String       | horn   | 音频时设置： 音频播放状态动画类型<br />可选值：line-线条 horn-喇叭 |
+| colorOptions     | ColorOptions | N      | 颜色配置项                                                   |
+| showLoading      | Boolean      | N      | 是否展示Loading动画（文本消息时有效）                        |
+| showIconComplete | Boolean      | N      | 是否展示完成图标（文本消息时有效）                           |
+| showIconText     | Boolean      | N      | 是否展示文本图标（文本消息时有效）                           |
+| showSkip         | Boolean      | N      | 展示跳过按钮                                                 |
+| showTools        | Boolean      | N      | 是否启用工具栏（只在align=R时有效）                          |
+| progress         | Number       | -1     | 进度展示，当该值>=0时，触发进度效果                          |
 
 ## ColorOptions
 
