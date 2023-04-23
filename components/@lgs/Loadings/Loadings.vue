@@ -1,3 +1,10 @@
+<!--
+ * @Author: Lee
+ * @Date: 2023-03-21 09:37:40
+ * @LastEditors: Lee
+ * @LastEditTime: 2023-04-23 17:30:04
+ * @Description: 
+-->
 <script setup>
 	import { defineProps } from 'vue';
 	import defaultLogo from '@/static/logo.png';
@@ -12,7 +19,7 @@
 		/** 距离顶部的距离　*/
 		top: { type: Number, default: 500 },
 		/** 边框颜色 */
-		borderColor: { type: String, default: "#8176F6" }
+		borderColor: { type: String, default: "#42b983" }
 	})
 </script>
 
