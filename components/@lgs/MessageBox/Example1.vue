@@ -211,7 +211,7 @@
 	const onHeightChange = (height) => {
 		setTimeout(() => {
 			scroll.value.scrollToBottom();
-		}, 250)
+		}, 300)
 	}
 	const onSendMessage = (message) => {
 		state.list.push({
@@ -262,27 +262,27 @@
 			<message-box align="L" showIconText :avatar="avatarAi" message="你好,我是耀哥,欢迎来到耀哥课堂,在开始之前请您做一个简单的自我介绍">
 				<template #bottom>
 					<view class="flex-h-end f32 " style="color: #8061FF;">
-						<view class="flex-h-center mt-20">
+						<view class="flex-h-center ">
 							<image class="icon-32x32" src="https://ai-resume.oss-cn-shenzhen.aliyuncs.com/resume/images/icon/20230420/1681979586521/icon_tiaoguo@2x.png"></image>
 							<text class="ml-8 ">跳过</text>
 						</view>
 					</view>
+				</template>
+				<template #extra>
+					<view style="height: 100rpx; background-color: orange; margin-top: 20rpx;"></view>
 				</template>
 			</message-box>
 			<!-- 列表消息 -->
 			<block v-for="(item, index) in state.list" :key="index">
 				<message-box :align="item.align" showTools :meta="item" :showIconText="item.showIconText" :avatar="avatarAi" :showSkip="item.showSkip" :audioText="item.audioText" :showIconComplete="item.showIcon" :showLoading="item.showLoading" :isPlaying="item.isPlaying" :readStatus="item.readStatus" :message="item.voiceDataTxt || item.voiceDataUrl" :duration="item.duration" @play="playAudio" @stop="stopAudio" />
 			</block>
-			<view class="space-400"></view>
+			<view class="space-88"></view>
 		</scroll-list>
 
 
 		<!-- 底部栏 -->
 		<voice-bar useDrawer userTips="长按可以发送语音哟~" @start="onRecorderStart" @stop="onRecorderStop" @sendMsg="onSendMessage" @heightChange="onHeightChange">
-			<!-- 自定义左侧 -->
-			<template #left>
-				<image src="@/static/logo.png" class="icon-64x64"></image>
-			</template>
+
 		</voice-bar>
 	</view>
 </template>
@@ -299,6 +299,7 @@
 		flex: 1;
 		position: relative;
 	}
+
 	.btn {
 		width: 200rpx;
 		height: 80rpx;

@@ -2,9 +2,6 @@
 	import { onMounted, reactive, onBeforeUnmount, nextTick, getCurrentInstance, computed } from "vue";
 	import Utils from '@/utils/index.js';
 
-
-
-
 	// -- props 
 	const props = defineProps({
 		/** 新用户引导提示 */
@@ -84,6 +81,8 @@
 			state.collapse = false;
 			emits("heightChange");
 		}
+		// 3. 更新键盘高度
+		state.keyboardHeight = 0;
 	}
 	const onToggleDrawer = () => {
 		// 1. 切换抽屉状态
@@ -124,7 +123,7 @@
 					});
 				}
 			});
-		}, 500);
+		}, 350);
 	}
 	const onTouchMove = ($event) => {
 		// -- 只在录音被触发的情况下才处理后续逻辑
@@ -246,7 +245,7 @@
 
 
 <template>
-	<view class="lg-voice-bar">
+	<view class="lg-voice-bar" catchtouchmove>
 		<!-- 呈现视图 -->
 		<view class="__container">
 			<!-- 按钮左侧（插槽） -->
@@ -297,7 +296,7 @@
 			<!-- 引导语 -->
 			<view v-if="guide" class="__guide">
 				<view class="__title">请按以下格式录入</view>
-				<view class="__content">{{guide}}</view>
+				<view class="__content" v-html="guide"></view>
 			</view>
 			<!-- 动态加载 -->
 			<view class="__loading">
@@ -423,7 +422,7 @@
 					width: 750rpx;
 					text-align: center;
 					position: absolute;
-					top: -110rpx;
+					top: -100rpx;
 					left: 50%;
 					transform: translateX(-50%);
 
@@ -492,7 +491,7 @@
 				overflow: hidden;
 				position: absolute;
 				/** 注意：应用时根据是否自定义导航栏调整top值 */
-				top: 200rpx;
+				top: 240rpx;
 				left: 50%;
 				transform: translateX(-50%);
 				font-size: 32rpx;
@@ -513,6 +512,7 @@
 					background-color: #FFFFFF;
 					color: #1A1A1A;
 					word-break: break-all;
+					line-break: anywhere;
 				}
 			}
 

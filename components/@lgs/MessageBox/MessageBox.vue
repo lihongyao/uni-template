@@ -174,34 +174,28 @@
 <template>
 	<!-- 外层容器 -->
 	<view class="lg-message-box" :style="varStyles" :id="Date.now()">
-		<!-- 内层框容器（考虑到后期拓展/比如消息框底部添加其他数据展示，所以这里套了一层容器） -->
-		<view class="lg-message-box__ct">
-
+		<!-- 内层框容器 -->
+		<view class="__inner">
 			<!-- 头像（左侧） -->
 			<image class="__avatar" :src="avatar" mode="aspectFill" :style="avatarLStyles"></image>
 
-			<!-- 消息框容器（限制消息框最大宽度） -->
-			<view class="__case" :style="caseStyles">
-
-
-				<!-- 1.图片 -->
-				<view v-if="state.messageType === 'IMAGE'" class="__wrap IMAGE" style="position: relative;">
-					<image :src="message" mode="widthFix" @click="onImagePreview" @longpress="onLongPress"></image>
-					<!-- 工具 -->
-					<view class="__tools" :class="{visible: state.openTools}">
-						<view class="item" @click.stop="onToolItemTap('undo')">撤回</view>
+			<!-- 内容区域 -->
+			<view class="__ct">
+				<!-- 消息框容器 -->
+				<view class="__case" :style="caseStyles">
+					<!-- 1.图片 -->
+					<view v-if="state.messageType === 'IMAGE'" class="__wrap IMAGE" style="position: relative;">
+						<image :src="message" mode="widthFix" @click="onImagePreview" @longpress.stop="onLongPress"></image>
+						<!-- 工具 -->
+						<view class="__tools" :class="{visible: state.openTools}">
+							<view class="item" @click.stop="onToolItemTap('undo')">撤回</view>
+						</view>
 					</view>
-				</view>
+					<!-- 2. 语音消息 / 文字消息  -->
+					<view v-if="['AUDIO', 'TEXT'].includes(state.messageType) " :class="`__slotWraps ${align}` " :style="{ width: audioText ? 'auto' : state.wrapWidth}" @longpress.stop="onLongPress">
 
-
-
-				<!-- 2. 语音消息 / 文字消息  -->
-				<view v-if="['AUDIO', 'TEXT'].includes(state.messageType) " :class="`__slotWraps ${align}` " :style="{ width: audioText ? 'auto' : state.wrapWidth}">
-
-					<!-- 语音消息 Start -->
-					<view v-if="state.messageType === 'AUDIO'" :class="getAudioCls()" :style="{...wrapStyles}" @click="onAudioTap" @longpress="onLongPress">
-						<!-- 消息内容 -->
-						<template>
+						<!-- 语音消息 Start -->
+						<view v-if="state.messageType === 'AUDIO'" :class="getAudioCls()" :style="{...wrapStyles}" @click="onAudioTap" >
 							<!-- 持续时间：展示条件 → 右侧且语音文本不存在时 -->
 							<view v-if="align === 'R'" class="__seconds" style="margin-right: 15rpx;">{{duration}}''</view>
 
@@ -226,59 +220,67 @@
 
 							<!-- 持续时间：展示条件 → 左侧且语音文本不存在时 -->
 							<view v-if="!audioText && align === 'L'" class="__seconds" style="margin-left: 15rpx;">{{duration}}''</view>
-						</template>
 
-					</view>
-					<!-- 语音消息 End -->
 
-					<!-- 文字消息 Start -->
-					<view v-if="state.messageType === 'TEXT'" :class="getTextCls()" :style="{...wrapStyles}" @longpress.stop="onLongPress">
-						<!-- 插槽：前缀 -->
-						<image v-if="showIconText && align === 'L'" class="__iconText" src="./images/icon_text.jpg"></image>
-						<!-- 内容 -->
-						<view style="display: flex; align-items: center; flex: 1;">
-							<!-- 消息内容 -->
-							<text>{{message}}</text>
-							<!-- 展示Loading -->
-							<view v-if="showLoading" class="__loading">
-								<view class="item"></view>
-								<view class="item"></view>
-								<view class="item"></view>
-							</view>
-							<!-- 插槽：后缀 -->
-							<slot name="suffix"></slot>
-							<!-- 展示Icon -->
-							<image v-if="showIconComplete" class="__iconComplete" src="./images/icon_complete.png"></image>
-							<!-- 进度条相关 -->
-							<template v-if="progress !== -1">
-								<text class="__progress-v">{{progress}}%</text>
-								<view class="__progress" :style="{'--progress-percent': progress + '%'}"></view>
-							</template>
 						</view>
-					</view>
-					<!-- 文字消息 End -->
+						<!-- 语音消息 End -->
 
-					<!-- 杂项元素 Start -->
-					<!-- 工具 -->
-					<view class="__tools" :class="{visible: state.openTools}">
-						<view class="item" @click.stop="onToolItemTap('undo')">撤回</view>
-					</view>
-					<!-- 角标提示 -->
-					<view :class="`angle ${align}`"></view>
-					<!-- 跳过按钮 -->
-					<template v-if="align === 'L' && showSkip">
-						<view class="__skip" @click.stop="emits('skip')">跳过</view>
-					</template>
-					<!-- 杂项元素 End -->
+						<!-- 文字消息 Start -->
+						<view v-if="state.messageType === 'TEXT'" :class="getTextCls()" :style="{...wrapStyles}" >
+							<!-- 插槽：前缀 -->
+							<template>
+								<slot name="prefix"></slot>
+								<image v-if="showIconText && align === 'L'" class="__iconText" src="./images/icon_text.jpg"></image>
+							</template>
+							<!-- 内容 -->
+							<view style="display: flex; align-items: center; flex: 1;">
+								<!-- 消息内容 -->
+								<text>{{message}}</text>
+								<!-- 展示Loading -->
+								<view v-if="showLoading" class="__loading">
+									<view class="item"></view>
+									<view class="item"></view>
+									<view class="item"></view>
+								</view>
+								<!-- 插槽：后缀 -->
+								<slot name="suffix"></slot>
+								<!-- 展示Icon -->
+								<image v-if="showIconComplete" class="__iconComplete" src="./images/icon_complete.png"></image>
+								<!-- 进度条相关 -->
+								<template v-if="progress !== -1">
+									<text class="__progress-v">{{progress}}%</text>
+									<view class="__progress" :style="{'--progress-percent': progress + '%'}"></view>
+								</template>
+							</view>
+						</view>
+						<!-- 文字消息 End -->
 
-					<!-- 自定义插槽 -->
-					<slot name="bottom"></slot>
+						<!-- 杂项元素 Start -->
+						<!-- 工具 -->
+						<view class="__tools" :class="{visible: state.openTools}">
+							<view class="item" @click.stop="onToolItemTap('undo')">撤回</view>
+						</view>
+						<!-- 角标提示 -->
+						<view :class="`angle ${align}`"></view>
+						<!-- 跳过按钮 -->
+						<template v-if="align === 'L' && showSkip">
+							<view class="__skip" @click.stop="emits('skip')">跳过</view>
+						</template>
+						<!-- 杂项元素 End -->
+
+						<!-- 自定义插槽 -->
+						<slot name="bottom"></slot>
+					</view>
+
 				</view>
+				<!-- 自定义插槽：#extra -->
+				<slot name="extra"></slot>
 			</view>
+
 			<!-- 头像（右侧） -->
 			<image class="__avatar" :src="avatar" mode="aspectFill" :style="avatarRStyles"></image>
-
 		</view>
+		<!-- 预留：自定义 -->
 	</view>
 </template>
 
@@ -287,18 +289,18 @@
 	@import url("./anis/ani.css");
 
 	.lg-message-box {
+		box-sizing: content-box;
 		padding: 12rpx 16rpx;
 		font-size: 32rpx;
-		line-height: 40rpx;
+		line-height: 1.2;
 		color: var(--text-color);
 		/** 解决标点符号导致断行的关键代码 */
 		word-break: break-all;
 		line-break: anywhere;
 
-		&__ct {
+		.__inner {
 			display: flex;
 			align-items: flex-start;
-			position: relative;
 
 			/** 用户头像 */
 			.__avatar {
@@ -309,327 +311,329 @@
 				flex-shrink: 0;
 			}
 
-			/** 消息框容器 */
-			.__case {
+			/** 内容区域容器 */
+			.__ct {
 				flex: 1;
-				margin: 0 18rpx;
+				box-sizing: border-box;
+				padding: 0 18rpx;
+
+				/** 消息框容器 */
+				.__case {
+					display: flex;
+					/** 程序中通过脚本控制居左还是居右对齐（这里默认居左） */
+					justify-content: flex-start;
+					align-items: center;
+				}
+			}
+
+			/** 语音/文字容器(支持自定义插槽) */
+			.__slotWraps {
+				background: var(--bg-color);
+				box-sizing: border-box;
+				min-height: 80rpx;
+				border-radius: 12rpx;
+				padding: 20rpx 30rpx;
+				position: relative;
+				/** 处理__wrap小于80rpx时，用于垂直居中 */
 				display: flex;
-				/** 程序中通过脚本控制居左还是居右对齐（这里默认居左） */
-				justify-content: flex-start;
-				align-items: center;
+				flex-direction: column;
+				justify-content: center;
 
-
-				/** 工具栏 */
-				.__tools {
-					padding: 0 20rpx;
-					height: 64rpx;
-					background: #606062;
-					border-radius: 16rpx;
-					display: none;
-					justify-content: center;
-					align-items: center;
+				/** 角标（三角形） */
+				.angle {
+					width: 0;
+					height: 0;
+					border-style: solid;
+					border-width: 10rpx;
 					position: absolute;
-					top: calc(-64rpx - 18rpx);
-					left: 0;
-					font-size: 26rpx;
-					color: #FFFFFF;
+					top: 28rpx;
 
-					&.visible {
-						display: flex;
+					&.L {
+						border-color: transparent var(--bg-color) transparent transparent;
+						right: 100%;
 					}
 
-					&::before {
-						content: "";
-						position: absolute;
-						top: calc(100% - 1px);
-						left: 50%;
-						transform: translateX(-50%);
-						border-width: 14rpx 14rpx 0 14rpx;
-						border-style: solid;
-						border-color: #606062 transparent transparent transparent;
-					}
-				}
-
-
-				/** 语音/文本/图片/视频内容容器公共样式 */
-				.__wrap {
-					display: flex;
-					align-items: center;
-				}
-
-				/** 语音/文字容器(支持自定义插槽) */
-				.__slotWraps {
-					background: var(--bg-color);
-					box-sizing: border-box;
-					min-height: 80rpx;
-					border-radius: 12rpx;
-					padding: 20rpx 30rpx;
-					position: relative;
-					/** 处理__wrap小于80rpx时，用于垂直居中 */
-					display: flex;
-					flex-direction: column;
-					justify-content: center;
-
-					/** 角标（三角形） */
-					.angle {
-						width: 0;
-						height: 0;
-						border-style: solid;
-						border-width: 10rpx;
-						position: absolute;
-						top: 28rpx;
-
-						&.L {
-							border-color: transparent var(--bg-color) transparent transparent;
-							right: 100%;
-						}
-
-						&.R {
-							border-color: transparent transparent transparent var(--bg-color);
-							left: 100%;
-						}
-					}
-				}
-
-
-				/** 图片样式 */
-				.IMAGE {
-					width: 60%;
-
-					image {
-						width: 100%;
-					}
-				}
-
-				/** 语音样式 */
-				.AUDIO {
-					.__aniHorn {
-						width: 32rpx;
-						height: 36rpx;
-						flex-shrink: 0;
-						overflow: hidden;
-						position: relative;
-
-						&.R {
-							transform: rotate(180deg);
-						}
-
-						.item {
-							box-sizing: content-box;
-							position: absolute;
-							top: 50%;
-
-							&:nth-child(1) {
-								border-top: 8rpx solid transparent;
-								border-right: 8rpx solid var(--ani-color);
-								border-bottom: 8rpx solid transparent;
-								border-radius: 50%;
-								left: 8rpx;
-								transform: translate(-50%, -50%);
-							}
-
-							&:nth-child(2) {
-								width: 20rpx;
-								height: 20rpx;
-								border-radius: 50%;
-								border: 4rpx solid transparent;
-								border-right-color: var(--ani-color);
-								right: calc(50% - 6rpx);
-								transform: translateY(-50%);
-							}
-
-							&:nth-child(3) {
-								width: 36rpx;
-								height: 36rpx;
-								border-radius: 50%;
-								border: 4rpx solid transparent;
-								border-right-color: var(--ani-color);
-								right: 0;
-								transform: translateY(-50%);
-							}
-						}
-
-						&.running .item {
-							&:nth-child(2) {
-								opacity: 0;
-								animation: ani-horn-1 linear 1s infinite;
-							}
-
-							&:nth-child(3) {
-								opacity: 0;
-								animation: ani-horn-2 linear 1s infinite;
-							}
-						}
-					}
-
-					.__aniLine {
-						display: flex;
-						justify-content: center;
-						align-items: center;
-						flex-shrink: 0;
-						position: relative;
-
-						.item {
-							width: 4rpx;
-							height: 28rpx;
-							background-color: var(--ani-color);
-
-							&:not(:last-child) {
-								margin-right: 6rpx;
-							}
-
-							&:nth-child(1) {
-								transform: scaleY(.5);
-							}
-
-							&:nth-child(2) {
-								transform: scaleY(1);
-							}
-
-							&:nth-child(3) {
-								transform: scaleY(.6);
-							}
-
-							&:nth-child(4) {
-								transform: scaleY(.35);
-							}
-
-						}
-
-						&.running .item {
-							animation: line-scale-pulse-out 1s infinite;
-
-							&:nth-child(1) {
-								animation-delay: -.5s;
-							}
-
-							&:nth-child(2) {
-								animation-delay: -.7s;
-							}
-
-							&:nth-child(3) {
-								animation-delay: -.9s;
-							}
-
-							&:nth-child(4) {
-								animation-delay: -.7s;
-							}
-						}
-					}
-
-					&.L.unread::before {
-						content: '';
-						width: 20rpx;
-						height: 20rpx;
-						border-radius: 50%;
-						background: red;
-						position: absolute;
-						top: 50%;
-						transform: translateY(-50%);
-						right: -40rpx;
-					}
-
-					/** 语音+文本时 */
-					&.hasText {
-						align-items: flex-start;
-
-						/** 微调语音动效元素的位置 */
-						.__aniHorn {
-							top: 2rpx;
-						}
-
-						.__aniLine {
-							top: 6rpx;
-						}
-					}
-				}
-
-				/** 文本样式 */
-				.TEXT {
-
-					.__iconText {
-						width: 40rpx;
-						height: 40rpx;
-						flex-shrink: 0;
-						margin-right: 15rpx;
-					}
-
-					.__iconComplete {
-						width: 34rpx;
-						height: 34rpx;
-						margin-left: 15rpx;
-					}
-
-					.__progress-v {
-						width: 90rpx;
-						text-align: right;
-						color: var(--primary-color);
-						margin-left: 15rpx;
-					}
-
-					.__progress {
-						width: 100%;
-						height: 100%;
-						border-radius: 12rpx;
-						overflow: hidden;
-						background: transparent;
-						position: absolute;
-						top: 0;
-						left: 0;
-
-						&::after {
-							content: '';
-							display: block;
-							transition: width .25s linear;
-							width: var(--progress-percent);
-							height: 2rpx;
-							background-color: var(--primary-color);
-							position: absolute;
-							left: 0;
-							bottom: 0;
-						}
-					}
-
-					.__loading {
-						display: flex;
-						justify-content: center;
-						align-items: center;
-						margin-left: 15rpx;
-
-						.item {
-							background: var(--primary-color);
-							vertical-align: middle;
-							opacity: 0;
-
-							&:nth-child(1) {
-								width: 8rpx;
-								height: 8rpx;
-								border-radius: 50%;
-								animation: ani-loading-1 2s linear infinite;
-							}
-
-							&:nth-child(2) {
-								width: 8rpx;
-								height: 16rpx;
-								border-radius: 4rpx;
-								margin: 0 6rpx;
-								animation: ani-loading-2 2s linear infinite;
-							}
-
-							&:nth-child(3) {
-								width: 8rpx;
-								height: 24rpx;
-								border-radius: 4rpx;
-								animation: ani-loading-3 2s linear infinite;
-							}
-						}
-					}
-
-					&.showIconText {
-						align-items: flex-start;
+					&.R {
+						border-color: transparent transparent transparent var(--bg-color);
+						left: 100%;
 					}
 				}
 			}
+
+			/** 语音/文本/图片/视频内容容器公共样式 */
+			.__wrap {
+				display: flex;
+				align-items: center;
+			}
+
+			/** 图片样式 */
+			.IMAGE {
+				width: 60%;
+				image {
+					width: 100%;
+				}
+			}
+
+			/** 语音样式 */
+			.AUDIO {
+				/** 语音动画1：喇叭样式 */
+				.__aniHorn {
+					width: 32rpx;
+					height: 36rpx;
+					flex-shrink: 0;
+					overflow: hidden;
+					position: relative;
+
+					&.R {
+						transform: rotate(180deg);
+					}
+
+					.item {
+						box-sizing: content-box;
+						position: absolute;
+						top: 50%;
+
+						&:nth-child(1) {
+							/** 由于部分机型（如三星）边框小于10像素设置锥形效果显示异常 */
+							/** 处理方式：10像素绘制锥形，通过transform:scale将其缩小即可正常显示*/
+							border-top: 20rpx solid transparent;
+							border-right: 20rpx solid var(--ani-color);
+							border-bottom: 20rpx solid transparent;
+							border-radius: 50%;
+							left: 8rpx;
+							transform: translate(-50%, -50%) scale(.35);
+						}
+
+						&:nth-child(2) {
+							width: 20rpx;
+							height: 20rpx;
+							border-radius: 50%;
+							border: 4rpx solid transparent;
+							border-right-color: var(--ani-color);
+							right: calc(50% - 6rpx);
+							transform: translateY(-50%);
+						}
+
+						&:nth-child(3) {
+							width: 36rpx;
+							height: 36rpx;
+							border-radius: 50%;
+							border: 4rpx solid transparent;
+							border-right-color: var(--ani-color);
+							right: 0;
+							transform: translateY(-50%);
+						}
+					}
+
+					&.running .item {
+						&:nth-child(2) {
+							opacity: 0;
+							animation: ani-horn-1 linear 1s infinite;
+						}
+
+						&:nth-child(3) {
+							opacity: 0;
+							animation: ani-horn-2 linear 1s infinite;
+						}
+					}
+				}
+				/** 语音动画1：线条样式 */
+				.__aniLine {
+					display: flex;
+					justify-content: center;
+					align-items: center;
+					flex-shrink: 0;
+					position: relative;
+
+					.item {
+						width: 4rpx;
+						height: 28rpx;
+						background-color: var(--ani-color);
+
+						&:not(:last-child) {
+							margin-right: 6rpx;
+						}
+
+						&:nth-child(1) {
+							transform: scaleY(.5);
+						}
+
+						&:nth-child(2) {
+							transform: scaleY(1);
+						}
+
+						&:nth-child(3) {
+							transform: scaleY(.6);
+						}
+
+						&:nth-child(4) {
+							transform: scaleY(.35);
+						}
+
+					}
+
+					&.running .item {
+						animation: line-scale-pulse-out 1s infinite;
+
+						&:nth-child(1) {
+							animation-delay: -.5s;
+						}
+
+						&:nth-child(2) {
+							animation-delay: -.7s;
+						}
+
+						&:nth-child(3) {
+							animation-delay: -.9s;
+						}
+
+						&:nth-child(4) {
+							animation-delay: -.7s;
+						}
+					}
+				}
+        /** 未读状态(语音) */
+				&.L.unread::before {
+					content: '';
+					width: 20rpx;
+					height: 20rpx;
+					border-radius: 50%;
+					background: red;
+					position: absolute;
+					top: 50%;
+					transform: translateY(-50%);
+					right: -40rpx;
+				}
+				/** 语音+文本时 */
+				&.hasText {
+					align-items: flex-start;
+					/** 微调语音动效元素的位置 */
+					.__aniHorn {
+						top: 2rpx;
+					}
+					.__aniLine {
+						top: 6rpx;
+					}
+				}
+			}
+
+			/** 文本样式 */
+			.TEXT {
+
+				.__iconText {
+					width: 40rpx;
+					height: 40rpx;
+					flex-shrink: 0;
+					margin-right: 15rpx;
+				}
+
+				.__iconComplete {
+					width: 34rpx;
+					height: 34rpx;
+					margin-left: 15rpx;
+				}
+
+				.__progress-v {
+					width: 90rpx;
+					text-align: right;
+					color: var(--primary-color);
+					margin-left: 15rpx;
+				}
+
+				.__progress {
+					width: 100%;
+					height: 100%;
+					border-radius: 12rpx;
+					overflow: hidden;
+					background: transparent;
+					position: absolute;
+					top: 0;
+					left: 0;
+
+					&::after {
+						content: '';
+						display: block;
+						transition: width .25s linear;
+						width: var(--progress-percent);
+						height: 2rpx;
+						background-color: var(--primary-color);
+						position: absolute;
+						left: 0;
+						bottom: 0;
+					}
+				}
+
+				.__loading {
+					display: flex;
+					justify-content: center;
+					align-items: center;
+					margin-left: 15rpx;
+
+					.item {
+						background: var(--primary-color);
+						vertical-align: middle;
+						opacity: 0;
+
+						&:nth-child(1) {
+							width: 8rpx;
+							height: 8rpx;
+							border-radius: 50%;
+							animation: ani-loading-1 2s linear infinite;
+						}
+
+						&:nth-child(2) {
+							width: 8rpx;
+							height: 16rpx;
+							border-radius: 4rpx;
+							margin: 0 6rpx;
+							animation: ani-loading-2 2s linear infinite;
+						}
+
+						&:nth-child(3) {
+							width: 8rpx;
+							height: 24rpx;
+							border-radius: 4rpx;
+							animation: ani-loading-3 2s linear infinite;
+						}
+					}
+				}
+
+				&.showIconText {
+					align-items: flex-start;
+				}
+			}
+
+			/** 工具栏 */
+			.__tools {
+				padding: 0 20rpx;
+				height: 64rpx;
+				background: #606062;
+				border-radius: 16rpx;
+				display: none;
+				justify-content: center;
+				align-items: center;
+				position: absolute;
+				top: calc(-64rpx - 18rpx);
+				left: 0;
+				font-size: 26rpx;
+				color: #FFFFFF;
+
+				&.visible {
+					display: flex;
+				}
+
+				&::before {
+					content: "";
+					position: absolute;
+					top: calc(100% - 1px);
+					left: 50%;
+					transform: translateX(-50%);
+					border-width: 14rpx 14rpx 0 14rpx;
+					border-style: solid;
+					border-color: #606062 transparent transparent transparent;
+				}
+			}
+
 
 
 			/** 跳过按钮 */
