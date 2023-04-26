@@ -50,6 +50,7 @@
 		isSafeArea: true, // 是否需要设置安全区域（根据键盘展开收起动态计算）
 		message: "", // 输入框的值
 		keyboardHeight: 0, // 键盘高度
+		focus: true, // 标识输入框获取焦点的状态
 
 	});
 	// -- life circles 
@@ -74,17 +75,24 @@
 	 ** 公共操作相关事件 **    
 	 *******************/
 	const onSwitchType = (type) => {
-		// 1. 切换语音/文本输入状态
+		console.log("__onSwitchType__");
+		// 1. 切换状态
 		state.type = type;
-		// 2. 如果抽屉处于打开状态，则关闭抽屉
-		if (state.collapse) {
-			state.collapse = false;
-			emits("heightChange");
+		// 2. 关闭抽屉
+		state.collapse = false;
+		// 3. 根据类型处理
+		switch (type) {
+			case 'AUDIO':
+				state.keyboardHeight = 0;
+				state.isSafeArea = true;
+				break;
+			case 'TEXT':
+				state.focus = true;
+				break;
 		}
-		// 3. 更新键盘高度
-		state.keyboardHeight = 0;
 	}
 	const onToggleDrawer = () => {
+		console.log("__onToggleDrawer__");
 		// 1. 切换抽屉状态
 		state.collapse = !state.collapse;
 		// 2. 触发高度更新事件
@@ -181,6 +189,7 @@
 		state.timer = null;
 	}
 	const onCloseUserTips = () => {
+		console.log("__onCloseUserTips__");
 		state.innerUserTips = '';
 		emits("closeUserTips");
 	}
@@ -191,24 +200,18 @@
 	const onFocus = () => {
 		console.log("__onFocus__");
 		// 1. 取消安全区域
-		if (state.keyboardHeight > 0) {
-			state.isSafeArea = false;
-		}
+		state.isSafeArea = false;
 		// 2. 如果抽屉处于打开状态，则关闭抽屉
-		if (state.collapse) {
-			state.collapse = false;
-		}
-		// 3. 触发高度更新事件
-		emits("heightChange");
+		state.collapse = false;
+		// 3. 焦点状态
+		state.focus = true;
 	}
 	const onBlur = () => {
 		console.log("__onBlur__");
 		// 1. 显示安全区域
 		state.isSafeArea = true;
-		// 2. 失去焦点/将键盘高度置为0
-		state.keyboardHeight = 0;
-		// 3. 触发高度更新事件
-		emits("heightChange");
+		// 2. 焦点状态
+		state.focus = false;
 	}
 	const onKeyboardHeightChange = ({ detail: { height } }) => {
 		console.log("__onKeyboardHeightChange__");
@@ -219,16 +222,17 @@
 		emits("heightChange");
 	}
 	const onSendMessage = () => {
+		console.log("__onSendMessage__");
 		// 1. 触发发送消息事件
 		emits("sendMsg", state.message);
 		// 2. 清空消息框内容
 		state.message = "";
-		// 3. 触发高度更新事件
-		emits("heightChange");
 	}
-	const onLineChange = () => {
-		// 1. 触发高度更新事件
-		emits("heightChange");
+	const onLineChange = ({ detail: { lineCount } }) => {
+		console.log('__onLineChange__')
+		if (lineCount !== 1) {
+			emits("heightChange");
+		}
 	}
 
 	/*******************
@@ -245,7 +249,7 @@
 
 
 <template>
-	<view class="lg-voice-bar" catchtouchmove>
+	<view class="lg-voice-bar">
 		<!-- 呈现视图 -->
 		<view class="__container">
 			<!-- 按钮左侧（插槽） -->
@@ -277,8 +281,8 @@
 				</view>
 			</view>
 			<!-- 文本输入  -->
-			<view v-if="state.type === 'TEXT'" class="__textArea">
-				<textarea class="__input" confirm-type="send" v-model="state.message" :fixed="true" :maxlength="-1" :auto-focus="true" :auto-height="true" :adjust-position="false" :show-confirm-bar="false" :disable-default-padding="true" @keyboardheightchange="onKeyboardHeightChange" @focus="onFocus" @blur="onBlur" @confirm="onSendMessage" @linechange="onLineChange" />
+			<view v-if="state.type === 'TEXT'" class="__textArea" @click="state.focus = true">
+				<textarea class="__input" confirm-type="send" v-model="state.message" :fixed="true" :maxlength="-1" :focus="state.focus" :auto-height="true" :adjust-position="false" :show-confirm-bar="false" :disable-default-padding="true" @keyboardheightchange="onKeyboardHeightChange" @focus="onFocus" @blur="onBlur" @confirm="onSendMessage" @linechange="onLineChange" />
 			</view>
 			<!-- 按钮右侧（插槽） -->
 			<view class="__side">
@@ -289,10 +293,12 @@
 		</view>
 		<!-- 底部抽屉 -->
 		<view class="__drawer" v-if="useDrawer" :class="{ collapse: state.collapse }">
-			<slot name="drawer"></slot>
+			<slot name="drawer">
+				<view style="text-align: center; padding-top: 100rpx; font-size: 50rpx; color: #999999;">Bottom drawer</view>
+			</slot>
 		</view>
 		<!-- 语音遮罩 -->
-		<view class="__mask" :class="{visible: state.maskOpen, 'cancel-status': state.k === 'CANCEL'}">
+		<view class="__mask" :class="{visible: state.maskOpen, 'cancel-status': state.k === 'CANCEL'}" catchtouchmove>
 			<!-- 引导语 -->
 			<view v-if="guide" class="__guide">
 				<view class="__title">请按以下格式录入</view>
@@ -376,17 +382,19 @@
 				box-sizing: border-box;
 				padding: 20rpx 0;
 				background: #FFF;
+				display: flex;
+				justify-content: center;
+				align-items: center;
 				border-radius: 12rpx;
 				overflow: hidden;
 
 				.__input {
 					width: 100%;
-					max-height: 200rpx;
-					/** rows * lineHeight */
+					max-height: 160rpx;
 					box-sizing: border-box;
 					padding: 0 20rpx;
 					color: #444444;
-					font-size: 30rpx;
+					font-size: 32rpx;
 					line-height: 40rpx;
 				}
 			}

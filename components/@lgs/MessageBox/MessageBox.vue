@@ -195,16 +195,18 @@
 					<view v-if="['AUDIO', 'TEXT'].includes(state.messageType) " :class="`__slotWraps ${align}` " :style="{ width: audioText ? 'auto' : state.wrapWidth}" @longpress.stop="onLongPress">
 
 						<!-- 语音消息 Start -->
-						<view v-if="state.messageType === 'AUDIO'" :class="getAudioCls()" :style="{...wrapStyles}" @click="onAudioTap" >
+						<view v-if="state.messageType === 'AUDIO'" :class="getAudioCls()" :style="{...wrapStyles}" @click="onAudioTap">
 							<!-- 持续时间：展示条件 → 右侧且语音文本不存在时 -->
 							<view v-if="align === 'R'" class="__seconds" style="margin-right: 15rpx;">{{duration}}''</view>
 
 							<!-- 语音动画 Satrt -->
 							<!-- 喇叭效果 -->
 							<view v-if="aniType === 'horn' " class="__aniHorn" :class="{running: isPlaying, R: align === 'R'}">
-								<view class="item"></view>
-								<view class="item"></view>
-								<view class="item"></view>
+								<view class="__aniHorn__wrap">
+									<view class="item"></view>
+									<view class="item"></view>
+									<view class="item"></view>
+								</view>
 							</view>
 							<!-- 线条效果 -->
 							<view v-else class="__aniLine" :class="{running: isPlaying}">
@@ -226,7 +228,7 @@
 						<!-- 语音消息 End -->
 
 						<!-- 文字消息 Start -->
-						<view v-if="state.messageType === 'TEXT'" :class="getTextCls()" :style="{...wrapStyles}" >
+						<view v-if="state.messageType === 'TEXT'" :class="getTextCls()" :style="{...wrapStyles}">
 							<!-- 插槽：前缀 -->
 							<template>
 								<slot name="prefix"></slot>
@@ -369,6 +371,7 @@
 			/** 图片样式 */
 			.IMAGE {
 				width: 60%;
+
 				image {
 					width: 100%;
 				}
@@ -376,13 +379,22 @@
 
 			/** 语音样式 */
 			.AUDIO {
+
 				/** 语音动画1：喇叭样式 */
 				.__aniHorn {
 					width: 32rpx;
 					height: 36rpx;
 					flex-shrink: 0;
-					overflow: hidden;
 					position: relative;
+
+					&__wrap {
+						width: 90rpx;
+						height: 100rpx;
+						position: absolute;
+						top: 50%;
+						left: 50%;
+						transform: translate(-50%, -50%) scale(.32);
+					}
 
 					&.R {
 						transform: rotate(180deg);
@@ -394,31 +406,29 @@
 						top: 50%;
 
 						&:nth-child(1) {
-							/** 由于部分机型（如三星）边框小于10像素设置锥形效果显示异常 */
-							/** 处理方式：10像素绘制锥形，通过transform:scale将其缩小即可正常显示*/
 							border-top: 20rpx solid transparent;
 							border-right: 20rpx solid var(--ani-color);
 							border-bottom: 20rpx solid transparent;
 							border-radius: 50%;
-							left: 8rpx;
-							transform: translate(-50%, -50%) scale(.35);
+							left: 10rpx;
+							transform: translate(-50%, -50%);
 						}
 
 						&:nth-child(2) {
-							width: 20rpx;
-							height: 20rpx;
+							width: 70rpx;
+							height: 70rpx;
 							border-radius: 50%;
-							border: 4rpx solid transparent;
+							border: 15rpx solid transparent;
 							border-right-color: var(--ani-color);
-							right: calc(50% - 6rpx);
+							right: calc(50% - 10rpx);
 							transform: translateY(-50%);
 						}
 
 						&:nth-child(3) {
-							width: 36rpx;
-							height: 36rpx;
+							width: 120rpx;
+							height: 120rpx;
 							border-radius: 50%;
-							border: 4rpx solid transparent;
+							border: 15rpx solid transparent;
 							border-right-color: var(--ani-color);
 							right: 0;
 							transform: translateY(-50%);
@@ -437,6 +447,7 @@
 						}
 					}
 				}
+
 				/** 语音动画1：线条样式 */
 				.__aniLine {
 					display: flex;
@@ -492,7 +503,8 @@
 						}
 					}
 				}
-        /** 未读状态(语音) */
+
+				/** 未读状态(语音) */
 				&.L.unread::before {
 					content: '';
 					width: 20rpx;
@@ -504,13 +516,16 @@
 					transform: translateY(-50%);
 					right: -40rpx;
 				}
+
 				/** 语音+文本时 */
 				&.hasText {
 					align-items: flex-start;
+
 					/** 微调语音动效元素的位置 */
 					.__aniHorn {
 						top: 2rpx;
 					}
+
 					.__aniLine {
 						top: 6rpx;
 					}
