@@ -73,9 +73,7 @@
 	<view class="lg-fab-menu">
 		<view class="__ct" @click.stop="onTap">
 			<slot>
-				<view class="dot"></view>
-				<view class="dot"></view>
-				<view class="dot"></view>
+				<image class="icon-more" src="./images/icon_more.png"></image>
 			</slot>
 		</view>
 		<view class="__menu" :class="{open: state.openMenu}" :style="{[state.position]: '100%'}">
@@ -94,23 +92,13 @@
 <style lang="less" scoped>
 	.lg-fab-menu {
 		position: relative;
-
 		.__ct {
 			display: flex;
 			justify-content: center;
 			align-items: center;
-			width: 50rpx;
-			height: 80rpx;
-
-			.dot {
-				width: 8rpx;
-				height: 8rpx;
-				background: #666666;
-				border-radius: 50%;
-
-				&:not(:last-child) {
-					margin-right: 6rpx;
-				}
+			.icon-more {
+				width: 40rpx;
+				height: 40rpx;
 			}
 		}
 
