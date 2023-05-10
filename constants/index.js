@@ -3,7 +3,7 @@
  **********************/
 
 // -- server
-const APP_HOST_DEV = 'http://192.168.0.22:8888';
+const APP_HOST_DEV = 'https://resume.d-dou.cn';
 const APP_HOST_TES = '测试环境';
 const APP_HOST_PRO = '生产环境';
 const APP_HOST_NCT = '穿透地址';
@@ -28,7 +28,7 @@ export const APP_KEY_SEARCH_HISTORY = 'APP_KEY_SEARCH_HISTORY'; /** 搜索历史
  **********************/
 export const APP_OSS_HOST = '';
 export const APP_H5_URI = '';
-export const APP_UPLOAD_IMAGE_URI = APP_HOST + '图片上传地址';
+export const APP_UPLOAD_IMAGE_URI = APP_HOST + '/mall-portal/aliyun/oss/upload';
 export const APP_UPLOAD_VOICE_URI = APP_HOST + '音频上传地址';
 
 /**********************
@@ -46,6 +46,7 @@ export const APP_MINE_FNS = [
 	{ label: '我的客服', path: '', checkLogin: false },
 	{ label: '意见反馈', path: '/pages/fns/feedback', checkLogin: true },
 	{ label: '设置', path: '/pages/fns/sets', checkLogin: false },
+	{ label: '文件上传', path: '/pages/upload/upload', checkLogin: false },
 ];
 
 import ICON_UNPAY from '@/pages/TabPages/images/unpay.png';

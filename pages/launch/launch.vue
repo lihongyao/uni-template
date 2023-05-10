@@ -1,5 +1,6 @@
 <script setup>
 	// -- imports
+	import { onLoad } from '@dcloudio/uni-app';
 	import { reactive, onMounted } from 'vue';
 	import { APP_KEY_TOKEN, APP_KEY_LOGIN } from '@/constants';
 	import Utils from '@/utils';
@@ -8,11 +9,15 @@
 
 	// -- state
 	const state = reactive({
+		q: '',
 		count: 2,
 		canJump: null,
 	});
 
 	// -- life circles
+	onLoad(({ q }) => {
+		state.q = q;
+	});
 	onMounted(() => {
 		login();
 	});
@@ -42,7 +47,11 @@
 		}
 	};
 	const jump = () => {
-		Utils.reLaunch('/pages/TabPages/index');
+		let jumpPath = '/pages/TabPages/index';
+		if(state.q) {
+			jumpPath = '/pages/upload/uploadForWeixin?q=app'
+		}
+		Utils.reLaunch(jumpPath);
 	};
 </script>
 

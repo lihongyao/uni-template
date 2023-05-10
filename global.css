@@ -80,6 +80,7 @@ image { box-sizing: content-box; }
 .color-333333 { color: #333333; } 
 .color-444444 { color: #444444; }
 .color-555555 { color: #555555; }
+.color-666666 { color: #666666; }
 .color-777777 { color: #777777; }
 .color-888888 { color: #888888; }
 .color-999999 { color: #999999; }
@@ -340,6 +341,7 @@ image { box-sizing: content-box; }
 .mr-28 { margin-right: 28rpx; }
 .mr-30 { margin-right: 30rpx; }
 .mr-32 { margin-right: 32rpx; }
+.mr-34 { margin-right: 34rpx; }
 .mr-36 { margin-right: 36rpx; }
 .mr-40 { margin-right: 40rpx; }
 .mr-42 { margin-right: 42rpx; }

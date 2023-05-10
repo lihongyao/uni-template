@@ -1,10 +1,25 @@
 {
-	"pages": [ {
+	"pages": [{
 		"path": "pages/launch/launch",
 		"style": {
 			"navigationStyle": "custom"
 		}
-	},{
+	}, {
+		"path": "pages/upload/upload",
+		"style": {
+			"navigationBarTitleText": "文件上传"
+		}
+	}, {
+		"path": "pages/upload/uploading",
+		"style": {
+			"navigationBarTitleText": ""
+		}
+	}, {
+		"path": "pages/upload/uploadForWeixin",
+		"style": {
+			"navigationBarTitleText": ""
+		}
+	}, {
 		"path": "pages/userinfo/userinfo",
 		"style": {
 			"navigationBarTitleText": "个人信息"
