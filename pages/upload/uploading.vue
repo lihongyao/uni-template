@@ -1,7 +1,7 @@
 <script setup>
 	// -- imports 
 	import { onLoad } from '@dcloudio/uni-app';
-	import { getCurrentInstance, onMounted, reactive } from "vue";
+	import { getCurrentInstance, reactive } from "vue";
 	import CircleProgress from '@/components/@lgs/CircleProgress/CircleProgress.vue';
 	import Utils from '@/utils';
 	import { APP_UPLOAD_IMAGE_URI } from '@/constants';
@@ -22,7 +22,7 @@
 	})
 	// -- methods 
 	const upload = (file) => {
-		Utils.uploadFileOnServer({
+		/*Utils.uploadFileOnServer({
 			uri: APP_UPLOAD_IMAGE_URI,
 			filePath: file.path || file.tempFilePath,
 			formData: { category: 'test' },
@@ -35,14 +35,15 @@
 			onProgressUpdate(progress) {
 				state.percent = progress;
 			}
-		});
-		// const t = setInterval(() => {
-		// 	state.percent += 1;
-		// 	if (state.percent >= 100) {
-		// 		clearInterval(t)
-		// 	}
-		// }, 30);
-		// console.log(file);
+		});*/
+		const t = setInterval(() => {
+			state.percent += 1;
+			if (state.percent >= 100) {
+				state.percent = 100;
+				clearInterval(t)
+			}
+		}, 30);
+		console.log(file);
 	}
 	// -- events
 	const onLaunchAppError = (error) => {
@@ -56,7 +57,7 @@
 		Utils.reLaunch('/pages/TabPages/index')
 	}
 	const onJump = () => {
-
+		Utils.reLaunch('/pages/TabPages/index')
 	}
 </script>
 
@@ -80,7 +81,7 @@
 					<button class="btn flex-h-center color-FFFFFF" @click="onStayInMp">留在小程序</button>
 				</template>
 				<template v-else>
-					<button class="jump-btn flex-h-center color-FFFFFF" @click="onJump">开始优化</button>
+					<button class="jump-btn flex-h-center color-FFFFFF" @click="onJump">返回首页</button>
 				</template>
 			</view>
 		</template>
