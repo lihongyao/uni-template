@@ -67,7 +67,7 @@
 	// 2. 监听用户输入手机号
 	const onInput = ({ detail: { value } }) => {
 		state.mobile = value;
-		state.canSendCode = Validator.tel(value);
+		state.canSendCode = Validator.tel(value) && state.checkedForMobile;
 	}
 	// 3. 发送验证码
 	const onSendCode = () => {
@@ -104,6 +104,10 @@
 				state.code = '';
 			}
 		}, 1000);
+	}
+	// 6. 手机号登录勾选用户协议 
+	const onCheckedForMobileChange = (checked) => {
+		state.canSendCode = Validator.tel(state.mobile) && checked;
 	}
 </script>
 
@@ -144,7 +148,7 @@
 			</view>
 			<!-- 用户协议 & 隐私正常 -->
 			<view class="protocol flex-h-start f26 mt-20">
-				<icon-check v-model="state.checkedForMobile" class="mr-10"></icon-check>
+				<icon-check v-model="state.checkedForMobile" @change="onCheckedForMobileChange" class="mr-10"></icon-check>
 				<text>我已阅读并同意</text>
 				<text class="link mx-10">用户协议</text>
 				<text>及</text>

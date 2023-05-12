@@ -1,6 +1,6 @@
 <script setup>
 	import { onLaunch, onShow, onHide } from '@dcloudio/uni-app';
-	import uma from 'umtrack-wx';
+	// import uma from 'umtrack-wx';
 
 	// -- life circles 
 	onLaunch(() => {

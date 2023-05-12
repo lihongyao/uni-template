@@ -6,7 +6,7 @@
 		/** 标题文本 */
 		title: { type: String, default: 'uni-app' },
 		/** 标题颜色 */
-		tintColor: { type: String, default: "#444444" },
+		tintColor: { type: String, default: "#171717" },
 		/** 背景颜色 */
 		backgroundColor: { type: String, default: "#FFFFFF" },
 		/** 渐变颜色 */
@@ -130,7 +130,6 @@
 					font-size: 32rpx;
 					font-family: PingFangSC-Medium, PingFang SC;
 					font-weight: 500;
-					color: #171717;
 				}
 
 				.__btns {

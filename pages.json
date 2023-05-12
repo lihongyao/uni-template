@@ -1,8 +1,23 @@
 {
 	"pages": [{
+		"path": "pages/TabPages/index",
+		"style": {
+			"navigationBarTitleText": "水果销售"
+		}
+	},{
 		"path": "pages/launch/launch",
 		"style": {
 			"navigationStyle": "custom"
+		}
+	}, {
+		"path": "pages/userinfo/userinfo",
+		"style": {
+			"navigationBarTitleText": "个人信息"
+		}
+	}, {
+		"path": "pages/TabPages/categories",
+		"style": {
+			"navigationBarTitleText": "分类列表"
 		}
 	}, {
 		"path": "pages/upload/upload",
@@ -18,11 +33,6 @@
 		"path": "pages/upload/uploadForWeixin",
 		"style": {
 			"navigationBarTitleText": ""
-		}
-	}, {
-		"path": "pages/userinfo/userinfo",
-		"style": {
-			"navigationBarTitleText": "个人信息"
 		}
 	}, {
 		"path": "pages/auth/login",
@@ -70,12 +80,7 @@
 		"style": {
 			"navigationBarTitleText": "支付成功"
 		}
-	}, {
-		"path": "pages/TabPages/index",
-		"style": {
-			"navigationBarTitleText": "水果销售"
-		}
-	}, {
+	},  {
 		"path": "pages/fns/about-us",
 		"style": {
 			"navigationBarTitleText": "关于我们"
@@ -84,11 +89,6 @@
 		"path": "pages/fns/feedback",
 		"style": {
 			"navigationBarTitleText": "意见反馈"
-		}
-	}, {
-		"path": "pages/TabPages/categories",
-		"style": {
-			"navigationBarTitleText": "分类列表"
 		}
 	}, {
 		"path": "pages/search/search",

@@ -53,10 +53,7 @@
 	const onLaunchAppSuccess = () => {
 		console.log('__onLaunchAppSuccess__');
 	}
-	const onStayInMp = () => {
-		Utils.reLaunch('/pages/TabPages/index')
-	}
-	const onJump = () => {
+	const onJumpToHome = () => {
 		Utils.reLaunch('/pages/TabPages/index')
 	}
 </script>
@@ -77,11 +74,12 @@
 		<template v-if="state.percent === 100">
 			<view class="safe-area-bottom fixed-bottom actions flex-h-center">
 				<template v-if="state.q">
-					<button class="btn flex-h-center mr-34" open-type="launchApp" @launchapp="onLaunchAppSuccess" @error="onLaunchAppError">返回APP</button>
-					<button class="btn flex-h-center color-FFFFFF" @click="onStayInMp">留在小程序</button>
+					<button class="btn flex-h-center" open-type="launchApp" @launchapp="onLaunchAppSuccess" @error="onLaunchAppError">返回APP</button>
+					<button class="btn flex-h-center color-FFFFFF ml-34" @click="onJumpToHome">留在小程序</button>
 				</template>
 				<template v-else>
-					<button class="jump-btn flex-h-center color-FFFFFF" @click="onJump">返回首页</button>
+					<button class="btn flex-h-center" @click="Utils.pop()">重新上传</button>
+					<button class="btn flex-h-center color-FFFFFF ml-34" @click="onJumpToHome">返回首页</button>
 				</template>
 			</view>
 		</template>
@@ -108,13 +106,6 @@
 			&:last-child {
 				background: linear-gradient(90deg, #7650FF 0%, #8872FF 100%);
 			}
-		}
-
-		.jump-btn {
-			width: 686rpx;
-			height: 96rpx;
-			background: linear-gradient(90deg, #7650FF 0%, #8872FF 100%);
-			border-radius: 16rpx;
 		}
 	}
 </style>

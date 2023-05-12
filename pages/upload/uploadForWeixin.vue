@@ -20,7 +20,7 @@
 			success(res) {
 				const tempFilePaths = res.tempFiles;
 				uni.navigateTo({
-					url: "/pages/upload/uploading" + state.q ? '?q=app' : '',
+					url: `/pages/upload/uploading${state.q ? '?q=' + state.q : ''}`,
 					success(res) {
 						res.eventChannel.emit("acceptTempFilePaths", { tempFilePaths })
 					}

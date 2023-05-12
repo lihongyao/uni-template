@@ -13,7 +13,7 @@
 		disabled: true,
 		user: {
 			avatarUrl: defaultAvatarUrl,
-			nickName: 'LiKG',
+			nickName: 'LiHONGYAO__',
 			mobile: "17398888669"
 		}
 	})

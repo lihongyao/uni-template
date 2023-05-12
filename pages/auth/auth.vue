@@ -102,7 +102,7 @@
 			<template v-else>
 				<view class="desc">为了我们更好的服务您，请使用微信快捷登录获取您的手机号码</view>
 				<button class="button bg-theme" open-type="getPhoneNumber" @getphonenumber="onGetPhoneNumber">
-					<image class="icon-44x44 mr-8" src="./icon_weixin.png"></image>
+					<image class="icon-44x44 mr-8" src="./images/icon_weixin.png"></image>
 					<text>微信快捷登录</text>
 				</button>
 			</template>

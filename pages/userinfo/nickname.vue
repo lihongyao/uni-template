@@ -25,52 +25,48 @@
 	});
 
 	// -- events 
-	const onInput = (value) => {
+	const onInput = ({ detail: { value } }) => {
 		state.nickName = value;
 		state.saveEnable = state.nickNameBack !== value && value !== '';
 	}
 
 	const onNickNameReview = ({ detail: { pass } }) => {
+		console.log(state.nickName);
 		if (!pass) {
 			state.nickName = '';
 			state.saveEnable = false;
+			console.log('__昵称拦截__');
+		} else {
+			console.log('__昵称通过__');
+			Utils.loading("处理中...");
+			setTimeout(() => {
+				Utils.hideLoading();
+				Bus.$emit("UPDATED_NICKNAME", state.nickName);
+				Utils.pop();
+			}, 1000);
 		}
-	}
-	const onSubmit = () => {
-		// 是否合法交由后端处理
-		console.log('----', state.nickName);
-		Bus.$emit("UPDATED_NICKNAME", state.nickName);
-		Utils.pop();
 	}
 </script>
 
 <template>
 	<view class="page pt-24">
-		<form @submit="onSubmit">
+		<form>
 			<!-- 输入框：真机调试 -->
-			<uni-easyinput type="nickname" placeholder="请填写您的昵称" :placeholderStyle="placeholderStyles" v-model="state.nickName" :inputBorder="false" @input="onInput" @nicknamereview="onNickNameReview" />
+			<input type="nickname" :value="state.nickName" placeholder="请填写您的昵称" :placeholderStyle="placeholderStyles" @input="onInput" @nicknamereview="onNickNameReview" />
 			<!-- 确认按钮 -->
-			<button class="save-button" :class="{'enable': state.saveEnable}" form-type="submit">保存</button>
+			<button class="save-button" :class="{'enable': state.saveEnable}">保存</button>
 		</form>
 	</view>
 </template>
 
 
 <style lang="less" scoped>
-	:deep(.uni-easyinput) {
-		.uni-easyinput__content {
-			height: 100rpx;
-			font-family: 'Courier New', Courier, monospace;
-
-			input {
-				padding-left: 30rpx;
-				font-size: 30rpx;
-			}
-
-			.uni-icons.uniui-clear {
-				font-size: 44rpx !important;
-			}
-		}
+	input {
+		height: 100rpx;
+		padding-left: 30rpx;
+		background: #FFF;
+		font-family: 'Courier New', Courier, monospace;
+		font-size: 30rpx;
 	}
 
 	.save-button {
