@@ -1,14 +1,21 @@
 <script setup>
-	/**
-	 * 金刚区滚动栏
-	 */
 	// -- imports 
 	import { getCurrentInstance, onMounted, reactive, ref } from 'vue';
 
 	// -- props
 	const props = defineProps({
+		/** 数据结构：Array<{icon, label}> */
 		data: { type: Array, default: [] },
-		max: { type: Number, default: 4 }
+		/** 显示最大个数 */
+		max: { type: Number, default: 4 },
+		/** 拇指宽度，单位：rpx */
+		thumbWidth: { type: [String, Number], default: 60 },
+		/** 拇指背景色 */
+		thumbBgColor: { type: String, default: "#B5B5B5" },
+		/** 游标宽度，单位：rpx  */
+		cursorWidth: { type: [String, Number], default: 24 },
+		/** 游标背景色 */
+		cursorBgColor: { type: String, default: "#FFFFFF" },
 	});
 	// -- emits
 	const emits = defineEmits(["itemTap"]);
@@ -17,37 +24,29 @@
 	const progressRef = ref();
 	// -- state 
 	const state = reactive({
-		windowWidth: 0,
-		progressWidth: 0,
-		cursorWidth: 0,
+		thumbWidth: uni.upx2px(props.thumbWidth),
+		cursorWidth: uni.upx2px(props.cursorWidth),
+		windowWidth: uni.getSystemInfoSync().windowWidth,
 		cursorLeft: 0,
 		showProgress: true,
 	});
-	// -- life circles
-	onMounted(() => {
-
-		state.windowWidth = uni.getSystemInfoSync().windowWidth;
-		const instance = getCurrentInstance();
-		const query = uni.createSelectorQuery().in(instance);
-		query.select("#lg-scroll-progress").boundingClientRect(resp => {
-			console.log(resp);
-			state.progressWidth = resp ? resp.width : 0;
-		});
-		query.select("#lg-scroll-cursor").boundingClientRect(resp => {
-			state.cursorWidth = resp ? resp.width : 0;
-		});
-		query.exec();
-	});
+	// -- styles 
+	const styles = {
+		'--thumb-width': state.thumbWidth + 'px',
+		'--cursor-width': state.cursorWidth + 'px',
+		'--thumb-bg-color': props.thumbBgColor,
+		'--cursor-bg-color': props.cursorBgColor,
+	}
 	// -- events
 	const onScroll = ({ detail }) => {
 		const { scrollWidth, scrollLeft } = detail;
 		if (scrollWidth - state.windowWidth > 0) {
 			/*
 				scrollLeft         scrollWidth  
-				——————————     =   ——————————        → left = (scrollLeft * progressWidth) / scrollWidth
-				left(未知)         progressWidth
+				——————————     =   ——————————        → left = (scrollLeft * thumbWidth) / scrollWidth
+				left(未知)          thumbWidth
 			 */
-			state.cursorLeft = scrollLeft * (state.progressWidth - state.cursorWidth) / (scrollWidth - state.windowWidth);
+			state.cursorLeft = scrollLeft * (state.thumbWidth - state.cursorWidth) / (scrollWidth - state.windowWidth);
 		}
 
 	}
@@ -57,20 +56,21 @@
 
 
 <template>
-	<view class="scroll-bar-wrap">
+	<view class="lg-diamond-region" :style="styles">
 		<!-- Items Start -->
-		<scroll-view scroll-x class="scroll-bar" @scroll="onScroll" id="sg-view">
+		<scroll-view scroll-x class="__scroll-bar" @scroll="onScroll" id="sg-view">
 			<block v-for="(item, index) in props.data" :key="index">
-				<view class="scroll-bar-item" @click="emits('itemTap', { ...item })">
-					<image class="icon" :src="item.iconUrl"></image>
-					<view class="label" :class="{empty: !item.name}">{{item.name || '————'}}</view>
+				<view class="__scroll-bar-item" @click="emits('itemTap', { ...item })">
+					<image class="icon" :src="item.icon"></image>
+					<view class="label">{{item.label || '————'}}</view>
 				</view>
 			</block>
 		</scroll-view>
 		<!-- Items End -->
+
 		<!-- Scroll Bar Start -->
-		<view v-if="props.data.length > props.max" class="scroll-progress" id="lg-scroll-progress" ref="progressRef">
-			<view class="cursor" id="lg-scroll-cursor" :style="{left: state.cursorLeft + 'px'}"></view>
+		<view v-if="props.data.length > props.max" class="__thumb" ref="progressRef">
+			<view class="cursor" id="__scroll-cursor" :style="{left: state.cursorLeft + 'px'}"></view>
 		</view>
 		<!-- Scroll Bar End -->
 	</view>
@@ -78,53 +78,50 @@
 
 
 <style lang="less" scoped>
-	.scroll-bar-wrap {
-
-		.scroll-bar {
+	.lg-diamond-region {
+		.__scroll-bar {
 			white-space: nowrap;
 			font-size: 0;
 
-			.scroll-bar-item {
+			.__scroll-bar-item {
 				width: 100rpx;
 				display: inline-block;
 				text-align: center;
-				margin-right: 70rpx;
+				margin-right: 48rpx;
 
 				&:first-child {
-					margin-left: 70rpx;
+					margin-left: 44rpx;
 				}
 			}
 
 			.icon {
-				width: 100rpx;
-				height: 100rpx;
-				background: #E2E2E2;
-				border-radius: 20rpx;
+				width: 72rpx;
+				height: 72rpx;
 			}
 
 			.label {
-				margin-top: 26rpx;
-				font-size: 24rpx;
-				color: #333333;
-				line-height: 34rpx;
-
-				&.empty {
-					color: #888888;
-				}
+				margin-top: 16rpx;
+				font-size: 26rpx;
+				font-family: PingFang SC-Regular, PingFang SC;
+				font-weight: 400;
+				color: #FFFFFF;
+				line-height: 26px;
 			}
 		}
 
-		.scroll-progress {
-			width: 84rpx;
-			height: 6rpx;
-			background: #E0E0E0;
+		.__thumb {
+			width: var(--thumb-width);
+			height: 12rpx;
+			border-radius: 6rpx;
+			background: var(--thumb-bg-color);
 			margin: 20rpx auto 0;
 			position: relative;
 
 			.cursor {
-				width: 24rpx;
-				height: 6rpx;
-				background: #2600FF;
+				width: var(--cursor-width);
+				height: 12rpx;
+				border-radius: 6rpx;
+				background: var(--cursor-bg-color);
 				position: absolute;
 				top: 0;
 			}
