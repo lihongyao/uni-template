@@ -19,7 +19,7 @@
 <template>
 	<view class="page pt-24">
 		<block v-for="(item, index) in list" :key="index">
-			<view class="item flex-h-between  px-30 bg-FFFFFF" @click="onFnItemTap(item)">
+			<view class="item flex-h-between  px-30 bg-secondary" @click="onFnItemTap(item)">
 				<view class="f28 color-333333 f-400 lh-40">{{item.label}}</view>
 				<view class="flex-1 flex-h-end">
 					<image class="icon-40x40" src="@/static/images/icon_right.png"></image>

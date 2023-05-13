@@ -10,7 +10,7 @@
 		<view class=" text-center mb-30">
 			<image class="icon-80x80" src="@/static/images/pay_success.png"></image>
 		</view>
-		<view class=" text-center ff-DIN-Bold f64 color-theme ls-2">
+		<view class=" text-center ff-DIN-Bold f64 color-primary ls-2">
 			支付成功
 		</view>
 

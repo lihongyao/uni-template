@@ -108,7 +108,7 @@
 <template>
 	<view class="page px-20 pt-20">
 		<!-- 表单 -->
-		<view class="bg-FFFFFF rounded-24 pl-30 ">
+		<view class="bg-secondary rounded-24 pl-30 ">
 			<!-- 联系人 -->
 			<view class="form-item flex-h-between border-bottom py-30">
 				<view class="label text-justify  mr-60">联系人</view>
@@ -122,7 +122,7 @@
 			<!-- 所在地区 -->
 			<view class="form-item flex-h-between border-bottom py-30 align-items-start">
 				<view class="label text-justify  mr-60">所在地区</view>
-				<view class="pr-40 color-202020 flex-1 flex-h-between" @click="onChooseLocation">
+				<view class="pr-40 color-secondary flex-1 flex-h-between" @click="onChooseLocation">
 					<view v-if="state.formData.area" class="flex-1 flex-shrink f28">{{state.formData.area.name}}</view>
 					<view v-else class="flex-1 flex-shrink color-999999 f28">请选择</view>
 					<image class="icon-right ml-20" src="./images/icon_right.png" />

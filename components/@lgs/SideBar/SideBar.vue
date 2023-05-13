@@ -33,8 +33,18 @@
 		cursorColor: { type: String, default: "#42b983" },
 		/** 侧栏元素高度 */
 		sideItemHeight: { type: [Number, String], default: 100 },
-		/** 侧栏宽度*/
+		/** 侧栏宽度 */
 		sideWidth: { type: [Number, String], default: 208 },
+		/** 侧栏区域背景色 */
+		sideBgColor: { type: String, default: '#F8F8F8' },
+		/** 侧栏前景色 */
+		sideTintColor: { type: String, default: "#A5A5A5" },
+		/** 侧栏激活区域颜色 */
+		sideActiveColor: { type: String, default: "#FFFFFF" },
+		/** 内容区域背景色 */
+		contentBgColor: { type: String, default: '#FFFFFF' },
+		/** 是否显示边框 */
+		bordered: Boolean
 	});
 	const emits = defineEmits(["load", "refresh"])
 	// -- state 
@@ -50,6 +60,16 @@
 		/** 侧栏宽度 */
 		sideWidth: uni.upx2px(props.sideWidth)
 	});
+
+	// -- styles 
+	const styles = {
+		'--side-width': state.sideWidth + 'px',
+		'--cursor-color': props.cursorColor,
+		'--side-bg-color': props.sideBgColor,
+		'--content-bg-color': props.contentBgColor,
+		'--side-tint-color': props.sideTintColor,
+		'--side-active-color': props.sideActiveColor,
+	}
 
 	// -- life circles
 	onMounted(() => {
@@ -78,7 +98,7 @@
 </script>
 
 <template>
-	<view class="lg-side-bar" :style="{'--side-width': state.sideWidth + 'px', '--cursor-color': props.cursorColor}">
+	<view class="lg-side-bar" :class="{bordered: !!bordered}" :style="styles">
 		<!-- 侧边栏 -->
 		<scroll-view class="lg-side-bar__side" scroll-y>
 			<block v-for="(item, index) in categories" :key="index">
@@ -99,15 +119,18 @@
 		position: absolute;
 		width: 100%;
 		height: 100%;
-		border-top: 2rpx solid #F7F7F7;
 		display: flex;
 		justify-content: space-between;
 		align-items: flex-start;
 
+		&.bordered {
+			border-top: 2rpx solid #F7F7F7;
+		}
+
 		&__side {
 			width: var(--side-width);
 			height: 100%;
-			background-color: #F8F8F8;
+			background-color: var(--side-bg-color);
 			position: relative;
 
 			.cursor {
@@ -123,12 +146,12 @@
 				align-items: center;
 				padding-left: 40rpx;
 				font-size: 28rpx;
-				color: #A5A5A5;
+				color: var(--side-tint-color);
 				position: relative;
 				transition: background-color .25s linear;
 
 				&.selected {
-					background-color: #FFFFFF;
+					background-color: var(--side-active-color);
 				}
 			}
 		}
@@ -136,7 +159,7 @@
 		&__contents {
 			flex: 1;
 			height: 100%;
-			background-color: #FFFFFF;
+			background-color: var(--content-bg-color);
 		}
 	}
 </style>

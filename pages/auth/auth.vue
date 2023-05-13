@@ -87,7 +87,7 @@
 
 <template>
 	<view class="page">
-		<view class="wrap rounded-24 bg-FFFFFF pt-70 px-48 mx-auto flex-v-center justify-content-start">
+		<view class="wrap rounded-24 bg-secondary pt-70 px-48 mx-auto flex-v-center justify-content-start">
 			<!-- logo -->
 			<image class="icon-160x160" src="@/static/logo.png"></image>
 			<!-- 店铺名称 -->
@@ -95,13 +95,13 @@
 			<!-- 获取用户信息 -->
 			<template v-if="state.key === 'GET_USER_PROFILE'">
 				<view class="desc">为了我们更好的服务您，【产品名称】小程序需要获取您的基础信息，请点击“授权登录”按钮，打开头像、昵称等信息的授权。</view>
-				<button v-if="state.canIUseGetUserProfile" class="button bg-theme" @click="onGetUserProfile">授权登录</button>
-				<button v-else class="button bg-theme" open-type="getUserInfo" @getuserinfo="onGetUserInfo">授权登录</button>
+				<button v-if="state.canIUseGetUserProfile" class="button bg-primary" @click="onGetUserProfile">授权登录</button>
+				<button v-else class="button bg-primary" open-type="getUserInfo" @getuserinfo="onGetUserInfo">授权登录</button>
 			</template>
 			<!-- 获取手机号码 -->
 			<template v-else>
 				<view class="desc">为了我们更好的服务您，请使用微信快捷登录获取您的手机号码</view>
-				<button class="button bg-theme" open-type="getPhoneNumber" @getphonenumber="onGetPhoneNumber">
+				<button class="button bg-primary" open-type="getPhoneNumber" @getphonenumber="onGetPhoneNumber">
 					<image class="icon-44x44 mr-8" src="./images/icon_weixin.png"></image>
 					<text>微信快捷登录</text>
 				</button>

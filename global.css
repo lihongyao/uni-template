@@ -52,28 +52,17 @@ image { box-sizing: content-box; }
 
 /**********************
  ** Background & Colors
+ ** 命名参照：https://v5.bootcss.com/docs/utilities/colors/
  **********************/
  
+.color-primary { color: #42b983; }
+.color-secondary { color: #202020; }
+.color-RMB { color: #D23434; }
  
-.bg-theme { background-color: #42b983; }
-.bg-B8BDC8 { background-color: #B8BDC8; }
- 
-.color-theme    { color: #42b983; } /** 主色 */
-.color-theme-30 { color: rgba(19,37,74,0.3); }
-
-
-.color-black-30 { color: rgba(0,0,0,0.30); }
-.color-black-36 { color: rgba(0,0,0,0.36); }
-
-.color-white-50 { color: rgba(255,255,255, .5); }
-
-
-
+.bg-primary { background-color: #42b983; }
+.bg-secondary { background-color: #FFFFFF; }
  
  
-.bg-FFFFFF { background-color: #FFFFFF; }
-.bg-F9F9F9 { background-color: #F9F9F9; }
-.bg-EAEAEE { background-color: #EAEAEE; }
 
 .color-111111 { color: #111111; }
 .color-222222 { color: #222222; }
@@ -85,13 +74,6 @@ image { box-sizing: content-box; }
 .color-888888 { color: #888888; }
 .color-999999 { color: #999999; }
 .color-FFFFFF { color: #FFFFFF; }
-.color-202020 { color: #202020; }
-.color-A5A5A5 { color: #A5A5A5; }
-.color-FF004C { color: #FF004C; }
-.color-8C8C8C { color: #8C8C8C; }
-.color-8176F6 { color: #8176F6;}
-.color-B8BDC8 { color: #B8BDC8; } 
-.color-BFBFBF { color: #BFBFBF; } 
 
 /**********************
  ** Spacings...

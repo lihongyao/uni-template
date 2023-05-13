@@ -18,7 +18,7 @@
 </script>
 
 <template>
-	<div class="page h-100 flex-h-center ls-2 ff-DIN-Bold f60 color-theme">
+	<div class="page h-100 flex-h-center ls-2 ff-DIN-Bold f60 color-primary">
 		SHOPPING CART
 	</div>
 </template>

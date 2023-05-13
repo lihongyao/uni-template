@@ -49,28 +49,28 @@ export const APP_MINE_FNS = [
 	{ label: '文件上传', path: '/pages/upload/upload', checkLogin: false },
 ];
 
-import ICON_UNPAY from '@/pages/TabPages/images/unpay.png';
-import ICON_RECEIVE from '@/pages/TabPages/images/receive.png';
-import ICON_DELIVER from '@/pages/TabPages/images/deliver.png';
-import ICON_COMPLETE from '@/pages/TabPages/images/complete.png';
+import ICON_ORDER_1 from '@/pages/TabPages/images/icon_order_1.png';
+import ICON_ORDER_2 from '@/pages/TabPages/images/icon_order_2.png';
+import ICON_ORDER_3 from '@/pages/TabPages/images/icon_order_3.png';
+import ICON_ORDER_4 from '@/pages/TabPages/images/icon_order_4.png';
 
 export const APP_MINE_ORDERS = [{
-		icon: ICON_UNPAY,
+		icon: ICON_ORDER_1,
 		path: '/pages/orders/list?q=0',
 		label: '待支付',
 	},
 	{
-		icon: ICON_DELIVER,
+		icon: ICON_ORDER_2,
 		path: '/pages/orders/list?q=1',
 		label: '待发货',
 	},
 	{
-		icon: ICON_RECEIVE,
+		icon: ICON_ORDER_3,
 		path: '/pages/orders/list?q=2',
 		label: '待收货',
 	},
 	{
-		icon: ICON_COMPLETE,
+		icon: ICON_ORDER_4,
 		path: '/pages/orders/list?q=3',
 		label: '已完成',
 	},

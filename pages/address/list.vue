@@ -92,13 +92,13 @@
 			<template v-if="state.list">
 				<template v-if="state.list.length > 0">
 					<block v-for="(item, index) in state.list" :key="index">
-						<view class="list-item bg-FFFFFF flex-h-center px-30 mb-20" @click="onAddressItemTap(item)">
+						<view class="list-item bg-secondary flex-h-center px-30 mb-20" @click="onAddressItemTap(item)">
 							<view class="flex-1 flex-shrink">
 								<view class="flex-h-start mb-20">
-									<text class="f32 color-202020 lh-44 f-600">{{item.name}}</text>
+									<text class="f32 color-secondary lh-44 f-600">{{item.name}}</text>
 									<text class="f24 color-999999 lh-34 ml-20">{{Tools.phoneFormatter(item.phone, "$1 $2 $3")}}</text>
 								</view>
-								<view class="address f26 color-202020 lh-36" :class="{'default': !!item.isDefault}">
+								<view class="address f26 color-secondary lh-36" :class="{'default': !!item.isDefault}">
 									{{`${item.area.address}-${item.area.name}·${item.doorplate}`}}
 								</view>
 							</view>

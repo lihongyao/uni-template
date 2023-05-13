@@ -42,7 +42,7 @@
 		<view class="row">
 			<view class="label">头像</view>
 			<button class="value chooseAvatar" hover-class="none" open-type="chooseAvatar" @chooseavatar="onChooseAvatar">
-				<image class="icon-112x112 bg-B8BDC8 rounded-14" :src="state.user.avatarUrl"></image>
+				<image class="icon-112x112 bg-secondary rounded-14" :src="state.user.avatarUrl"></image>
 				<image class="icon-40x40" src="@/static/images/icon_right.png"></image>
 			</button>
 		</view>

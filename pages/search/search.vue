@@ -102,7 +102,7 @@
 <template>
 	<view class="page px-40">
 		<!-- Search Start -->
-		<view class="search-bar-wrap px-40 fixed-top bg-FFFFFF">
+		<view class="search-bar-wrap px-40 fixed-top bg-secondary">
 			<view class="search-bar rounded-36 pl-24 flex-h-between ">
 				<image class="icon-48x48" src="@/components/@lgs/SearchBar/images/icon_search.png"></image>
 				<input class="uni-input flex-1 pl-20" v-model="state.keyword" placeholder="请输入搜索关键字" confirm-type="search" :placeholder-style="placeholderStyle" @confirm="onSearch" @input="onInput" />

@@ -37,7 +37,7 @@
 <template>
 
 	<view class="page pt-20 px-20">
-		<view class="wrap bg-FFFFFF px-30 py-30 rounded-24">
+		<view class="wrap bg-secondary px-30 py-30 rounded-24">
 			<uni-easyinput type="textarea" v-model="feedback" placeholder="请填写您的意见和反馈,便于更好的服务您~" :clearable="true" :auto-height="true" :placeholder-style="placeholderStyle" :input-border="false" />
 		</view>
 		<button class="action-button mt-80" @click="onSureButtonTap">确认提交</button>

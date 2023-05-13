@@ -17,7 +17,6 @@
 	// -- life circles
 	onLoad(({ q }) => {
 		state.q = q;
-		console.log(uni.getSystemInfoSync());
 	});
 	onMounted(() => {
 		login();

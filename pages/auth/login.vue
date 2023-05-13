@@ -121,8 +121,8 @@
 			<!-- 产品图 -->
 			<view class="intro flex-h-center color-FFFFFF">产品介绍图</view>
 			<!-- 授权按钮 -->
-			<button v-if="state.checkedForAuth" class="auth-button bg-theme flex-h-center f28 color-FFFFFF" open-type="getPhoneNumber" @getphonenumber="onGetPhoneNumber">微信快捷登录</button>
-			<button v-else class="auth-button bg-theme flex-h-center f28 color-FFFFFF" @click="showTips">微信快捷登录</button>
+			<button v-if="state.checkedForAuth" class="auth-button bg-primary flex-h-center f28 color-FFFFFF" open-type="getPhoneNumber" @getphonenumber="onGetPhoneNumber">微信快捷登录</button>
+			<button v-else class="auth-button bg-primary flex-h-center f28 color-FFFFFF" @click="showTips">微信快捷登录</button>
 			<!-- 手机号验证码登录 -->
 			<view class="login-mobile f24 text-center color-555555" @click="state.k = 1">手机号验证码登录</view>
 			<!-- 用户协议 & 隐私正常 -->
@@ -156,7 +156,7 @@
 			</view>
 			<!-- 发送验证码 -->
 			<view class="flex-h-end mt-60">
-				<view :class="{disabled: !state.canSendCode}" class="action-button bg-theme flex-h-center color-FFFFFF rounded-45 f26" @click="onSendCode">发送验证码</view>
+				<view :class="{disabled: !state.canSendCode}" class="action-button bg-primary flex-h-center color-FFFFFF rounded-45 f26" @click="onSendCode">发送验证码</view>
 			</view>
 		</view>
 		<!-- 3.接收验证码 -->
@@ -174,8 +174,8 @@
 
 			<!-- 发送验证码 -->
 			<view class="flex-h-end mt-60">
-				<view v-if="state.count" class="action-button disabled bg-theme flex-h-center color-FFFFFF rounded-45 f26">{{timeString}}s</view>
-				<view v-else class="action-button bg-theme flex-h-center color-FFFFFF rounded-45 f26" @click="onSendCode">重新获取</view>
+				<view v-if="state.count" class="action-button disabled bg-primary flex-h-center color-FFFFFF rounded-45 f26">{{timeString}}s</view>
+				<view v-else class="action-button bg-primary flex-h-center color-FFFFFF rounded-45 f26" @click="onSendCode">重新获取</view>
 			</view>
 		</view>
 	</view>

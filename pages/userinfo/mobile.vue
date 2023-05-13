@@ -131,8 +131,8 @@
 				<VerifyCode v-model="state.code" :length="4" align="left" @validate="onValidate" borderColor="rgba(0, 0, 0, .36)" />
 				<!-- 发送验证码 -->
 				<view class="flex-h-end mt-80">
-					<view v-if="state.count" class="action-button disabled bg-theme flex-h-center color-FFFFFF rounded-45 f26">{{timeString}}s</view>
-					<view v-else class="action-button bg-theme flex-h-center color-FFFFFF rounded-45 f26" @click="onSendCode">重新获取</view>
+					<view v-if="state.count" class="action-button disabled bg-primary flex-h-center color-FFFFFF rounded-45 f26">{{timeString}}s</view>
+					<view v-else class="action-button bg-primary flex-h-center color-FFFFFF rounded-45 f26" @click="onSendCode">重新获取</view>
 				</view>
 			</view>
 		</uni-popup>
