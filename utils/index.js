@@ -1,9 +1,5 @@
 // -- 引入常量配置
-import {
-	APP_OSS_HOST,
-	APP_KEY_LOGIN,
-	APP_KEY_TOKEN,
-} from '@/constants/index.js';
+import { APP_KEY_LOGIN, APP_KEY_TOKEN } from '@/constants/index.js';
 // -- 友盟统计
 import uma from 'umtrack-wx';
 // -- 加密
@@ -257,60 +253,72 @@ export default class Utils {
 	}
 
 	/**
-	 * 文件上传 - OSS直传
-	 * @param {Object} uploadFile 配置信息
+	 * 文件上传 - OSS（前端签名直传）
+	 * --- 基础配置
+	 * @param {Object} options
+	 * @param {String} options.uri OSSHost
+	 * @param {String} options.key 上传路径
+	 * @param {String} options.filePath 文件路径
+	 * --- 阿里云相关
+	 * @param {Object} options.ossConfigs 阿里云相关配置 
+	 * @param {Object} options.ossConfigs.accessKeyId  
+	 * @param {Object} options.ossConfigs.accessKeySecret  
+	 * @param {Object} options.ossConfigs.securityToken  
+	 * -- 回调函数
+	 * @param {Function} options.success 上传成功回调
+	 * @param {Function} options.fail 上传失败回调
+	 * @param {Function} options.onProgressUpdate 进度更新
 	 */
-	static uploadFile({
-		key,
-		filePath,
-		accessKeySecret,
-		accessKeyId,
-		securityToken,
-	}) {
-		return new Promise((resolve, reject) => {
-			// 1. 客户端获取签名
-			// -- 构造policy
-			const date = new Date();
-			date.setHours(date.getHours() + 1);
-			const policyText = {
-				expiration: date.toISOString(),
-				conditions: [
-					['content-length-range', 0, 1024 * 1024 * 1024]
-				],
-			};
-			const policy = Base64.encode(JSON.stringify(policyText));
-			// -- 获取签名
-			const signature = crypto.enc.Base64.stringify(
-				crypto.HmacSHA1(policy, accessKeySecret)
-			);
-			// 2.构造formData
-			const formData = {
-				key,
-				policy,
-				signature,
-				OSSAccessKeyId: accessKeyId,
-				'x-oss-security-token': securityToken, // 使用STS签名时必传。
-			};
-			// 3. 执行上传
-			uni.uploadFile({
-				url: APP_OSS_HOST,
-				filePath,
-				name: 'file',
-				formData,
-				timeout: 60 * 1000,
-				header: {
-					'Content-Type': 'application/json',
-				},
-				success: (res) => {
-					if (res.statusCode === 204) {
-						resolve(`${APP_OSS_HOST}/${key}`);
-					}
-				},
-				fail: (err) => {
-					reject(err);
-				},
-			});
+	static uploadFile(options) {
+		// 1. 客户端获取签名
+		// -- 构造policy
+		const date = new Date();
+		date.setHours(date.getHours() + 1);
+		const policyText = {
+			expiration: date.toISOString(),
+			conditions: [
+				['content-length-range', 0, 1024 * 1024 * 1024]
+			],
+		};
+		const policy = Base64.encode(JSON.stringify(policyText));
+		// -- 获取签名
+		const signature = crypto.enc.Base64.stringify(
+			crypto.HmacSHA1(policy, options.ossConfigs.accessKeySecret)
+		);
+		// 2.构造formData
+		const formData = {
+			key: options.key,
+			policy,
+			signature,
+			OSSAccessKeyId: options.ossConfigs.accessKeyId,
+			'x-oss-security-token': options.ossConfigs.securityToken, // 使用STS签名时必传。
+		};
+		// 3. 执行上传
+		const uploadTask = uni.uploadFile({
+			url: options.uri,
+			filePath: options.filePath,
+			name: 'file',
+			formData,
+			timeout: 60 * 1000,
+			header: {
+				'Content-Type': 'application/json',
+			},
+			success: (res) => {
+				if (res.statusCode === 204) {
+					options.success && options.success(`${options.uri}/${options.key}`)
+				} else {
+					options.fail && options.fai();
+				}
+			},
+			fail: (err) => {
+				options.fail && options.fai();
+			},
 		});
+		// 4. 监听上传进度
+		uploadTask.onProgressUpdate((res) => {
+			options.onProgressUpdate && options.onProgressUpdate(res.progress)
+		});
+		return uploadTask;
 	}
 
 	/**
@@ -734,4 +742,14 @@ export default class Utils {
 			},
 		};
 	};
+
+	/**
+	 * 富文本内容格式化
+	 * @param {Object} htmlString
+	 */
+	static formatRichText(htmlString) {
+		return htmlString && htmlString.replace(/<img[^>]*>/gi, function(match, capture) { // 查找所有的 img 元素
+			return match.replace(/style=".*"/gi, '').replace(/style='.*'/gi, ''); // 删除找到的所有 img 元素中的 style 属性
+		}).replace(/\<img/gi, '<img style="width:100%;"'); // 对 img 元素增加 style 属性，并设置宽度为 100%
+	}
 }

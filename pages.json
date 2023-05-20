@@ -1,18 +1,18 @@
 {
-	"pages": [{
+	"pages": [ {
 		"path": "pages/launch/launch",
 		"style": {
 			"navigationStyle": "custom"
+		}
+	},{
+		"path": "pages/userinfo/userinfo",
+		"style": {
+			"navigationBarTitleText": "个人信息"
 		}
 	}, {
 		"path": "pages/TabPages/index",
 		"style": {
 			"navigationBarTitleText": "水果销售"
-		}
-	}, {
-		"path": "pages/userinfo/userinfo",
-		"style": {
-			"navigationBarTitleText": "个人信息"
 		}
 	}, {
 		"path": "pages/TabPages/categories",

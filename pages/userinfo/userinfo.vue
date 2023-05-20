@@ -1,64 +1,116 @@
 <script setup>
+	import { reactive, ref } from "vue";
+	import { onLoad, onUnload } from '@dcloudio/uni-app';
+	import { APP_OSS_HOST } from "@/constants";
 	import Utils from '@/utils';
 	import Tools from 'lg-tools';
-	import { reactive, ref } from "vue";
-	import { onLoad } from '@dcloudio/uni-app';
 	import Bus from 'lg-bus';
+	import service from '@/service';
+
 	// -- constants 
 	const defaultAvatarUrl = 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0';
-	// -- refs
-	const popupNickName = ref();
+
 	// -- state 
 	const state = reactive({
-		disabled: true,
+		/** OSS配置相关 */
+		ossConfigs: null,
+		/** 用户信息 */
 		user: {
-			avatarUrl: defaultAvatarUrl,
-			nickName: 'LiHONGYAO__',
-			mobile: "17398888669"
+			avatar: defaultAvatarUrl,
+			nickName: '',
+			mobile: ""
 		}
 	})
 	// -- life circles 
 	onLoad(() => {
+
+		// 1. 获取用户信息
+		// service.user.info().then(resp => {
+		// 	state.user = resp.data;
+		// });
+
+
+		// 2. 获取阿里云OSS配置
+		// service.common.getOSSConfigs().then(resp => {
+		// 	state.ossConfigs = resp.data.credentials;
+		// });
+
+
+		// 3. 监听用户昵称/手机号更新
 		Bus.$on("UPDATED_NICKNAME", (nickName) => {
 			state.user.nickName = nickName;
+			Bus.$emit("REFRESH_USERINFO");
 		});
 		Bus.$on("UPDATED_MOBILE", (mobile) => {
 			state.user.mobile = mobile;
+			Bus.$emit("REFRESH_USERINFO");
 		});
 	});
 
+	onUnload(() => {
+		Bus.$off("UPDATED_NICKNAME");
+		Bus.$off("UPDATED_MOBILE");
+	})
+
 	// -- events 
-	// 1. 修改头像
 	const onChooseAvatar = ($event) => {
-		const avatarUrl = $event.detail.avatarUrl;
-		state.user.avatarUrl = avatarUrl;
-		console.log(`avatarUrl：${avatarUrl}`);
+		// -- 获取头像临时路径
+		const tempFilePath = $event.detail.avatarUrl;
+		state.user = { ...state.user, avatar: tempFilePath }; // 临时代码
+		return;
+
+		// -- 构造上传路径
+		const suffix = tempFilePath.substring(tempFilePath.lastIndexOf("."));
+		const date = new Date();
+		const year = date.getFullYear();
+		const month = (date.getMonth() + 1).toString().padStart(2, '0');
+		const day = date.getDate().toString().padStart(2, '0');
+		const key = `avatars/${year}${month}${day}/${date.getTime()}${suffix}`;
+		// -- 上传头像
+		Utils.uploadFile({
+			uri: APP_OSS_HOST,
+			key,
+			filePath: tempFilePath,
+			ossConfigs: state.ossConfigs,
+			success: async (url) => {
+				// -- 更新用户头像
+				const resp = await service.user.edit({ avatar: url });
+				if (resp && resp.code === 200) {
+					Utils.toast("上传成功");
+					Bus.$emit("REFRESH_USERINFO");
+					state.user = { ...state.user, avatar: url };
+				}
+			},
+			fail: () => {
+				Utils.toast("上传失败，请重试！");
+			}
+		})
 	}
 </script>
 
 <template>
 	<view class="page pt-24">
 		<!-- 头像 -->
-		<view class="row">
+		<view class="row bg-primary" >
 			<view class="label">头像</view>
 			<button class="value chooseAvatar" hover-class="none" open-type="chooseAvatar" @chooseavatar="onChooseAvatar">
-				<image class="icon-112x112 bg-secondary rounded-14" :src="state.user.avatarUrl"></image>
+				<image class="icon-112x112 bg-secondary rounded-14" :src="state.user.avatar"></image>
 				<image class="icon-40x40" src="@/static/images/icon_right.png"></image>
 			</button>
 		</view>
 		<!-- 名字 -->
-		<view class="row">
+		<view class="row bg-primary" @click="Utils.push(`/pages/userinfo/nickname?nickName=${state.user.nickName || ''}`)">
 			<view class="label">名字</view>
-			<view class="value" @click="Utils.push(`/pages/userinfo/nickname?nickName=${state.user.nickName}`)">
-				<text>{{state.user.nickName}}</text>
+			<view class="value">
+				<text>{{state.user.nickName || "————"}}</text>
 				<image class="icon-40x40" src="@/static/images/icon_right.png"></image>
 			</view>
 		</view>
 		<!-- 手机号 -->
-		<view class="row">
+		<view class="row bg-primary" @click="Utils.push(`/pages/userinfo/mobile?mobile=${state.user.mobile}`)">
 			<view class="label">手机号</view>
-			<view class="value" @click="Utils.push(`/pages/userinfo/mobile?mobile=${state.user.mobile}`)">
-				<text>{{state.user.mobile}}</text>
+			<view class="value">
+				<text>{{state.user.mobile || '——————'}} </text>
 				<image class="icon-40x40" src="@/static/images/icon_right.png"></image>
 			</view>
 		</view>

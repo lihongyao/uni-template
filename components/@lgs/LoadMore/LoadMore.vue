@@ -1,7 +1,7 @@
 <script setup>
 	// -- props 
 	const props = defineProps({
-		tips: { type: String, default: "———— 自由旅行 ————" },
+		tips: { type: String, default: "———— END ————" },
 		showTips: { type: Boolean, default: true },
 		hasMore: { type: Boolean, default: false }
 	})

@@ -12,23 +12,29 @@
 		/** 渐变颜色 */
 		gradientColor: String,
 		/** 是否显示返回按钮 */
-		showBack: Boolean
+		showBack: Boolean,
+		/** 占位 */
+		showPlace: Boolean,
 	})
 	// -- state 
 	const state = reactive({
+		/** 状态栏高度 */
 		statusBarHeight: 0,
+		/** 标题栏高度 */
 		titleBarHeight: 0,
+		/** 导航栏高度 = 状态栏高度 + 标题栏高度 */
 		navHeight: 0,
+		/** 透明度 */
 		opacity: 0,
+		/** 左侧间距 */
 		leftSpacing: 0,
-		capsuleHeight: 0, // 导航栏右侧胶囊高度
-
+		/** 导航栏右侧胶囊高度 */
+		capsuleHeight: 0,
 	});
 	// -- life circles 
 	onMounted(() => {
 		// -- 获取窗口信息
 		const { statusBarHeight, screenWidth } = uni.getWindowInfo();
-
 
 		// -- 计算标题栏高度
 		// #ifdef MP-WEIXIN 
@@ -81,9 +87,9 @@
 <template>
 	<view class="app-header" :style="{color: tintColor}">
 		<!-- 占位 -->
-		<view v-if="!gradientColor" class="app-header__place" :style="{height: `${state.navHeight}px` }"></view>
+		<view v-if="showPlace" class="__place" :style="{height: `${state.navHeight}px` }"></view>
 		<!-- 内容 -->
-		<view class="app-header__wrap" :style="{height:  `${state.navHeight}px`, backgroundColor}">
+		<view class="__wrap" :style="{height:  `${state.navHeight}px`, backgroundColor}">
 			<!-- 状态栏 -->
 			<view class="__statusBar" :style="{height: `${state.statusBarHeight}px`}"></view>
 			<!-- 标题栏 -->
@@ -108,12 +114,12 @@
 	.app-header {
 		width: 100vw;
 
-		&__place {
+		.__place {
 			width: 100vw;
 			background-color: transparent;
 		}
 
-		&__wrap {
+		.__wrap {
 			width: 100vw;
 			position: fixed;
 			top: 0;

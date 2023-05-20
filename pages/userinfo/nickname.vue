@@ -4,6 +4,7 @@
 	import { onLoad } from '@dcloudio/uni-app';
 	import Utils from "@/utils";
 	import Bus from "lg-bus";
+	import service from "@/service";
 
 
 	// -- constants
@@ -19,7 +20,8 @@
 	});
 
 	// -- life circles 
-	onLoad(({ nickName = 'LiKG' }) => {
+	onLoad(({ nickName }) => {
+		console.log(nickName);
 		state.nickName = nickName;
 		state.nickNameBack = nickName;
 	});
@@ -31,19 +33,25 @@
 	}
 
 	const onNickNameReview = ({ detail: { pass } }) => {
-		console.log(state.nickName);
 		if (!pass) {
+			console.log('__昵称拦截__');
 			state.nickName = '';
 			state.saveEnable = false;
-			console.log('__昵称拦截__');
+
 		} else {
 			console.log('__昵称通过__');
+			Bus.$emit("UPDATED_NICKNAME", state.nickName); // -- 临时代码
+			Utils.pop(); // -- 临时代码
+			return;
+			// -- 更新用户昵称
 			Utils.loading("处理中...");
-			setTimeout(() => {
+			service.user.edit({ nickName: state.nickName }).then(() => {
 				Utils.hideLoading();
 				Bus.$emit("UPDATED_NICKNAME", state.nickName);
 				Utils.pop();
-			}, 1000);
+			}).catch(() => {
+				Utils.hideLoading();
+			})
 		}
 	}
 </script>
