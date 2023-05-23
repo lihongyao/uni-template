@@ -14,9 +14,11 @@
 	// -- props & emits 
 	const props = defineProps({
 		/** 营业时间，格式：HH:mm - HH:mm */
-		businessHours: { type: String, default: "09:00 - 21:00" },
+		businessHours: { type: String, default: "09:00 - 18:00" },
 		/** 限制天数， */
 		limit: { type: Number, default: 60 },
+		/** 默认值，格式为：{ start: Date, end: Date } */
+		defaultValue: Object,
 		/** 标签文案，默认：取车时间 - 还车时间 */
 		labelText: {
 			type: Object,
@@ -26,15 +28,36 @@
 			})
 		}
 	});
-	// -- @sure：确认事件，回调值 {length, result }
+	// -- @sure：确认事件，回调值 {length, date }
 	const emits = defineEmits(['sure'])
 
 	// -- constants 
-	const __curDate = new Date();
-	const __hours = getHours();
+	const __curDate = new Date(); // 获取当前时间
+	const __hours = getHours(); // 获取小时数数据源（00-23）
 
 	// -- default 
-	const __defaultResult = getDefaultResult(__curDate, props.businessHours);
+	const __defaultResult = (function() {
+		// 1. 计算默认值
+		const t = getDefaultResult(__curDate, props.businessHours);
+		// 2. 判断是否传入默认值
+		if (props.defaultValue) {
+			// -- 如果传入默认值则判断默认值开始时间是否已过当前时间
+			if (props.defaultValue.start < __curDate) {
+				// -- 已过当前时间则弹出提示，将t作为默认值
+				uni.showToast({
+					icon: "none",
+					duration: 3000,
+					title: `亲，${props.labelText.start}已过当前时间，已为您修改${props.labelText.start}`
+				});
+				return t;
+			} else {
+				// -- 未过当前时间则将传入的defaultValue作为默认值
+				return props.defaultValue;
+			}
+		}
+		// 3. 没有传入默认值则将t作为默认值
+		return t;
+	})();
 	console.log('————————————————————————————————————')
 	console.log("开始时间(默认)：", __defaultResult.start);
 	console.log("结束时间(默认)：", __defaultResult.end);
@@ -144,7 +167,7 @@
 				// -- 由于结束时间默认比开始时间多2天
 				// -- 为了避免日期溢出，即开始时间选到最大值，修改结束时间时，日期数据为空的问题
 				// -- 所以开始日期的截取只需截取到倒数第2项即可
-				state.columns1 = t.slice(0, -2); 
+				state.columns1 = t.slice(0, -2);
 				// -- 计算下标（根据当前选中的「开始时间」计算）
 				k1 = state.columns1.findIndex(item => {
 					return (item === '今日' ? state.curDate : item).toDateString() === startDate.toDateString();
@@ -265,13 +288,29 @@
 		state.k = type;
 		// 2. 更新当前时间
 		state.curDate = new Date();
-		// 3. 更新结果（默认）
-		state.result = getDefaultResult(state.curDate, props.businessHours);
-		// 4. 更新标题
-		state.title = getLengthOfLease(state.result.start, state.result.end);
-		// 5. 更新数据源
+		// 3. 判断结果开始时间是否已过当前时间
+		if (state.result.start < state.curDate) {
+			// -- 弹出提示用户
+			uni.showToast({
+				icon: "none",
+				duration: 3000,
+				title: `亲，${props.labelText.start}已过当前时间，已为您修改${props.labelText.start}`
+			});
+			// -- 更新结果（默认）
+			state.result = getDefaultResult(state.curDate, props.businessHours);
+			// -- 更新标题
+			state.title = getLengthOfLease(state.result.start, state.result.end);
+			// -- 触发更新
+			emits("sure", {
+				/** 租赁时长 */
+				length: state.title,
+				/** 租赁时间 */
+				date: { ...state.result }
+			});
+		}
+		// 4. 更新数据源
 		getColumns(state.result.start, state.result.end);
-		// 6. 展示
+		// 5. 展示
 		state.visible = true;
 	}
 	const close = () => {
@@ -329,62 +368,74 @@
 
 
 <template>
-	<view class="lg-picker-date-lease" :class="{visible: state.visible}">
+	<view class="lg-picker-date-lease">
+		<!-- 内容 -->
 		<view class="__contents">
-			<!-- 顶栏 -->
-			<view class="__head">
-				<view class="__close" @click="close"></view>
-				<view class="__title">{{state.title}}</view>
-				<view class="__sure" @click="onSure">确认</view>
-			</view>
-			<!-- 日期 -->
-			<view class="__result">
-				<view class="__item __start" :class="{selected: state.k === 'start'}" @click="onSwitchType('start')">
-					<view class="__t">{{props.labelText.start}}</view>
-					<view class="__v">{{dateFormat(state.result['start'])}}</view>
-				</view>
-				<view class="__item __end" :class="{selected: state.k === 'end'}" @click="onSwitchType('end')">
-					<view class="__t">{{props.labelText.end}}</view>
-					<view class="__v">{{dateFormat(state.result['end'])}}</view>
-				</view>
-			</view>
-			<!-- pickers -->
-			<picker-view class="__picker" :value="state.value" indicator-class="__indicator" immediate-change @pickend="onPickerEnd" @change="oPickerChange">
-				<picker-view-column>
-					<view class="column" v-for="(item,index) in state.columns1" :key="index">
-						{{renderColumnItemForDate(item)}}
-					</view>
-				</picker-view-column>
-				<picker-view-column>
-					<view class="column" v-for="(item,index) in state.columns2" :key="index">{{item}}</view>
-				</picker-view-column>
-				<picker-view-column>
-					<view class="column" v-for="(item,index) in state.columns3" :key="index">{{item}}</view>
-				</picker-view-column>
-			</picker-view>
+			<slot></slot>
 		</view>
+		<!-- 遮罩 -->
+		<view class="__mask" :class="{visible: state.visible}">
+			<view class="__mask-contents">
+				<!-- 顶栏 -->
+				<view class="__head">
+					<view class="__close" @click="close"></view>
+					<view class="__title">{{state.title}}</view>
+					<view class="__sure" @click="onSure">确认</view>
+				</view>
+				<!-- 日期 -->
+				<view class="__result">
+					<view class="__item __start" :class="{selected: state.k === 'start'}" @click="onSwitchType('start')">
+						<view class="__t">{{props.labelText.start}}</view>
+						<view class="__v">{{dateFormat(state.result['start'])}}</view>
+					</view>
+					<view class="__item __end" :class="{selected: state.k === 'end'}" @click="onSwitchType('end')">
+						<view class="__t">{{props.labelText.end}}</view>
+						<view class="__v">{{dateFormat(state.result['end'])}}</view>
+					</view>
+				</view>
+				<!-- pickers -->
+				<picker-view class="__picker" :value="state.value" indicator-class="__indicator" immediate-change @pickend="onPickerEnd" @change="oPickerChange">
+					<picker-view-column>
+						<view class="column" v-for="(item,index) in state.columns1" :key="index">
+							{{renderColumnItemForDate(item)}}
+						</view>
+					</picker-view-column>
+					<picker-view-column>
+						<view class="column" v-for="(item,index) in state.columns2" :key="index">{{item}}</view>
+					</picker-view-column>
+					<picker-view-column>
+						<view class="column" v-for="(item,index) in state.columns3" :key="index">{{item}}</view>
+					</picker-view-column>
+				</picker-view>
+			</view>
+		</view>
+
 	</view>
+
 </template>
 
 
 <style lang="less" scoped>
 	.lg-picker-date-lease {
-		width: 100vw;
-		height: 100vh;
-		background-color: rgba(0, 0, 0, .5);
-		position: fixed;
-		top: 0;
-		left: 0;
-		transition: all .25s linear;
-		z-index: -1;
-		opacity: 0;
 
-		&.visible {
-			z-index: 10;
-			opacity: 1;
+		.__mask {
+			width: 100vw;
+			height: 100vh;
+			background-color: rgba(0, 0, 0, .5);
+			position: fixed;
+			top: 0;
+			left: 0;
+			transition: all .25s linear;
+			z-index: -1;
+			opacity: 0;
+
+			&.visible {
+				z-index: 10;
+				opacity: 1;
+			}
 		}
 
-		.__contents {
+		.__mask-contents {
 			width: 750rpx;
 			background: #FFF;
 			border-radius: 26rpx 26rpx 0 0;
@@ -479,8 +530,15 @@
 					}
 
 					&.selected {
-						background: #4988EF;
 						color: #FFF;
+
+						&.__start {
+							background: linear-gradient(to right, #4988EF 20%, #F4F4F4 100%);
+						}
+
+						&.__end {
+							background: linear-gradient(to left, #4988EF 20%, #F4F4F4 100%);
+						}
 					}
 				}
 
