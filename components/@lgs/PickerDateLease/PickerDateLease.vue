@@ -15,7 +15,7 @@
 	const props = defineProps({
 		/** 营业时间，格式：HH:mm - HH:mm */
 		businessHours: { type: String, default: "09:00 - 18:00" },
-		/** 限制天数， */
+		/** 限制天数 */
 		limit: { type: Number, default: 60 },
 		/** 默认值，格式为：{ start: Date, end: Date } */
 		defaultValue: Object,
@@ -28,7 +28,7 @@
 			})
 		}
 	});
-	// -- @sure：确认事件，回调值 {length, date }
+	// -- @sure：确认事件，回调值 { start, end, durations: { value, description} }
 	const emits = defineEmits(['sure'])
 
 	// -- constants 
@@ -52,7 +52,7 @@
 				return t;
 			} else {
 				// -- 未过当前时间则将传入的defaultValue作为默认值
-				return props.defaultValue;
+				return { start: props.defaultValue.start, end: props.defaultValue.end };
 			}
 		}
 		// 3. 没有传入默认值则将t作为默认值
@@ -73,7 +73,7 @@
 		/** 拾取器结果 - 响应*/
 		result: __defaultResult,
 		/** 租赁时长 */
-		title: getLengthOfLease(__defaultResult.start, __defaultResult.end),
+		durations: getLengthOfLease(__defaultResult.start, __defaultResult.end),
 		/** 拾取器结果 - 内部 */
 		value: [0, 0, 0],
 		/** 拾取器第1列数据 */
@@ -88,10 +88,10 @@
 	onMounted(() => {
 		// 1. 触发「sure」事件，将默认结果回传给调用者
 		emits("sure", {
-			/** 租赁时长 */
-			length: state.title,
-			/** 租赁时间 */
-			date: { ...state.result }
+			...state.result,
+			durations: {
+				...state.durations
+			}
 		});
 		// 2. 计算列表数据
 		getColumns(state.result.start, state.result.end);
@@ -104,7 +104,7 @@
 		console.log("结束时间：", v.end);
 		console.log('————————————————————————————————————');
 		// 1. 更新结果值更新，动态计算租赁时长
-		state.title = getLengthOfLease(v.start, v.end);
+		state.durations = getLengthOfLease(v.start, v.end);
 	}, {
 		deep: true
 	})
@@ -155,13 +155,18 @@
 		let k3 = 0;
 		// Column1 - 计算第1列数据
 		(() => {
-			// 1. 根据当前时间计算默认数据源（「开始时间/结束时间」基于此数据源计算）
+			// 1. 根据当前时间构造日期对象实例（避免因为引用关系更改state.curDate值影响后续计算）
 			const d = new Date(state.curDate.getTime());
-			const t = ["今日"];
+			const t = [];
+			// 2. 如果当前时间未超过当天23:30分，则可选【今日】
+			if (!(d.getHours() === 23 && d.getMinutes() >= 30)) {
+				t.push("今日");
+			}
+			// 3. 计算日期选择数据源
 			for (let i = 0; i < props.limit; i++) {
 				t.push(new Date(d.setDate(d.getDate() + 1)))
 			}
-			// 2. 根据拾取类型处理
+			// 4. 根据拾取类型处理
 			if (state.k === 'start') {
 				// -- 开始时间(直接赋值)
 				// -- 由于结束时间默认比开始时间多2天
@@ -268,7 +273,6 @@
 					state.columns3 = ['00', '30'];
 				}
 				const { minutes } = getDateMeta(endDate);
-				console.log(__h, __m, v1, v2, minutes);
 				const index = state.columns3.findIndex(item => item === minutes);
 				k3 = index === -1 ? 0 : index;
 			}
@@ -299,13 +303,13 @@
 			// -- 更新结果（默认）
 			state.result = getDefaultResult(state.curDate, props.businessHours);
 			// -- 更新标题
-			state.title = getLengthOfLease(state.result.start, state.result.end);
+			state.durations = getLengthOfLease(state.result.start, state.result.end);
 			// -- 触发更新
 			emits("sure", {
-				/** 租赁时长 */
-				length: state.title,
-				/** 租赁时间 */
-				date: { ...state.result }
+				...state.result,
+				durations: {
+					...state.durations
+				}
 			});
 		}
 		// 4. 更新数据源
@@ -321,16 +325,16 @@
 	// -- 用户点击确认
 	const onSure = () => {
 		console.log('————————————————————————————————————');
-		console.log("租赁时长：", state.title);
+		console.log("租赁时长：", state.durations.description);
 		console.log("开始时间：", state.result.start);
 		console.log("结束时间：", state.result.end);
 		console.log('————————————————————————————————————');
 		close();
 		emits("sure", {
-			/** 租赁时长 */
-			length: state.title,
-			/** 租赁时间 */
-			date: { ...state.result }
+			...state.result,
+			durations: {
+				...state.durations
+			}
 		});
 	}
 	// -- 用户切换类型：开始时间 / 结束时间
@@ -366,7 +370,6 @@
 </script>
 
 
-
 <template>
 	<view class="lg-picker-date-lease">
 		<!-- 内容 -->
@@ -379,7 +382,7 @@
 				<!-- 顶栏 -->
 				<view class="__head">
 					<view class="__close" @click="close"></view>
-					<view class="__title">{{state.title}}</view>
+					<view class="__title">{{state.durations.description}}</view>
 					<view class="__sure" @click="onSure">确认</view>
 				</view>
 				<!-- 日期 -->

@@ -25,6 +25,13 @@ const request = (options) => {
 		if (method === 'GET') {
 			data.timeStamp = timeStamp;
 		}
+		// --- 处理GET参数，过滤值不存在的属性
+		const t = {};
+		for (let k in data) {
+			if (data[k]) {
+				t[k] = data[k]
+			}
+		}
 		// -- 处理URL，如果传递完整请求地址(特殊请求)，则不做拼接处理
 		if (!/^http(s?)/.test(url)) {
 			url = `${APP_HOST}${url}`
@@ -35,7 +42,7 @@ const request = (options) => {
 		uni.request({
 			url,
 			method,
-			data,
+			data: t,
 			timeout: 60 * 1000,
 			header: {
 				"Authorization": 'Bearer ' + token,

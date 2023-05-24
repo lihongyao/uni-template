@@ -4,12 +4,12 @@
 		"style": {
 			"navigationStyle": "custom"
 		}
-	}, {
+	},{
 		"path": "pages/test/test",
 		"style": {
 			"navigationBarTitleText": "测试页面"
 		}
-	}, {
+	},  {
 		"path": "pages/userinfo/userinfo",
 		"style": {
 			"navigationBarTitleText": "个人信息"

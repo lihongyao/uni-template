@@ -15,7 +15,7 @@
 	const store = useStore();
 	// -- state 
 	const state = reactive({
-		date: {
+		pickerRes: {
 			start: new Date("2023/05/20 09:00:00"),
 			end: new Date("2023/07/10 09:00:00")
 		}
@@ -31,19 +31,19 @@
 			type
 		})
 	}
-	const onPicked = ({ date }) => {
-		state.date = date;
+	const onPicked = (value) => {
+		state.pickerRes = value;
 	}
 </script>
 
 
 <template>
 	<view class="page">
-		<picker-date-lease ref="picker" @sure="onPicked" :defaultValue="state.date">
+		<picker-date-lease ref="picker" @sure="onPicked" :defaultValue="state.pickerRes">
 			<view class="flex-h-center">
-				<view @click="openPicker('start')">{{ state.date ? Tools.dateFormat(state.date.start, 'MM-DD HH:mm') : "开始时间"}}</view>
+				<view @click="openPicker('start')">{{ state.pickerRes ? Tools.dateFormat(state.pickerRes.start, 'MM-DD HH:mm') : "开始时间"}}</view>
 				<view class="mx-30">————</view>
-				<view @click="openPicker('end')">{{state.date ? Tools.dateFormat(state.date.end, 'MM-DD HH:mm') : "结束时间"}}</view>
+				<view @click="openPicker('end')">{{state.pickerRes ? Tools.dateFormat(state.pickerRes.end, 'MM-DD HH:mm') : "结束时间"}}</view>
 			</view>
 		</picker-date-lease>
 	</view>

@@ -6,11 +6,12 @@ const weeks = ["周日", "周一", "周二", "周三", "周四", "周五", "周�
 
 /**
  * 解析营业时间
- * @param {Object} businessHours
+ * @param {Date} currentDate 当前时间
+ * @param {String} businessHours 营业时间，格式：HH:mm - HH:mm，如：09:00 - 18:00
  */
-export function parseBusinessHours(businessHours) {
+export function parseBusinessHours(currentDate, businessHours) {
 	const [timeStart, timeEnd] = businessHours.replace(/\s*/g, "").split("-");
-	const { year, month, day } = getDateMeta(new Date());
+	const { year, month, day } = getDateMeta(currentDate);
 	const workTimeStart = new Date(`${year}/${month}/${day} ${timeStart}`);
 	const workTimeEnd = new Date(`${year}/${month}/${day} ${timeEnd}`);
 	return { workTimeStart, workTimeEnd }
@@ -72,19 +73,19 @@ export function getDateMeta(date) {
  */
 export function getDefaultResult(currentDate, businessHours) {
 	// 1. 解析营业时间
-	const { workTimeStart, workTimeEnd } = parseBusinessHours(businessHours);
+	const { workTimeStart, workTimeEnd } = parseBusinessHours(currentDate, businessHours);
 	console.log('————————————————————————————————————')
 	console.log("上班时间：", workTimeStart);
 	console.log("下班时间：", workTimeEnd);
 	console.log('————————————————————————————————————')
 
-	// 2. 解构
+	// 2. 解构当前时间
 	const { year, month, day, hours, minutes, seconds } = getDateMeta(currentDate);
 	// 4. 处理开始时间
 	let startDate = new Date(`${year}/${month}/${day} ${hours}:${minutes}:${seconds}`);
 	// -- 判断当前时间是否在营业时间期间
 	if (currentDate > workTimeStart && currentDate < workTimeEnd) {
-		console.log("__营业中__");
+		console.log("当前状态：营业中");
 		// 获取当前时、分
 		const hours = startDate.getHours();
 		const minutes = startDate.getMinutes();
@@ -97,9 +98,8 @@ export function getDefaultResult(currentDate, businessHours) {
 			startDate.setHours(hours + 1);
 			startDate.setMinutes(0);
 			startDate.setSeconds(0);
-			console.log(startDate);
+			// 如果计算后的取车时间超过打烊时间时
 			if (startDate.getTime() > workTimeEnd.getTime()) {
-				// 计算后的取车时间超过打烊时间时
 				const date = workTimeStart.getDate();
 				const hours = workTimeStart.getHours();
 				const minutes = workTimeStart.getMinutes();
@@ -111,7 +111,7 @@ export function getDefaultResult(currentDate, businessHours) {
 		}
 	} else {
 		const isClose = currentDate > workTimeEnd;
-		console.log(isClose ? "__已打烊__" : '__未营业__');
+		console.log(isClose ? "当前状态：已打烊" : '当前状态：未营业');
 		const date = workTimeStart.getDate();
 		const hours = workTimeStart.getHours();
 		const minutes = workTimeStart.getMinutes();
@@ -151,19 +151,33 @@ export function renderColumnItemForDate(date) {
  * @param {Object} endDate
  */
 export function getLengthOfLease(startDate, endDate) {
-	let ms = endDate - startDate;
-	let day = Math.floor(ms / 1000 / 60 / 60 / 24);
-	let hours = Math.floor((ms / 1000 / 60 / 60) % 24);
-	let minutes = Math.floor((ms / 1000 / 60) % 60);
-	let result = '';
+	// 1. 计算时差
+	const ms = endDate - startDate;
+	const day = Math.floor(ms / 1000 / 60 / 60 / 24);
+	const hours = Math.floor((ms / 1000 / 60 / 60) % 24);
+	const minutes = Math.floor((ms / 1000 / 60) % 60);
+	// 2. 如果分钟>=30，则小时+1，如果小时>=24，则天+1，小时置为0
+	let rDay = day;
+	let rHours = hours;
 	if (minutes >= 30) {
-		hours += 1;
+		rHours += 1;
 	}
-	if (day) {
-		result += `${day}天`;
+	if (rHours >= 24) {
+		rDay += 1;
+		rHours = 0;
 	}
-	if (hours) {
-		result += `${hours}小时`
+	// 3. 拼接租赁时长字符串
+	let rString = "";
+	if (rDay) {
+		rString += `${rDay}天`;
 	}
-	return result || '0小时';
+	if (rHours) {
+		rString += `${rHours}小时`;
+	}
+	// 4. 组合返回
+	return {
+		day: rDay,
+		hours: rHours,
+		description: rString,
+	}
 }
