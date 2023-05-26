@@ -15,10 +15,14 @@
 	const props = defineProps({
 		/** 营业时间，格式：HH:mm - HH:mm */
 		businessHours: { type: String, default: "09:00 - 18:00" },
-		/** 限制天数 */
-		limit: { type: Number, default: 60 },
 		/** 默认值，格式为：{ start: Date, end: Date } */
 		defaultValue: Object,
+		/** 选择区间时长至少多少天，默认值：1 */
+		minDays: { type: Number, default: 1 },
+		/** 可选日期区间，即从当前时间开始计算可选天数，默认值：60 */
+		countDays: { type: Number, default: 60 },
+		/** 固定开始时间，传入此值时仅支持调整结束时间，常在续租时使用（将订单选择的结束日期作为固定开始时间传入） */
+		fixedDateForStart: Date,
 		/** 标签文案，默认：取车时间 - 还车时间 */
 		labelText: {
 			type: Object,
@@ -28,18 +32,25 @@
 			})
 		}
 	});
+
 	// -- @sure：确认事件，回调值 { start, end, durations: { value, description} }
 	const emits = defineEmits(['sure'])
 
 	// -- constants 
-	const __curDate = new Date(); // 获取当前时间
+	const __curDate = props.fixedDateForStart || new Date(); // 获取当前时间（如果传入固定开始时间，则将其作为当前时间）
 	const __hours = getHours(); // 获取小时数数据源（00-23）
 
 	// -- default 
 	const __defaultResult = (function() {
-		// 1. 计算默认值
+		// 1. 如果传入固定开始时间，则将固定开始时间作为默认结果开始时间，默认结果结束时间在开始时间基础上+2天即可
+		if (props.fixedDateForStart) {
+			const t = new Date(props.fixedDateForStart.getTime());
+			t.setDate(t.getDate() + 2);
+			return { start: props.fixedDateForStart, end: t };
+		}
+		// 2. 计算默认值
 		const t = getDefaultResult(__curDate, props.businessHours);
-		// 2. 判断是否传入默认值
+		// 3. 判断是否传入默认值
 		if (props.defaultValue) {
 			// -- 如果传入默认值则判断默认值开始时间是否已过当前时间
 			if (props.defaultValue.start < __curDate) {
@@ -55,7 +66,7 @@
 				return { start: props.defaultValue.start, end: props.defaultValue.end };
 			}
 		}
-		// 3. 没有传入默认值则将t作为默认值
+		// 4. 没有传入默认值则将t作为默认值
 		return t;
 	})();
 	console.log('————————————————————————————————————')
@@ -163,7 +174,7 @@
 				t.push("今日");
 			}
 			// 3. 计算日期选择数据源
-			for (let i = 0; i < props.limit; i++) {
+			for (let i = 0; i < props.countDays; i++) {
 				t.push(new Date(d.setDate(d.getDate() + 1)))
 			}
 			// 4. 根据拾取类型处理
@@ -254,7 +265,8 @@
 				// -- 开始时间
 				const __h = state.curDate.getHours();
 				const __m = state.curDate.getMinutes();
-				if (v1 === '今日' && +v2 === __h && __m < 30) {
+				// -- 日期、小时相同，并且分钟数在（0,30）之间时只保留['30']
+				if (v1 === '今日' && +v2 === __h && __m < 30 && __m > 0) {
 					state.columns3 = ['30'];
 				} else {
 					state.columns3 = ['00', '30'];
@@ -263,7 +275,7 @@
 				const index = state.columns3.findIndex(item => item === minutes);
 				k3 = index === -1 ? 0 : index;
 			} else {
-				// -- 结束时
+				// -- 结束时间
 				const __h = startDate.getHours();
 				const __m = startDate.getMinutes();
 
@@ -288,11 +300,13 @@
 	}
 
 	const open = ({ type }) => {
-		// 1. 更新当前选中类型
+		// 1. 如果传入固定开始时间，则仅支持修改结束时间
+		if (props.fixedDateForStart && type === 'start') return;
+		// 2. 更新当前选中类型
 		state.k = type;
-		// 2. 更新当前时间
-		state.curDate = new Date();
-		// 3. 判断结果开始时间是否已过当前时间
+		// 3. 更新当前时间
+		state.curDate = props.fixedDateForStart || new Date();
+		// 4. 判断结果开始时间是否已过当前时间
 		if (state.result.start < state.curDate) {
 			// -- 弹出提示用户
 			uni.showToast({
@@ -312,9 +326,9 @@
 				}
 			});
 		}
-		// 4. 更新数据源
+		// 5. 更新数据源
 		getColumns(state.result.start, state.result.end);
-		// 5. 展示
+		// 6. 展示
 		state.visible = true;
 	}
 	const close = () => {
@@ -329,6 +343,14 @@
 		console.log("开始时间：", state.result.start);
 		console.log("结束时间：", state.result.end);
 		console.log('————————————————————————————————————');
+		// 校验时长
+		if (state.durations.day < props.minDays) {
+			uni.showToast({
+				title: `亲，租赁天数至少${props.minDays}天哟~`,
+				icon: "none"
+			});
+			return;
+		}
 		close();
 		emits("sure", {
 			...state.result,
@@ -339,9 +361,13 @@
 	}
 	// -- 用户切换类型：开始时间 / 结束时间
 	const onSwitchType = (type) => {
-		// 1. 切换类型
+		// 1. 如果传入固定开始时间，则仅支持修改结束时间
+		if (props.fixedDateForStart) {
+			return;
+		}
+		// 2. 切换类型
 		state.k = type;
-		// 2. 重新计算列表数据
+		// 3. 重新计算列表数据
 		getColumns(state.result.start, state.result.end);
 	}
 	// -- 拾取器值改变
