@@ -1,9 +1,5 @@
 import { APP_HOST, APP_KEY_TOKEN } from '@/constants/index.js';
 
-
-let requestQueue = []; // 请求队列
-let isRefreshingToken = false; // Token刷新状态
-
 /**
  * 请求对象
  * @param  {String} url 请求uri地址
@@ -13,32 +9,32 @@ let isRefreshingToken = false; // Token刷新状态
  * @return {Promise}     
  */
 const request = (options) => {
+	// 1. 处理默认配置
+	const defaultOptions = { method: 'GET' };
+	// 2. 合并配置
+	Object.assign(defaultOptions, options);
+	// 3. 解构配置
+	let { method, url, data = {}, headers = {} } = defaultOptions;
+	// 4. 处理GET请求(添加时间戳)
+	const timeStamp = new Date().getTime();
+	if (method === 'GET') {
+		data.timeStamp = timeStamp;
+	}
+	// 5. 过滤无用的数据
+	const t = {};
+	for (let k in data) {
+		if (data[k]) {
+			t[k] = data[k]
+		}
+	}
+	// 6.  处理URL，如果传递完整请求地址(特殊请求)，则不做拼接处理
+	if (!/^http(s?)/.test(url)) {
+		url = `${APP_HOST}${url}`
+	};
+	// 7. 获取Token
+	const token = uni.getStorageSync(APP_KEY_TOKEN);
+	// 8. 执行请求
 	return new Promise((resolve, reject) => {
-		// -- 处理默认配置
-		const defaultOptions = { method: 'GET' };
-		// -- 合并配置
-		Object.assign(defaultOptions, options);
-		// -- 解构配置
-		let { method, url, data = {}, headers = {} } = defaultOptions;
-		// -- 处理GET请求
-		const timeStamp = new Date().getTime();
-		if (method === 'GET') {
-			data.timeStamp = timeStamp;
-		}
-		// --- 处理GET参数，过滤值不存在的属性
-		const t = {};
-		for (let k in data) {
-			if (data[k]) {
-				t[k] = data[k]
-			}
-		}
-		// -- 处理URL，如果传递完整请求地址(特殊请求)，则不做拼接处理
-		if (!/^http(s?)/.test(url)) {
-			url = `${APP_HOST}${url}`
-		};
-		// -- 获取token
-		const token = uni.getStorageSync(APP_KEY_TOKEN);
-		// -- 发送请求
 		uni.request({
 			url,
 			method,
@@ -49,50 +45,24 @@ const request = (options) => {
 				...headers
 			},
 			success: (response) => {
-				if ([200, 201].includes(response.statusCode)) {
-					const { code, msg } = response.data;
-					switch (code) {
-						case 200:
-							resolve(response.data);
-							break;
-						case 401:
-							break;
-						case 8888:
-							// 是否正在刷新token
-							// if (isRefreshingToken) {
-							// 	console.log('放入任务队列~')
-							// 	return new Promise(resolve => {
-							// 		requestQueue.push(() => {
-							// 			resolve(request(options));
-							// 		})
-							// 	})
-							// } else {
-							// 	isRefreshingToken = true;
-							// 	// 刷新Token
-							// 	setTimeout(() => {
-							// 		uni.setStorageSync('DPMP_TOKEN', '');
-							// 		console.log('token刷新成功');
-							// 		// 执行任务队列
-							// 		requestQueue.forEach(cb => cb());
-							// 		requestQueue = [];
-							// 		isRefreshingToken = false;
-							// 		// 重试本次请求
-							// 		return request(options);
-							// 	}, 1000);
-							// }
-							break;
-						default:
-							reject(msg);
-							uni.showToast({ title: msg || '服务器忙，请稍后再试！', icon: 'none' });
-					}
-				} else {
-					reject(response.data.error);
-					uni.showToast({ title: response.data.error, icon: 'none' })
+				const { statusCode, data } = response;
+				switch (statusCode) {
+					case 200:
+					case 201:
+						resolve(data);
+						break;
+					case 401:
+						reject();
+						uni.showToast({ title: '401 (Unauthorized)', icon: 'none' });
+						break;
+					default:
+						reject();
+						uni.showToast({ title: data.message || "服务器异常，请稍后再试", icon: 'none' });
 				}
 			},
-			fail: (err) => {
-				reject(err);
-				console.log('AJAX_ERROR：', err)
+			fail: () => {
+				reject();
+				uni.showToast({ title: data.message || "服务器异常，请稍后再试", icon: 'none' });
 			}
 		})
 	});
