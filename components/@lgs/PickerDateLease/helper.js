@@ -2,7 +2,7 @@
  * 周，用于计算当前处于周几
  * 取周公式：weeks[date.getDay()]
  */
-const weeks = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
+export const weeks = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
 
 /**
  * 解析营业时间
@@ -28,12 +28,19 @@ export function format(n) {
 
 
 /**
- * 处理渲染日期格式，格式为 MM月DD日 HH:mm
+ * 处理渲染日期格式，格式为 YYYY-MM-DD HH:mm:ss d
  * @param {Object} date
  */
-export function dateFormat(date, format) {
-	const { month, day, hours, minutes } = getDateMeta(date);
-	return `${month}月${day}日 ${hours}:${minutes}`;
+export function dateFormat(date, format = "MM月DD日 HH:mm") {
+	const { year, month, day, hours, minutes, seconds, week } = getDateMeta(date);
+	return format
+		.replace(/YYYY/gi, year)
+		.replace(/MM/, month)
+		.replace(/DD/, day)
+		.replace(/HH/, hours)
+		.replace(/mm/, minutes)
+		.replace(/ss/, seconds)
+		.replace(/d/, week);
 }
 
 

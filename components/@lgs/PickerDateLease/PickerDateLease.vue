@@ -8,14 +8,15 @@
 		dateFormat,
 		getDefaultResult,
 		renderColumnItemForDate,
-		getLengthOfLease
+		getLengthOfLease,
+		weeks
 	} from './helper.js'
 
 	// -- props & emits 
 	const props = defineProps({
 		/** 营业时间，格式：HH:mm - HH:mm */
 		businessHours: { type: String, default: "09:00 - 18:00" },
-		/** 默认值，格式为：{ start: Date, end: Date } */
+		/** 默认值，格式为：{ start: { v,dateTimeString,weeks }, end: { v,dateTimeString,weeks }, durations: { day, hours, description }} */
 		defaultValue: Object,
 		/** 选择区间时长至少多少天，默认值：1 */
 		minDays: { type: Number, default: 1 },
@@ -33,7 +34,7 @@
 		}
 	});
 
-	// -- @sure：确认事件，回调值 { start, end, durations: { value, description} }
+	// -- @sure：确认事件，回调值 { start: { v,dateTimeString,weeks }, end: { v,dateTimeString,weeks }, durations: { day, hours, description }}
 	const emits = defineEmits(['sure'])
 
 	// -- constants 
@@ -52,8 +53,10 @@
 		const t = getDefaultResult(__curDate, props.businessHours);
 		// 3. 判断是否传入默认值
 		if (props.defaultValue) {
+			const startDate = new Date(props.defaultValue.start.dateTimeString);
+			const endDate = new Date(props.defaultValue.end.dateTimeString);
 			// -- 如果传入默认值则判断默认值开始时间是否已过当前时间
-			if (props.defaultValue.start < __curDate) {
+			if (startDate < __curDate) {
 				// -- 已过当前时间则弹出提示，将t作为默认值
 				uni.showToast({
 					icon: "none",
@@ -63,7 +66,7 @@
 				return t;
 			} else {
 				// -- 未过当前时间则将传入的defaultValue作为默认值
-				return { start: props.defaultValue.start, end: props.defaultValue.end };
+				return { start: startDate, end: endDate };
 			}
 		}
 		// 4. 没有传入默认值则将t作为默认值
@@ -98,12 +101,7 @@
 	// -- life circle 
 	onMounted(() => {
 		// 1. 触发「sure」事件，将默认结果回传给调用者
-		emits("sure", {
-			...state.result,
-			durations: {
-				...state.durations
-			}
-		});
+		triggerEventForSure();
 		// 2. 计算列表数据
 		getColumns(state.result.start, state.result.end);
 	});
@@ -121,6 +119,31 @@
 	})
 
 	// -- methods 
+	const getWeeks = (date) => {
+		if (date.toLocaleDateString() === state.curDate.toLocaleDateString()) {
+			return "今日";
+		}
+		return weeks[date.getDay()];
+	}
+	// -- 触发sure事件
+	const triggerEventForSure = () => {
+		const { year, } = getDateMeta(state.result.start);
+		emits("sure", {
+			start: {
+				v: dateFormat(state.result.start, 'MM月DD日 HH:mm'),
+				dateTimeString: dateFormat(state.result.start, 'YYYY-MM-DD HH:mm:ss'),
+				weeks: getWeeks(state.result.start)
+			},
+			end: {
+				v: dateFormat(state.result.end, 'MM月DD日 HH:mm'),
+				dateTimeString: dateFormat(state.result.end, 'YYYY-MM-DD HH:mm:ss'),
+				weeks: getWeeks(state.result.end)
+			},
+			durations: {
+				...state.durations
+			}
+		});
+	}
 	// -- 根据value查询选中的列表值
 	const getValueMeta = () => {
 		const [k1, k2, k3] = state.value;
@@ -132,11 +155,13 @@
 
 	// -- 获取结果值
 	const getResults = () => {
+
 		// 1. 获取列表值
 		const { v1, v2, v3 } = getValueMeta();
 		// 2. 定义变量(开始时间/结束时间)
 		let startDate, endDate;
 		// 3. 解构第1列数据
+
 		const { year, month, day } = getDateMeta(v1 === '今日' ? state.curDate : v1);
 		// 4. 根据类型处理
 		if (state.k === 'start') {
@@ -170,7 +195,7 @@
 			const d = new Date(state.curDate.getTime());
 			const t = [];
 			// 2. 如果当前时间未超过当天23:30分，则可选【今日】
-			if (!(d.getHours() === 23 && d.getMinutes() >= 30)) {
+			if (!(d.getHours() === 23 && d.getMinutes() > 30)) {
 				t.push("今日");
 			}
 			// 3. 计算日期选择数据源
@@ -319,12 +344,7 @@
 			// -- 更新标题
 			state.durations = getLengthOfLease(state.result.start, state.result.end);
 			// -- 触发更新
-			emits("sure", {
-				...state.result,
-				durations: {
-					...state.durations
-				}
-			});
+			triggerEventForSure();
 		}
 		// 5. 更新数据源
 		getColumns(state.result.start, state.result.end);
@@ -352,12 +372,7 @@
 			return;
 		}
 		close();
-		emits("sure", {
-			...state.result,
-			durations: {
-				...state.durations
-			}
-		});
+		triggerEventForSure();
 	}
 	// -- 用户切换类型：开始时间 / 结束时间
 	const onSwitchType = (type) => {

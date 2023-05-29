@@ -1,7 +1,7 @@
 // -- 引入常量配置
 import { APP_KEY_LOGIN, APP_KEY_TOKEN } from '@/constants/index.js';
 // -- 友盟统计
-import uma from 'umtrack-wx';
+// import uma from 'umtrack-wx';
 // -- 加密
 import crypto from 'crypto-js';
 import { Base64 } from 'js-base64';
