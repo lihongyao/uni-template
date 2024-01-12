@@ -2,7 +2,6 @@
 	import { onLoad } from "@dcloudio/uni-app";
 	import { reactive } from "vue";
 	import Utils from "@/utils";
-	import service from '@/service';
 
 	// -- constants
 

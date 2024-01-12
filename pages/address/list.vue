@@ -3,7 +3,7 @@
 	import { onLoad, onShow } from "@dcloudio/uni-app";
 	import Loadings from '@/components/@lgs/Loadings/Loadings.vue';
 	import NoData from '@/components/@lgs/NoData/NoData.vue';
-	import Tools from 'lg-tools';
+	import Tools from '@likg/tools';
 	import Utils from '@/utils';
 	// -- state
 	const state = reactive({
@@ -27,6 +27,8 @@
 
 	// -- methods
 	const getList = () => {
+		
+	
 
 		state.list = [{
 			id: "1",

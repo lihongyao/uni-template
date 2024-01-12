@@ -1,7 +1,6 @@
 <script setup>
 	import { onLoad, onShow } from "@dcloudio/uni-app";
 	import { reactive, watch } from 'vue';
-	import service from '@/service';
 	import Utils from '@/utils';
 	import MenuBar from '@/components/@lgs/MenuBar/MenuBar.vue';
 	import ScrollList from '@/components/@lgs/ScrollList/ScrollList.vue';

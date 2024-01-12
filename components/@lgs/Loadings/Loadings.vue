@@ -6,7 +6,6 @@
  * @Description: 
 -->
 <script setup>
-	import { defineProps } from 'vue';
 	import defaultLogo from '@/static/logo.png';
 
 	const props = defineProps({

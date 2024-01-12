@@ -3,8 +3,8 @@
 	import { reactive } from "vue";
 	import { onLoad } from '@dcloudio/uni-app';
 	import Utils from "@/utils";
-	import Bus from "lg-bus";
-	import service from "@/service";
+	import Bus from "@likg/bus";
+	import { apiUser } from "@/api/apiServer";
 
 
 	// -- constants
@@ -45,7 +45,7 @@
 			return;
 			// -- 更新用户昵称
 			Utils.loading("处理中...");
-			service.user.edit({ nickName: state.nickName }).then(() => {
+			apiUser.edit({ nickName: state.nickName }).then(() => {
 				Utils.hideLoading();
 				Bus.$emit("UPDATED_NICKNAME", state.nickName);
 				Utils.pop();
@@ -60,7 +60,8 @@
 	<view class="page pt-24">
 		<form>
 			<!-- 输入框：真机调试 -->
-			<input type="nickname" :value="state.nickName" placeholder="请填写您的昵称" :placeholderStyle="placeholderStyles" @input="onInput" @nicknamereview="onNickNameReview" />
+			<input type="nickname" :value="state.nickName" placeholder="请填写您的昵称" :placeholderStyle="placeholderStyles"
+				@input="onInput" @nicknamereview="onNickNameReview" />
 			<!-- 确认按钮 -->
 			<button class="save-button" :class="{'enable': state.saveEnable}">保存</button>
 		</form>

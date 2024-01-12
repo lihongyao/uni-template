@@ -1,5 +1,5 @@
 <script setup>
-	import Tools from 'lg-tools';
+	import Tools from '@likg/tools';
 	const props = defineProps({
 		data: Object
 	})

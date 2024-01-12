@@ -2,7 +2,7 @@
 	import { onLoad, onShow } from "@dcloudio/uni-app";
 	import { reactive, getCurrentInstance } from "vue";
 	import Utils from '@/utils/index.js';
-	import Validator from 'lg-validator';
+	import Validator from '@likg/validator';
 
 	// -- constants
 	const placeholderStyle = "color:#999999; font-size: 28rpx"

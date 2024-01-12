@@ -2,7 +2,6 @@
 	import { reactive, ref } from 'vue';
 	import { onLoad } from "@dcloudio/uni-app";
 	import Utils from "@/utils";
-	import service from "@/service";
 	import Dialog from '@/components/@lgs/Dialog/Dialog.vue';
 
 	// -- constants

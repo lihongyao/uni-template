@@ -1,7 +1,6 @@
 <script setup>
 	import { onLoad } from '@dcloudio/uni-app';
 	import Utils from '@/utils';
-	import service from '@/service';
 	import SearchBar from '@/components/@lgs/SearchBar/SearchBar.vue';
 	import SideBar from '@/components/@lgs/SideBar/SideBar.vue';
 	import Loading from '@/components/@lgs/Loadings/Loadings.vue';
@@ -10,6 +9,8 @@
 	import { reactive } from "vue";
 	// -- constants 
 	const searchTexts = ["苹果", "香蕉"];
+
+
 	// -- state 
 	const state = reactive({
 		list: null,

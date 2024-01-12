@@ -1,8 +1,8 @@
 <script setup>
 	import { onLoad } from '@dcloudio/uni-app';
 	import { reactive, ref } from 'vue';
-	import Tools from 'lg-tools';
-	import Bus from 'lg-bus';
+	import Tools from '@likg/tools';
+	import Bus from '@likg/bus';
 	import Utils from '@/utils';
 	import Dialog from '@/components/@lgs/Dialog/Dialog.vue';
 	import { APP_KEY_LOGIN, APP_MINE_FNS, APP_MINE_ORDERS } from '@/constants';

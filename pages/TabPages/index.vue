@@ -2,7 +2,6 @@
 	import { onLoad } from '@dcloudio/uni-app';
 	import { reactive } from "vue";
 	import Utils from "@/utils";
-	import service from "@/service";
 	import SearchBar from '@/components/@lgs/SearchBar/SearchBar.vue';
 	import LoadMore from '@/components/@lgs/LoadMore/LoadMore.vue';
 	import defaultBanners from "@/static/images/default_banners.png";

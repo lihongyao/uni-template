@@ -1,4 +1,4 @@
-import request from '@/utils/request.js';
+import request from '@/api/apiConfig';
 
 /**
  * 地址列表

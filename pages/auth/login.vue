@@ -4,9 +4,9 @@
 	import Utils from '@/utils/index.js';
 	import IconCheck from '@/components/@lgs/IconCheck/IconCheck.vue';
 	import VerifyCode from '@/components/@lgs/VerifyCode/VerifyCode.vue';
-	import Validator from 'lg-validator';
-	import Tools from 'lg-tools';
-	import Bus from "lg-bus";
+	import Validator from '@likg/validator';
+	import Tools from '@likg/tools';
+	import Bus from "@likg/bus";
 
 	// -- constants
 	const MAX_COUNT = 60;

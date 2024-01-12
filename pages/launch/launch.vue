@@ -4,8 +4,8 @@
 	import { reactive, onMounted } from 'vue';
 	import { APP_KEY_TOKEN, APP_KEY_LOGIN } from '@/constants';
 	import Utils from '@/utils';
-	import service from '@/service';
 	import TimeDown from '@/components/@lgs/TimeDown/TimeDown.vue';
+	import { apiUser } from '@/api/apiServer';
 
 	// -- state
 	const state = reactive({
@@ -29,7 +29,7 @@
 			scopes: 'auth_base',
 			success: async ({ code }) => {
 				// -- 用户登录
-				// const resp = await service.user.login(code)
+				// const resp = await apiUser.login(code)
 				// const { token, isBindPhone } = resp.data;
 				// uni.setStorageSync(APP_KEY_TOKEN, token);
 				// uni.setStorageSync(APP_KEY_LOGIN, isBindPhone);
@@ -48,7 +48,7 @@
 	};
 	const jump = () => {
 		let jumpPath = '/pages/TabPages/index';
-		if(state.q) {
+		if (state.q) {
 			jumpPath = '/pages/upload/uploadForWeixin?q=app'
 		}
 		Utils.reLaunch(jumpPath);

@@ -4,7 +4,6 @@
 	import LoadMore from '@/components/@lgs/LoadMore/LoadMore.vue';
 	import NoData from '@/components/@lgs/NoData/NoData.vue';
 
-	import service from '@/service';
 
 	// -- constants 
 	const placeholderStyle = "font-size: 28rpx; color: #BFBFBF;";

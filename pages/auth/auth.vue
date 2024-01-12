@@ -1,9 +1,8 @@
 <script setup>
 	import { reactive, onMounted } from 'vue';
-	import Tools from 'lg-tools';
-	import Bus from 'lg-bus';
+	import Tools from '@likg/tools';
+	import Bus from '@likg/bus';
 	import Utils from '@/utils';
-	import service from '@/service';
 	import { APP_KEY_TOKEN, APP_KEY_LOGIN } from '@/constants';
 
 	// -- state

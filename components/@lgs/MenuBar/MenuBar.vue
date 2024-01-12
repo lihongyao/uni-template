@@ -1,5 +1,5 @@
 <script setup>
-	import { defineProps, defineEmits, reactive, onMounted, getCurrentInstance } from 'vue';
+	import { defineEmits, reactive, onMounted, getCurrentInstance } from 'vue';
 	// -- props & emits
 	const props = defineProps({
 		modelValue: [String, Number],

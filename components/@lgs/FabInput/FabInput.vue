@@ -18,7 +18,7 @@ const onItemTap = (item) => {
 
 <script setup>
 	// -- imports 
-	import Tools from "lg-tools";
+	import Tools from "@likg/tools";
 import { nextTick, reactive } from "vue";
 
 	// -- defaultOptions 

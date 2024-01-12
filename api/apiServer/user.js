@@ -1,5 +1,5 @@
 
-import request from '@/utils/request.js';
+import request from '@/api/apiConfig';
 
 /**
  * POST：登录

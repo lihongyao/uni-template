@@ -354,7 +354,9 @@ export default class Utils {
 												}
 											},
 											fail: (error) => {
-												console.log('「checkAuthorizeWithScope」：', error);
+												console.log(
+													'「checkAuthorizeWithScope」：',
+													error);
 											},
 										});
 									}
@@ -749,7 +751,8 @@ export default class Utils {
 	 */
 	static formatRichText(htmlString) {
 		return htmlString && htmlString.replace(/<img[^>]*>/gi, function(match, capture) { // 查找所有的 img 元素
-			return match.replace(/style=".*"/gi, '').replace(/style='.*'/gi, ''); // 删除找到的所有 img 元素中的 style 属性
+			return match.replace(/style=".*"/gi, '').replace(/style='.*'/gi,
+			''); // 删除找到的所有 img 元素中的 style 属性
 		}).replace(/\<img/gi, '<img style="width:100%;"'); // 对 img 元素增加 style 属性，并设置宽度为 100%
 	}
 }

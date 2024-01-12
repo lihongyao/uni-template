@@ -3,10 +3,9 @@
 	import { reactive, ref } from "vue";
 	import { onLoad } from '@dcloudio/uni-app';
 	import { useStore } from '@/stores';
-	import service from '@/service/index.js';
 	import Utils from '@/utils/index.js';
 	import PickerDateLease from '@/components/@lgs/PickerDateLease/PickerDateLease.vue';
-	import Tools from 'lg-tools';
+	import Tools from '@likg/tools';
 
 	// -- constants 
 	// -- refs 

@@ -4,8 +4,8 @@
 	import { onLoad } from '@dcloudio/uni-app';
 	import Utils from "@/utils";
 	import VerifyCode from '@/components/@lgs/VerifyCode/VerifyCode.vue';
-	import Tools from "lg-tools";
-	import Bus from "lg-bus";
+	import Tools from "@likg/tools";
+	import Bus from "@likg/bus";
 
 	// -- constants
 	const MAX_COUNT = 60;

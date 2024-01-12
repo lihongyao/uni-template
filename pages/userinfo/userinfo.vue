@@ -3,9 +3,9 @@
 	import { onLoad, onUnload } from '@dcloudio/uni-app';
 	import { APP_OSS_HOST } from "@/constants";
 	import Utils from '@/utils';
-	import Tools from 'lg-tools';
-	import Bus from 'lg-bus';
-	import service from '@/service';
+	import Tools from '@likg/tools';
+	import Bus from '@likg/bus';
+import { apiUser } from "../../api/apiServer";
 
 	// -- constants 
 	const defaultAvatarUrl = 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0';
@@ -25,7 +25,7 @@
 	onLoad(() => {
 
 		// 1. 获取用户信息
-		// service.user.info().then(resp => {
+		// apiUser.info().then(resp => {
 		// 	state.user = resp.data;
 		// });
 
