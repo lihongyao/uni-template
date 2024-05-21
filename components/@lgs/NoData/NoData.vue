@@ -1,6 +1,5 @@
 <script setup>
 	// -- imports 
-	import { defineProps } from 'vue';
 	import defaultImage from './images/no-data__7.png'
 	// -- props
 	const props = defineProps({
