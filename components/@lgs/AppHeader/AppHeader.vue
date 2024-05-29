@@ -6,9 +6,11 @@
 		/** 标题文本 */
 		title: { type: String, default: 'uni-app' },
 		/** 标题颜色 */
-		tintColor: { type: String, default: "#171717" },
+		tintColor: { type: String, default: "#212121" },
 		/** 背景颜色 */
 		backgroundColor: { type: String, default: "#FFFFFF" },
+		/** 背景图片 */
+		bgImgSrc: { type: String, default: '' },
 		/** 渐变颜色 */
 		gradientColor: String,
 		/** 是否显示返回按钮 */
@@ -96,7 +98,7 @@
 			<view class="__titleBar" :style="{height: `${state.titleBarHeight}px`}">
 				<view class="__btns" :style="{left: `${state.leftSpacing}px`}">
 					<view v-if="showBack" class="back-button" @click="onBackButtonTap">
-						<image src="./images/icon_back.png"></image>
+						<image mode="widthFix" src="./images/icon_back_arrow.png"></image>
 					</view>
 					<slot name="left"></slot>
 				</view>
@@ -105,7 +107,11 @@
 				</view>
 			</view>
 			<!-- 遮罩（渐变标题背景） -->
-			<view v-if="props.gradientColor" class="mask" :style="{backgroundColor: props.gradientColor, opacity: state.opacity}"></view>
+			<image v-if="props.bgImgSrc" class="__mask-bg" :style="{width: '750rpx', height: `${state.navHeight}px`}"
+				mode="aspectFill" :src="props.bgImgSrc"></image>
+			<!-- 遮罩（渐变标题背景） -->
+			<view v-if="props.gradientColor" class="__mask"
+				:style="{backgroundColor: props.gradientColor, opacity: state.opacity}"></view>
 		</view>
 	</view>
 </template>
@@ -146,16 +152,19 @@
 					.back-button {
 						width: 64rpx;
 						height: 64rpx;
-
+						display: flex;
+						justify-content: center;
+						align-items: center;
 						image {
-							width: inherit;
-							height: inherit;
+							width: 24rpx;
+							// width: inherit;
+							// height: inherit;
 						}
 					}
 				}
 			}
 
-			.mask {
+			.__mask {
 				width: 100%;
 				height: 100%;
 				position: absolute;
@@ -163,6 +172,13 @@
 				left: 0;
 				z-index: -1;
 				opacity: 0;
+			}
+
+			.__mask-bg {
+				position: absolute;
+				top: 0;
+				left: 0;
+				z-index: -1;
 			}
 		}
 	}

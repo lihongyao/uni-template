@@ -56,7 +56,7 @@
 	.lg-popup {
 		width: 100vw;
 		height: 100vh;
-		background-color: rgba(0, 0, 0, .5);
+		background-color: rgba(0, 0, 0, .75);
 		position: fixed;
 		top: 0;
 		left: 0;
@@ -83,7 +83,7 @@
 		}
 
 		&.visible {
-			z-index: 10;
+			z-index: 20;
 			opacity: 1;
 
 			.lg-popup__content {

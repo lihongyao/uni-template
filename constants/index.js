@@ -45,7 +45,7 @@ export const APP_MINE_FNS = [
 	{ label: '地址管理', path: '/pages/address/list', checkLogin: true },
 	{ label: '我的客服', path: '', checkLogin: false },
 	{ label: '意见反馈', path: '/pages/fns/feedback', checkLogin: true },
-	{ label: '设置', path: '/pages/fns/sets', checkLogin: false },
+	{ label: '设置中心', path: '/pages/fns/sets', checkLogin: false },
 	{ label: '文件上传', path: '/pages/upload/upload', checkLogin: false },
 ];
 
@@ -75,3 +75,4 @@ export const APP_MINE_ORDERS = [{
 		label: '已完成',
 	},
 ];
+

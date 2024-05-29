@@ -97,9 +97,6 @@
 			height: auto;
 			padding: 60rpx 32rpx 50rpx;
 			background-color: #FFFFFF;
-			background-image: url('https://ai-resume.oss-cn-shenzhen.aliyuncs.com/resume/images/icon/20230418/1681783601228/tips_bj@2x.png');
-			background-repeat: no-repeat;
-			background-size: 100% auto;
 			border-radius: 26rpx;
 		}
 

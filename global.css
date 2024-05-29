@@ -81,11 +81,13 @@ image { box-sizing: content-box; }
 .p-4  { padding-top: 4rpx; padding-right: 4rpx; padding-bottom: 4rpx; padding-left: 4rpx;     }
 
 .p-12 { padding-top: 12rpx; padding-right: 12rpx; padding-bottom: 12rpx; padding-left: 12rpx; }
+.p-16 { padding-top: 16rpx; padding-right: 16rpx; padding-bottom: 16rpx; padding-left: 16rpx; }
 .p-20 { padding-top: 20rpx; padding-right: 20rpx; padding-bottom: 20rpx; padding-left: 20rpx; }
 .p-24 { padding-top: 24rpx; padding-right: 24rpx; padding-bottom: 24rpx; padding-left: 24rpx; }
 .p-26 { padding-top: 26rpx; padding-right: 26rpx; padding-bottom: 26rpx; padding-left: 26rpx; }
 .p-30 { padding-top: 30rpx; padding-right: 30rpx; padding-bottom: 30rpx; padding-left: 30rpx; }
 .p-32 { padding-top: 32rpx; padding-right: 32rpx; padding-bottom: 32rpx; padding-left: 32rpx; }
+.p-40 { padding-top: 40rpx; padding-right: 40rpx; padding-bottom: 40rpx; padding-left: 40rpx; }
 
 .px-0 { padding-left:  0rpx;  padding-right: 0rpx; }
 .px-4 { padding-left:  4rpx;  padding-right: 4rpx; }
@@ -139,6 +141,7 @@ image { box-sizing: content-box; }
 .py-34 { padding-top: 34rpx; padding-bottom: 34rpx; }
 .py-36 { padding-top: 36rpx; padding-bottom: 36rpx; }
 .py-40 { padding-top: 40rpx; padding-bottom: 40rpx; }
+.py-48 { padding-top: 48rpx; padding-bottom: 48rpx; }
 
 .pt-8  { padding-top: 8rpx;  }
 .pt-10 { padding-top: 10rpx; }
@@ -157,6 +160,7 @@ image { box-sizing: content-box; }
 .pt-36 { padding-top: 36rpx; }
 .pt-38 { padding-top: 38rpx; }
 .pt-40 { padding-top: 40rpx; }
+.pt-48 { padding-top: 48rpx; }
 .pt-54 { padding-top: 54rpx; }
 .pt-60 { padding-top: 60rpx; }
 .pt-70 { padding-top: 70rpx; }
@@ -391,7 +395,9 @@ image { box-sizing: content-box; }
 .my-12 { margin-top: 12rpx; margin-bottom: 12rpx; }
 .my-16 { margin-top: 16rpx; margin-bottom: 16rpx; }
 .my-20 { margin-top: 20rpx; margin-bottom: 20rpx; }
+.my-24 { margin-top: 24rpx; margin-bottom: 24rpx; }
 .my-28 { margin-top: 28rpx; margin-bottom: 28rpx; }
+.my-48 { margin-top: 48rpx; margin-bottom: 48rpx; }
 
 
 /**********************
@@ -441,6 +447,7 @@ image { box-sizing: content-box; }
 .icon-148x148 { width: 148rpx; height: 148rpx; }
 .icon-160x160 { width: 160rpx; height: 160rpx; }
 .icon-190x190 { width: 190rpx; height: 190rpx; }
+.icon-200x200 { width: 200rpx; height: 200rpx; }
 .icon-238x238 { width: 238rpx; height: 238rpx; }
 .icon-438x438 { width: 438rpx; height: 438rpx; }
 
@@ -466,6 +473,7 @@ image { box-sizing: content-box; }
 .rounded-34 { border-radius: 34rpx; }
 .rounded-36 { border-radius: 36rpx; }
 .rounded-38 { border-radius: 38rpx; }
+.rounded-40 { border-radius: 40rpx; }
 .rounded-42 { border-radius: 42rpx; }
 .rounded-44 { border-radius: 44rpx; }
 .rounded-46 { border-radius: 46rpx; }

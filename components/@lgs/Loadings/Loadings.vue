@@ -1,10 +1,3 @@
-<!--
- * @Author: Lee
- * @Date: 2023-03-21 09:37:40
- * @LastEditors: Lee
- * @LastEditTime: 2023-04-23 17:30:04
- * @Description: 
--->
 <script setup>
 	import defaultLogo from '@/static/logo.png';
 
@@ -39,8 +32,8 @@
 
 		&__ct {
 			position: relative;
-			width: 128rpx;
-			height: 128rpx;
+			width: 160rpx;
+			height: 160rpx;
 			margin: 0 auto;
 			display: flex;
 			justify-content: center;
@@ -48,8 +41,9 @@
 		}
 
 		&__logo {
-			width: 50rpx;
-			height: 50rpx;
+			width: 120rpx;
+			height: 120rpx;
+			border-radius: 50%;
 			position: relative;
 			z-index: 2;
 		}

@@ -10,9 +10,9 @@
 	 flex-direction: column;
  }
  .scroll {
-	  flex: 1;
-		/** 此属性必须设置 */
-		position: relative; 
+	flex: 1;
+	/** 此属性必须设置 */
+	position: relative; 
  }
 -->
 
@@ -27,8 +27,10 @@
 		refresherEnabled: Boolean,
 		/** 刷新区域背景颜色 */
 		refresherBackground: { type: String, default: '#F3F5F9' },
+		/** 刷新区域前景色 */
+		refresherTintColor: { type: String, default: 'rgba(0, 0, 0, 0.3)' },
 		/** 距底部多远时（单位px），触发 load 事件 */
-		lowerThreshold: { type: Number, default: 10 },
+		lowerThreshold: { type: Number, default: 30 },
 	});
 
 	// -- emits
@@ -142,9 +144,7 @@
 						// 计算出二者的差值就是需要滚动的距离
 						state.scrollTop = contentHeight - wrapHeight;
 						console.log(
-							`wrapHeight=${wrapHeight}，contentHeight=${contentHeight}，scrollTop=${
-              contentHeight - wrapHeight
-            }`
+							`wrapHeight=${wrapHeight}，contentHeight=${contentHeight}，scrollTop=${contentHeight - wrapHeight}`
 						);
 					} else {
 						state.scrollTop = 0;
@@ -205,9 +205,14 @@
 </script>
 
 <template>
-	<scroll-view scroll-y scroll-with-animation refresher-default-style="none" :class="`lg-scroll-list ${cls}`" :scroll-top="state.scrollTop" :lower-threshold="lowerThreshold" :refresher-enabled="refresherEnabled" :refresher-threshold="state.threshold" :refresher-triggered="state.triggered" @scroll="onScroll" @scrolltolower="onLoad" @refresherrefresh="onRefresh" @refresherrestore="onRestore" @refresherpulling="onPulling" @refresherabort="onAbort">
+	<scroll-view scroll-y scroll-with-animation refresher-default-style="none" :class="`lg-scroll-list ${cls}`"
+		:scroll-top="state.scrollTop" :lower-threshold="lowerThreshold" :refresher-enabled="refresherEnabled"
+		:refresher-threshold="state.threshold" :refresher-triggered="state.triggered" @scroll="onScroll"
+		@scrolltolower="onLoad" @refresherrefresh="onRefresh" @refresherrestore="onRestore"
+		@refresherpulling="onPulling" @refresherabort="onAbort">
 		<view class="lg-scroll-list__refresh-bar" :style="{
         '--refresher-bg-color': props.refresherBackground,
+		'--refresher-tint-color': props.refresherTintColor,
         '--refresher-top': `-${state.threshold}px`,
         '--refresher-height': `${state.threshold}px`,
       }">{{ renderRefreshText() }}</view>
@@ -233,7 +238,7 @@
 			justify-content: center;
 			align-items: center;
 			font-size: 28rpx;
-			color: rgba(0, 0, 0, 0.3);
+			color: var(--refresher-tint-color);
 			position: absolute;
 			top: var(--refresher-top);
 			left: 0;

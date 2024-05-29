@@ -90,7 +90,7 @@
 					</template>
 					<template v-else>
 						<image class="icon-96x96 rounded-circle" src="@/static/logo.png" />
-						<view class="f32 f-600 color-secondary ml-24" @click.stop="Utils.push('/pages/auth/login')">立即登录
+						<view class="f32 f-600 color-secondary ml-24" @click.stop="Utils.push('/pages/auth/auth')">立即登录
 						</view>
 					</template>
 				</view>

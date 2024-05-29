@@ -61,7 +61,7 @@
 		<form>
 			<!-- 输入框：真机调试 -->
 			<input type="nickname" :value="state.nickName" placeholder="请填写您的昵称" :placeholderStyle="placeholderStyles"
-				@input="onInput" @nicknamereview="onNickNameReview" />
+				@input="onInput" @nicknamereview="onNickNameReview" maxlength="30" />
 			<!-- 确认按钮 -->
 			<button class="save-button" :class="{'enable': state.saveEnable}">保存</button>
 		</form>

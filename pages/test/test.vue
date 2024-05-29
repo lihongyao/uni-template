@@ -53,7 +53,7 @@
 <template>
 	<view class="page">
 		<!-- :defaultValue="state.pickerRes" -->
-		<picker-date-lease ref="picker" @sure="onPicked" :fixedDateForStart="new Date('2023/05/29 23:30:00')" >
+		<picker-date-lease ref="picker" @sure="onPicked" :fixedDateForStart="new Date('2023/05/29 23:30:00')">
 			<view class="flex-h-center">
 				<view @click="openPicker('start')">{{ state.pickerRes ? state.pickerRes.start.v: "开始时间"}}</view>
 				<view class="mx-30">————</view>

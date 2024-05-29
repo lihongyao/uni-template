@@ -15,7 +15,6 @@
 	const url = ref('');
 	// -- life circles
 	onLoad(({ q, uri }) => {
-
 		url.value = uri ? decodeURIComponent(uri) : WEBPAGEs[q].url
 	});
 </script>

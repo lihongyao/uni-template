@@ -5,10 +5,11 @@
 	import Utils from '@/utils';
 	import Tools from '@likg/tools';
 	import Bus from '@likg/bus';
-import { apiUser } from "../../api/apiServer";
+	import { apiUser, apiCommon } from "@/api/apiServer/index.js";
 
 	// -- constants 
-	const defaultAvatarUrl = 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0';
+	const defaultAvatarUrl =
+		'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0';
 
 	// -- state 
 	const state = reactive({
@@ -31,7 +32,7 @@ import { apiUser } from "../../api/apiServer";
 
 
 		// 2. 获取阿里云OSS配置
-		// service.common.getOSSConfigs().then(resp => {
+		// apiCommon.getOSSConfigs().then(resp => {
 		// 	state.ossConfigs = resp.data.credentials;
 		// });
 
@@ -74,7 +75,7 @@ import { apiUser } from "../../api/apiServer";
 			ossConfigs: state.ossConfigs,
 			success: async (url) => {
 				// -- 更新用户头像
-				const resp = await service.user.edit({ avatar: url });
+				const resp = await apiUser.edit({ avatar: url });
 				if (resp && resp.code === 200) {
 					Utils.toast("上传成功");
 					Bus.$emit("REFRESH_USERINFO");
@@ -91,15 +92,17 @@ import { apiUser } from "../../api/apiServer";
 <template>
 	<view class="page pt-24">
 		<!-- 头像 -->
-		<view class="row bg-primary" >
+		<view class="row bg-primary">
 			<view class="label">头像</view>
-			<button class="value chooseAvatar" hover-class="none" open-type="chooseAvatar" @chooseavatar="onChooseAvatar">
+			<button class="value chooseAvatar" hover-class="none" open-type="chooseAvatar"
+				@chooseavatar="onChooseAvatar">
 				<image class="icon-112x112 bg-secondary rounded-14" :src="state.user.avatar"></image>
 				<image class="icon-40x40" src="@/static/images/icon_right.png"></image>
 			</button>
 		</view>
 		<!-- 名字 -->
-		<view class="row bg-primary" @click="Utils.push(`/pages/userinfo/nickname?nickName=${state.user.nickName || ''}`)">
+		<view class="row bg-primary"
+			@click="Utils.push(`/pages/userinfo/nickname?nickName=${state.user.nickName || ''}`)">
 			<view class="label">名字</view>
 			<view class="value">
 				<text>{{state.user.nickName || "————"}}</text>

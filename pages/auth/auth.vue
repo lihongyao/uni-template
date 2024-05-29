@@ -1,77 +1,31 @@
 <script setup>
-	import { reactive, onMounted } from 'vue';
-	import Tools from '@likg/tools';
 	import Bus from '@likg/bus';
 	import Utils from '@/utils';
-	import { APP_KEY_TOKEN, APP_KEY_LOGIN } from '@/constants';
+	import { apiUser } from '@/api/apiServer/index.js'
+	import { APP_KEY_LOGIN } from '@/constants';
 
-	// -- state
-	const state = reactive({
-		key: "GET_USER_PROFILE", // "GET_USER_PROFILE" | "GET_USER_PHONE",
-		canIUseGetUserProfile: false
-	});
-
-	// -- life circles
-	onMounted(() => {
-		// 1. 判断设备是否支持 getUserProfile
-		wx.getUserProfile && (state.canIUseGetUserProfile = true);
-	});
-
-	// -- methods
-	const edit = async (data) => {
-		Utils.loading("处理中...");
-		setTimeout(() => {
-			Utils.hideLoading();
-			state.key = 'GET_USER_PHONE';
-		}, 1000);
-		/*
-		const resp = await service.user.edit(data);
-		if(resp && resp.code === 200) {
-			state.key = 'GET_USER_PHONE';
-		}*/
-
-	}
 
 	// -- events
-	const onGetUserInfo = ({ detail }) => {
-		const { errMsg, userInfo: { avatarUrl, nickName } } = detail;
-		if (/ok/.test(errMsg)) {
-			// -- 更新用户信息
-			edit({ avatarUrl, nickName });
-		}
-	}
-
-	const onGetUserProfile = () => {
-		wx.getUserProfile({
-			desc: '用于完善用户头像、昵称展示信息',
-			success: (res) => {
-				const { errMsg, userInfo: { avatarUrl, nickName } } = res;
-				if (/ok/.test(errMsg)) {
-					// -- 更新用户信息
-					edit({ avatarUrl, nickName });
-				}
-			}
-		});
-	}
-
-	const onGetPhoneNumber = ({ detail }) => {
+	const onGetPhoneNumber = async ({ detail }) => {
 		const { errMsg, code } = detail;
 		console.log("手机号授权code：", code);
 		Utils.loading("处理中...");
 		setTimeout(() => {
 			Utils.hideLoading();
-			Bus.$emit("BINDED_PHONE");
+			uni.setStorageSync(APP_KEY_LOGIN, true);
+			Bus.$emit("LOGGED");
 			Utils.pop();
 		}, 1000);
 
-		if (/ok/.test(errMsg)) {
-			// -- 更新手机号
-			// Api.user.bindPhone({ code }).then(r => {
-			// uni.setStorageSync(APP_KEY_LOGIN, true);
-			// Bus.$emit("BINDED_PHONE");
-			// Utils.pop();
-			// });
-		}
+		// if (/ok/.test(errMsg)) {
+		// 	// -- 更新手机号
+		// 	Utils.loading("处理中...");
+		// 	const resp = await apiUser.bindPhone(code);
+		// 	Utils.hideLoading();
+		// 	uni.setStorageSync(APP_KEY_LOGIN, true);
+		// 	Bus.$emit("LOGGED");
+		// 	Utils.pop();
+		// }
 	}
 	const onBack = () => {
 		const pages = getCurrentPages();
@@ -86,40 +40,28 @@
 
 <template>
 	<view class="page">
-		<view class="wrap rounded-24 bg-secondary pt-70 px-48 mx-auto flex-v-center justify-content-start">
+		<image class="absolute-top" src="./images/bg1.png" mode="widthFix"></image>
+		<view
+			class="wrap position-relative zIndex-1 rounded-24 bg-secondary pt-70 px-48 mx-auto flex-v-center justify-content-start">
 			<!-- logo -->
 			<image class="icon-160x160" src="@/static/logo.png"></image>
 			<!-- 店铺名称 -->
 			<view class="f32 f-600 lh-44 mt-20" style="color: #202020;">产品名称</view>
-			<!-- 获取用户信息 -->
-			<template v-if="state.key === 'GET_USER_PROFILE'">
-				<view class="desc">为了我们更好的服务您，【产品名称】小程序需要获取您的基础信息，请点击“授权登录”按钮，打开头像、昵称等信息的授权。</view>
-				<button v-if="state.canIUseGetUserProfile" class="button bg-primary" @click="onGetUserProfile">授权登录</button>
-				<button v-else class="button bg-primary" open-type="getUserInfo" @getuserinfo="onGetUserInfo">授权登录</button>
-			</template>
 			<!-- 获取手机号码 -->
-			<template v-else>
-				<view class="desc">为了我们更好的服务您，请使用微信快捷登录获取您的手机号码</view>
-				<button class="button bg-primary" open-type="getPhoneNumber" @getphonenumber="onGetPhoneNumber">
-					<image class="icon-44x44 mr-8" src="./images/icon_weixin.png"></image>
-					<text>微信快捷登录</text>
-				</button>
-			</template>
+			<view class="desc">为了我们更好的服务您，请使用微信快捷登录获取您的手机号码</view>
+			<button class="button bg-primary" open-type="getPhoneNumber" @getphonenumber="onGetPhoneNumber">
+				<image class="icon-44x44 mr-8" src="./images/icon_weixin.png"></image>
+				<text>微信快捷登录</text>
+			</button>
 			<!-- 暂不登录 -->
 			<view class="f28 lh-40 mt-40 f-400" style="color:#202020;" @click="onBack">暂不登录</view>
 		</view>
-
-
 	</view>
 </template>
 
 
 <style lang="less" scoped>
 	.page {
-		background-image: url('https://yinghong-maintenance.oss-cn-chengdu.aliyuncs.com/icons/UMR1646215168771.png');
-		background-repeat: no-repeat;
-		background-size: 100% auto;
-		background-position: top left;
 		padding-top: 180rpx;
 
 		.wrap {

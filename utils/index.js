@@ -1,5 +1,5 @@
 // -- 引入常量配置
-import { APP_KEY_LOGIN, APP_KEY_TOKEN } from '@/constants/index.js';
+import { APP_KEY_LOGIN } from '@/constants/index.js';
 // -- 友盟统计
 // import uma from 'umtrack-wx';
 // -- 加密
@@ -163,7 +163,7 @@ export default class Utils {
 				resolve();
 			} else {
 				uni.navigateTo({
-					url: '/pages/auth/login',
+					url: '/pages/auth/auth',
 				});
 			}
 		});
@@ -259,7 +259,7 @@ export default class Utils {
 	 * @param {String} options.uri OSSHost
 	 * @param {String} options.key 上传路径
 	 * @param {String} options.filePath 文件路径
-	 * --- 阿里云相关
+	 * --- 阿里云相关（请求后端返回）
 	 * @param {Object} options.ossConfigs 阿里云相关配置 
 	 * @param {Object} options.ossConfigs.accessKeyId  
 	 * @param {Object} options.ossConfigs.accessKeySecret  
@@ -293,6 +293,7 @@ export default class Utils {
 			OSSAccessKeyId: options.ossConfigs.accessKeyId,
 			'x-oss-security-token': options.ossConfigs.securityToken, // 使用STS签名时必传。
 		};
+		console.log(formData)
 		// 3. 执行上传
 		const uploadTask = uni.uploadFile({
 			url: options.uri,
@@ -304,14 +305,15 @@ export default class Utils {
 				'Content-Type': 'application/json',
 			},
 			success: (res) => {
+				console.log(res)
 				if (res.statusCode === 204) {
 					options.success && options.success(`${options.uri}/${options.key}`)
 				} else {
-					options.fail && options.fai();
+					options.fail && options.fail();
 				}
 			},
 			fail: (err) => {
-				options.fail && options.fai();
+				options.fail && options.fail();
 			},
 		});
 		// 4. 监听上传进度
@@ -323,7 +325,7 @@ export default class Utils {
 
 	/**
 	 * 权限校验
-	 * @param {Object} scope 需要校验权限的 scope，详见 → https://uniapp.dcloud.net.cn/api/other/authorize.html#scope-%E5%88%97%E8%A1%A8
+	 * @param {String} scope 需要校验权限的 scope，详见 → https://uniapp.dcloud.net.cn/api/other/authorize.html#scope-%E5%88%97%E8%A1%A8
 	 * @param {Object} options 配置项
 	 * @param {String} options.title  提示框标题
 	 * @param {String} options.content 提示框内容
@@ -492,10 +494,10 @@ export default class Utils {
 	/**
 	 * 获取用户定位信息
 	 * 注意：使用chooseLocation需在mainfest.json文件（切换至源码视图）中添加如下配置
-	 * "mp-weixin": {
-	 *   "permission": { "scope.userLocation": { "desc": "用于定位选择位置" }},
-	 *   "requiredPrivateInfos": [ "getLocation", "chooseLocation"]
-	 * }
+	   "mp-weixin": {
+			"permission": { "scope.userLocation": { "desc": "用于定位选择位置" }},
+			"requiredPrivateInfos": [ "getLocation", "chooseLocation"]
+	    }
 	 */
 	static getLocation() {
 		return new Promise((resolve) => {
@@ -503,7 +505,8 @@ export default class Utils {
 				content: '需要获取你的地理位置，用于定位选择位置',
 			}).then(() => {
 				uni.getLocation({
-					success({ errMsg, latitude, longitude }) {
+					success(result) {
+						const { errMsg, latitude, longitude } = result;
 						if (/ok/.test(errMsg)) {
 							resolve({ lat: latitude, lng: longitude });
 						}
@@ -568,6 +571,35 @@ export default class Utils {
 			});
 		});
 	}
+
+	/**
+	 * 拾取文件
+	 * 从本地相册拾取/摄像头拍照
+	 */
+	static chooseFile() {
+		return new Promise((resolve, reject) => {
+			// 1. 选择图片
+			uni.chooseMedia({
+				count: 1,
+				mediaType: ['image', 'video'],
+				sourceType: ['album', 'camera'],
+				camera: 'front',
+				success({ errMsg, tempFiles }) {
+					if (/ok/.test(errMsg)) {
+						const { tempFilePath } = tempFiles[0];
+						resolve(tempFilePath);
+					} else {
+						console.log(errMsg);
+					}
+				},
+				fail(error) {
+					console.log(error);
+				},
+			});
+		});
+	}
+
+
 	/**
 	 * 伪进度条：渲染进度
 	 * @param {Object} options 可选项
@@ -580,14 +612,14 @@ export default class Utils {
 	 * 1. clearTimers：清除定时器，使用者在页面或组件销毁时调用该函数
 	 * 2. done：当实际加载完成时调用该函数可触发从当前值-过渡到100%
 	 * 
-	 * 📒 请求持续时间和进度条之间渲染公式（区间单位-秒）：
+	 * ?? 请求持续时间和进度条之间渲染公式（区间单位-秒）：
 	 * [1-20] ：百分比从 0%匀速(10秒内)增长至40%，请求成功，匀速加载到100%。
 	 * [20-40]：百分比从40%匀速(10秒内)增长至60%，请求成功，匀速加载到100%。
 	 * [40-60]：百分比从60%匀速(10秒内)增长至80%，请求成功，匀速加载到100%。
 	 * [60-90]：百分比从80%匀速(10秒内)增长至95%，请求成功，匀速加载到100%。
 	 * [90, ] ：提示文案：抱歉，可能需要等待一会儿
 	 *  
-	 * 📌 代码调用示例
+	 * ?? 代码调用示例
 			const { clearTimers, done } = Utils.renderProgress({
 				pending: (progress) => {
 					console.log('当前进度：', progress);
@@ -750,9 +782,34 @@ export default class Utils {
 	 * @param {Object} htmlString
 	 */
 	static formatRichText(htmlString) {
-		return htmlString && htmlString.replace(/<img[^>]*>/gi, function(match, capture) { // 查找所有的 img 元素
-			return match.replace(/style=".*"/gi, '').replace(/style='.*'/gi,
-			''); // 删除找到的所有 img 元素中的 style 属性
-		}).replace(/\<img/gi, '<img style="width:100%;"'); // 对 img 元素增加 style 属性，并设置宽度为 100%
+		if (!htmlString) return htmlString;
+
+
+		// 删除所有 img 元素中的 style 属性
+		htmlString = htmlString.replace(/<img[^>]*>/gi, function(match, capture) {
+			return match.replace(/style=".*"/gi, '').replace(/style='.*'/gi, '');
+		});
+		// 给所有 img 元素增加 style 属性，并设置宽度为 100%
+		htmlString = htmlString.replace(/\<img/gi,
+			'<img style="width:100%; height: auto; margin: 10px auto; display: block; "');
+		return htmlString;
+
+
+		// return htmlString && htmlString.replace(/<img[^>]*>/gi, function(match, capture) { // 查找所有的 img 元素
+		// 	return match.replace(/style=".*"/gi, '').replace(/style='.*'/gi,
+		// 		''); // 删除找到的所有 img 元素中的 style 属性
+		// }).replace(/\<img/gi, '<img style="width:100%;"'); 
+	}
+
+
+	/**
+	 * 逆地址解析
+	 * @See https://lbs.qq.com/miniProgram/jsSdk/jsSdkGuide/jsSdkOverview
+	 */
+	static getAddressWithCoordinate() {
+		qqmapsdk = new QQMapWX({
+			key: '申请的key'
+		});
+
 	}
 }
