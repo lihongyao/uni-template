@@ -48,10 +48,10 @@
 			<!-- 店铺名称 -->
 			<view class="f32 f-600 lh-44 mt-20" style="color: #202020;">产品名称</view>
 			<!-- 获取手机号码 -->
-			<view class="desc">为了我们更好的服务您，请使用微信快捷登录获取您的手机号码</view>
-			<button class="button bg-primary" open-type="getPhoneNumber" @getphonenumber="onGetPhoneNumber">
-				<image class="icon-44x44 mr-8" src="./images/icon_weixin.png"></image>
-				<text>微信快捷登录</text>
+			<view class="desc f26 mt-40 color-666666">为了我们更好的服务您，请使用手机号快捷登录获取您的手机号码。</view>
+			<button class="button rounded-48 flex-h-center bg-primary color-FFFFFF f32 " open-type="getPhoneNumber"
+				@getphonenumber="onGetPhoneNumber">
+				手机号快捷登录
 			</button>
 			<!-- 暂不登录 -->
 			<view class="f28 lh-40 mt-40 f-400" style="color:#202020;" @click="onBack">暂不登录</view>
@@ -71,21 +71,11 @@
 
 		.desc {
 			height: 108rpx;
-			margin-top: 40rpx;
-			font-size: 26rpx;
-			color: #999999;
 		}
 
 		.button {
 			width: 400rpx;
 			height: 88rpx;
-			color: #FFFFFF;
-			font-size: 32rpx;
-			border-radius: 48rpx;
-			margin-top: 100rpx;
-			display: flex;
-			justify-content: center;
-			align-items: center;
 		}
 	}
 </style>

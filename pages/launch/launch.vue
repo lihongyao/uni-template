@@ -6,12 +6,15 @@
 	import Utils from '@/utils';
 	import TimeDown from '@/components/@lgs/TimeDown/TimeDown.vue';
 	import { apiUser } from '@/api/apiServer';
+	import PrivacyDialog from '@/components/@lgs/PrivacyDialog/PrivacyDialog.vue';
+
 
 	// -- state
 	const state = reactive({
 		q: '',
 		count: 2,
-		canJump: null,
+		isLogin: false,
+		isAgree: false,
 	});
 
 	// -- life circles
@@ -34,31 +37,34 @@
 				// uni.setStorageSync(APP_KEY_TOKEN, token);
 				// uni.setStorageSync(APP_KEY_LOGIN, isBindPhone);
 				uni.setStorageSync(APP_KEY_LOGIN, false);
-				state.canJump = true;
-				if (state.count === 0) {
-					jump();
-				}
+				state.isLogin = true;
+				jump();
 			},
 		});
 	};
-	const onTimeDownEnd = () => {
-		if (state.canJump) {
-			jump();
-		}
-	};
 	const jump = () => {
-		let jumpPath = '/pages/TabPages/index';
-		if (state.q) {
-			jumpPath = '/pages/upload/uploadForWeixin?q=app'
+		if (state.count === 0 && state.isLogin && state.isAgree) {
+			let jumpPath = '/pages/TabPages/index';
+			if (state.q) {
+				jumpPath = '/pages/upload/uploadForWeixin?q=app'
+			}
+			Utils.reLaunch(jumpPath);
 		}
-		Utils.reLaunch(jumpPath);
 	};
+	const onTimeDownEnd = () => {
+		jump();
+	};
+	const onAgree = () => {
+		state.isAgree = true;
+		jump();
+	}
 </script>
 
 <template>
 	<view class="page ff-DIN-Bold">
 		<TimeDown v-model="state.count" @end="onTimeDownEnd" />
 		<view class="tips"> LAUNCH PAGE </view>
+		<PrivacyDialog @agree="onAgree" />
 	</view>
 </template>
 

@@ -116,15 +116,15 @@
 <template>
 	<view class="page">
 		<!-- 导航栏 -->
-		<!-- 1.微信快捷登录 -->
+		<!-- 1.手机号快捷登录 -->
 		<view v-if="state.k === 0" class="loginForAuth">
 			<!-- 产品图 -->
 			<view class="intro flex-h-center color-FFFFFF">产品介绍图</view>
 			<!-- 授权按钮 -->
 			<button v-if="state.checkedForAuth" class="auth-button bg-primary flex-h-center f28 color-FFFFFF" open-type="getPhoneNumber" @getphonenumber="onGetPhoneNumber">微信快捷登录</button>
-			<button v-else class="auth-button bg-primary flex-h-center f28 color-FFFFFF" @click="showTips">微信快捷登录</button>
+			<button v-else class="auth-button bg-primary flex-h-center f28 color-FFFFFF" @click="showTips">手机号快捷登录</button>
 			<!-- 手机号验证码登录 -->
-			<view class="login-mobile f24 text-center color-555555" @click="state.k = 1">手机号验证码登录</view>
+			<view class="login-mobile f24 text-center color-555555" @click="state.k = 1">短信验证码登录</view>
 			<!-- 用户协议 & 隐私正常 -->
 			<view class="protocol flex-h-center flex-h-center f26 mt-80">
 				<icon-check v-model="state.checkedForAuth" class="mr-10"></icon-check>
