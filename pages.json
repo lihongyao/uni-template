@@ -1,6 +1,6 @@
 {
-	"pages": [{
-		"path": "pages/launch/launch",
+	"pages": [ {
+		"path": "pages/auth/auth",
 		"style": {
 			"navigationStyle": "custom"
 		}
@@ -8,6 +8,11 @@
 		"path": "pages/auth/login",
 		"style": {
 			"navigationBarTitleText": "登录"
+		}
+	},{
+		"path": "pages/launch/launch",
+		"style": {
+			"navigationStyle": "custom"
 		}
 	}, {
 		"path": "pages/test/test",
@@ -64,11 +69,6 @@
 		"path": "pages/fns/sets",
 		"style": {
 			"navigationBarTitleText": "设置"
-		}
-	}, {
-		"path": "pages/auth/auth",
-		"style": {
-			"navigationStyle": "custom"
 		}
 	}, {
 		"path": "pages/address/list",

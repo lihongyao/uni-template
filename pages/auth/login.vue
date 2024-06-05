@@ -146,7 +146,7 @@
 			<view class="input-wrap pb-30 mt-96">
 				<input :value="state.mobile" class="f32 f-600 ff-DIN-Bold" type="number" @input="onInput" auto-focus :placeholder-style="placeholderStyles" placeholder="请输入手机号码" maxlength="11" />
 			</view>
-			<!-- 用户协议 & 隐私正常 -->
+			<!-- 用户协议 & 隐私政策 -->
 			<view class="protocol flex-h-start f26 mt-20">
 				<icon-check v-model="state.checkedForMobile" @change="onCheckedForMobileChange" class="mr-10"></icon-check>
 				<text>我已阅读并同意</text>
@@ -186,7 +186,6 @@
 		background: #FFFFFF;
 	}
 
-	/** 公共样式 */
 	.protocol {
 		color: rgba(0, 0, 0, .36);
 	}
