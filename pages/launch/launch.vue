@@ -1,7 +1,7 @@
 <script setup>
 	// -- imports
 	import { onLoad } from '@dcloudio/uni-app';
-	import { reactive, onMounted } from 'vue';
+	import { reactive } from 'vue';
 	import { APP_KEY_TOKEN, APP_KEY_LOGIN } from '@/constants';
 	import Utils from '@/utils';
 	import TimeDown from '@/components/@lgs/TimeDown/TimeDown.vue';
@@ -18,10 +18,15 @@
 	});
 
 	// -- life circles
+	// -- 扫描普通二维码链接进入通过q拿到链接并读取 query 参数处理后续逻辑
+	// -- 二维码在线生成：https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=123
 	onLoad(({ q }) => {
-		state.q = q;
-	});
-	onMounted(() => {
+		
+		if (q) {
+			const link = decodeURIComponent(q);
+			const queryParams = Utils.getQueryParams(link);
+			console.log(queryParams);
+		}
 		login();
 	});
 	// -- methods

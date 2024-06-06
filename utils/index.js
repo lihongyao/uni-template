@@ -801,6 +801,24 @@ export default class Utils {
 		// }).replace(/\<img/gi, '<img style="width:100%;"'); 
 	}
 
+	/**
+	 * 解析查询参数
+	 * @param {String} url - 要解析的 URL
+	 * @returns {Object} 解析后的查询参数对象
+	 */
+	static getQueryParams(url) {
+		const queryString = url.split('?')[1];
+		const params = {};
+		if (queryString) {
+			const pairs = queryString.split('&');
+			pairs.forEach(pair => {
+				const [key, value] = pair.split('=');
+				params[decodeURIComponent(key)] = decodeURIComponent(value || '');
+			});
+		}
+		return params;
+	}
+
 
 	/**
 	 * 逆地址解析
