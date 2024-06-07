@@ -5,6 +5,8 @@ import { APP_KEY_LOGIN } from '@/constants/index.js';
 // -- 加密
 import crypto from 'crypto-js';
 import { Base64 } from 'js-base64';
+// -- 腾讯地图
+// const QQMapWX = require('@/libs/qqmap-wx-jssdk1.2/qqmap-wx-jssdk.min.js')
 
 export default class Utils {
 	/**
@@ -159,7 +161,7 @@ export default class Utils {
 	 */
 	static checkLogin() {
 		return new Promise((resolve, reject) => {
-			if (uni.getStorageSync(APP_KEY_LOGIN)) {
+			if (uni.getStorageSync(APP_KEY_LOGIN) === 1) {
 				resolve();
 			} else {
 				uni.navigateTo({
@@ -779,26 +781,48 @@ export default class Utils {
 
 	/**
 	 * 富文本内容格式化
+	 * 小程序受信HTML节点：https://developers.weixin.qq.com/miniprogram/dev/component/rich-text.html
+	 * ️特别注意：小程序富文本不支持音视频标签，本方法保留了对音频和视频的处理
+	 * 
 	 * @param {Object} htmlString
 	 */
 	static formatRichText(htmlString) {
 		if (!htmlString) return htmlString;
 
-
-		// 删除所有 img 元素中的 style 属性
-		htmlString = htmlString.replace(/<img[^>]*>/gi, function(match, capture) {
-			return match.replace(/style=".*"/gi, '').replace(/style='.*'/gi, '');
+		const regexSrc = /src="([^"]+)"/;
+		const cssText = 'style="width:100%; height: auto; margin: 10px auto; display: block;"';
+		// -- 处理图片
+		const regImg = /\<img.*?\/\>/gi;
+		htmlString = htmlString.replace(regImg, function(match) {
+			const src = match.match(regexSrc);
+			if (src) {
+				return `<img src="${src[1]}" alt="" ${cssText} />`;
+			}
+			return match;
 		});
-		// 给所有 img 元素增加 style 属性，并设置宽度为 100%
-		htmlString = htmlString.replace(/\<img/gi,
-			'<img style="width:100%; height: auto; margin: 10px auto; display: block; "');
+
+		// -- 处理视频
+		const regVideo = /<div data-w-e-type="video"[^>]*>[\s\S]*?<\/div>/gi;
+		htmlString = htmlString.replace(regVideo, function(match) {
+			const videoSrc = match.match(regexSrc);
+			if (videoSrc) {
+				return `<video src="${videoSrc[1]}" controls ${cssText}></video>`;
+			}
+			return match;
+		});
+
+		// -- 处理音频
+		// const regAudio = /<div data-w-e-type="audio"[^>]*>[\s\S]*?<\/div>/gi;
+		const regAudio = /<div[^>]*data-w-e-type="audio"[^>]*>.*?<\/div>/gis;
+		htmlString = htmlString.replace(regAudio, function(match) {
+			const audioSrc = match.match(regexSrc);
+			if (audioSrc) {
+				return `<audio controls preload="auto" src="${audioSrc[1]}" ${cssText} />`;
+			}
+			return match;
+		});
+
 		return htmlString;
-
-
-		// return htmlString && htmlString.replace(/<img[^>]*>/gi, function(match, capture) { // 查找所有的 img 元素
-		// 	return match.replace(/style=".*"/gi, '').replace(/style='.*'/gi,
-		// 		''); // 删除找到的所有 img 元素中的 style 属性
-		// }).replace(/\<img/gi, '<img style="width:100%;"'); 
 	}
 
 	/**

@@ -21,7 +21,6 @@
 	// -- 扫描普通二维码链接进入通过q拿到链接并读取 query 参数处理后续逻辑
 	// -- 二维码在线生成：https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=123
 	onLoad(({ q }) => {
-		
 		if (q) {
 			const link = decodeURIComponent(q);
 			const queryParams = Utils.getQueryParams(link);
