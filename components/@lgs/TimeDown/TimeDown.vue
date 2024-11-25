@@ -43,7 +43,8 @@
 </script>
 
 <template>
-	<view class="time-down" :style="`top:${state.statusBarHeight}px; height: ${state.titleBarHeight}px;padding-left: ${state.countPaddingLeft}px`">
+	<view class="time-down"
+		:style="`top:${state.statusBarHeight}px; height: ${state.titleBarHeight}px;padding-left: ${state.countPaddingLeft}px`">
 		<view class="count" :style="`height:${state.countHeight}px`">
 			{{state.v}}&nbsp;s
 		</view>

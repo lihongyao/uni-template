@@ -1,18 +1,23 @@
 {
-	"pages": [ {
+	"pages": [{
+		"path": "pages/auth/login_account",
+		"style": {
+			"navigationStyle": "custom"
+		}
+	}, {
 		"path": "pages/auth/auth",
 		"style": {
 			"navigationStyle": "custom"
 		}
-	},{
-		"path": "pages/auth/login",
-		"style": {
-			"navigationBarTitleText": "登录"
-		}
-	},{
+	}, {
 		"path": "pages/launch/launch",
 		"style": {
 			"navigationStyle": "custom"
+		}
+	}, {
+		"path": "pages/auth/login",
+		"style": {
+			"navigationBarTitleText": "登录"
 		}
 	}, {
 		"path": "pages/test/test",
@@ -49,7 +54,7 @@
 		"style": {
 			"navigationBarTitleText": ""
 		}
-	},  {
+	}, {
 		"path": "pages/userinfo/nickname",
 		"style": {
 			"navigationBarTitleText": "设置昵称"

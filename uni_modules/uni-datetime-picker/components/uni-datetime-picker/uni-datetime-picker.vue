@@ -81,7 +81,7 @@
 				<view class="popup-x-body">
 					<Calendar ref="left" :showMonth="false" :start-date="calendarRange.startDate"
 						:end-date="calendarRange.endDate" :range="true" :pleStatus="endMultipleStatus" @change="leftChange"
-						@firstEnterCale="updateRightCale" style="padding: 0 8px;" />
+						@firstEnterCale="updateRightCale" style="padding: 0 8px;"/>
 					<Calendar ref="right" :showMonth="false" :start-date="calendarRange.startDate"
 						:end-date="calendarRange.endDate" :range="true" @change="rightChange" :pleStatus="startMultipleStatus"
 						@firstEnterCale="updateLeftCale" style="padding: 0 8px;border-left: 1px solid #F1F1F1;" />
@@ -98,7 +98,7 @@
 			:start-date="calendarRange.startDate" :end-date="calendarRange.endDate" :selectableTimes="mobSelectableTime"
 			:startPlaceholder="startPlaceholder" :endPlaceholder="endPlaceholder" :default-value="defaultValue"
 			:pleStatus="endMultipleStatus" :showMonth="false" :range="isRange" :hasTime="hasTime" :insert="false"
-			:hideSecond="hideSecond" @confirm="mobileChange" @maskClose="close" />
+			:hideSecond="hideSecond" @confirm="mobileChange" @maskClose="close" @change="calendarClick"/>
 	</view>
 </template>
 <script>
@@ -142,8 +142,14 @@
 
 	export default {
 		name: 'UniDatetimePicker',
+
 		options: {
+			// #ifdef MP-TOUTIAO
+			virtualHost: false,
+			// #endif
+			// #ifndef MP-TOUTIAO
 			virtualHost: true
+			// #endif
 		},
 		components: {
 			Calendar,
@@ -458,13 +464,21 @@
 					this.isPhone = navigator.userAgent.toLowerCase().indexOf('mobile') !== -1
 					return
 				}
+				// #ifdef MP-WEIXIN
+				const {
+					windowWidth
+				} = uni.getWindowInfo()
+				// #endif
+				// #ifndef MP-WEIXIN
 				const {
 					windowWidth
 				} = uni.getSystemInfoSync()
+				// #endif
 				this.isPhone = windowWidth <= 500
 				this.windowWidth = windowWidth
 			},
 			show() {
+				this.$emit("show")
 				if (this.disabled) {
 					return
 				}
@@ -497,7 +511,7 @@
 								this.$refs.right.changeMonth('pre')
 							}
 						} else {
-							this.$refs.right.changeMonth('next')
+							// this.$refs.right.changeMonth('next')
 							if (this.isPhone) {
 								this.$refs.right.cale.lastHover = false;
 							}
@@ -615,6 +629,7 @@
 					fulldate: e.fulldate
 				}
 				this.startMultipleStatus = Object.assign({}, this.startMultipleStatus, obj)
+				this.$emit('calendarClick', e)
 			},
 			rightChange(e) {
 				const {
@@ -629,6 +644,7 @@
 					fulldate: e.fulldate
 				}
 				this.endMultipleStatus = Object.assign({}, this.endMultipleStatus, obj)
+				this.$emit('calendarClick', e)
 			},
 			mobileChange(e) {
 				if (this.isRange) {
@@ -636,9 +652,7 @@
 						before,
 						after
 					} = e.range
-
-					if (!before || !after) {
-						this.$emit("noChange",e);
+					if (!before) {
 						return;
 					}
 
@@ -691,11 +705,11 @@
 						startString = getDateTime(this.start, this.hideSecond)
 					}
 					[startDate, startTime] = startString.split(' ')
-					if (this.start && !dateCompare(this.start, this.tempRange.startDate)) {
+					if (this.start && !dateCompare(this.start, `${this.tempRange.startDate} ${this.tempRange.startTime}`)) {
 						startDateLaterRangeStartDate = true
 						this.tempRange.startDate = startDate
 					}
-					if (this.start && !dateCompare(this.start, this.tempRange.endDate)) {
+					if (this.start && !dateCompare(this.start, `${this.tempRange.endDate} ${this.tempRange.endTime}`)) {
 						startDateLaterRangeEndDate = true
 						this.tempRange.endDate = startDate
 					}
@@ -710,11 +724,11 @@
 					}
 					[endDate, endTime] = endString.split(' ')
 
-					if (this.end && !dateCompare(this.tempRange.startDate, this.end)) {
+					if (this.end && !dateCompare(`${this.tempRange.startDate} ${this.tempRange.startTime}`, this.end)) {
 						endDateEarlierRangeStartDate = true
 						this.tempRange.startDate = endDate
 					}
-					if (this.end && !dateCompare(this.tempRange.endDate, this.end)) {
+					if (this.end && !dateCompare(`${this.tempRange.endDate} ${this.tempRange.endTime}`, this.end)) {
 						endDateEarlierRangeEndDate = true
 						this.tempRange.endDate = endDate
 					}
@@ -753,8 +767,8 @@
 				this.pickerVisible = false
 			},
 			handleStartAndEnd(before, after, temp = false) {
-				if (!(before && after)) return
-
+				if (!before) return
+				if (!after) after = before;
 				const type = temp ? 'tempRange' : 'range'
 				const isStartEarlierEnd = dateCompare(before, after)
 				this[type].startDate = isStartEarlierEnd ? before : after
@@ -818,6 +832,10 @@
 						this.$emit('update:modelValue', [])
 					}
 				}
+			},
+
+			calendarClick(e) {
+				this.$emit('calendarClick', e)
 			}
 		}
 	}
