@@ -57,23 +57,23 @@
 	<view class="page">
 		<image class="absolute-top" src="./images/bg1.png" mode="widthFix"></image>
 		<view
-			class="wrap position-relative zIndex-1 rounded-24 bg-secondary pt-70 px-48 mx-auto flex-v-center justify-content-start">
+			class="wrap relative z-10 rounded-24 bg-secondary pt-70 px-48 mx-auto flex-v-center justify-start">
 			<!-- logo -->
 			<image class="icon-160x160" src="@/static/logo.png"></image>
 			<!-- 店铺名称 -->
-			<view class="f32 f-600 lh-44 mt-20" style="color: #202020;">产品名称</view>
+			<view class="text-32 font-semibold leading-44 mt-20" style="color: #202020;">产品名称</view>
 			<!-- 获取手机号码 -->
-			<view class="desc f26 mt-40 color-666666">为了我们更好的服务您，请使用手机号快捷登录获取您的手机号码。</view>
-			<button v-if="state.checked" class="button rounded-48 flex-h-center bg-primary color-FFFFFF f32 "
+			<view class="desc text-26 mt-40 text-666666">为了我们更好的服务您，请使用手机号快捷登录获取您的手机号码。</view>
+			<button v-if="state.checked" class="button rounded-48 flex-h-center bg-primary text-white text-32 "
 				open-type="getPhoneNumber" @getphonenumber="onGetPhoneNumber">
 				手机号快捷登录
 			</button>
-			<button v-else class="button rounded-48 flex-h-center bg-primary color-FFFFFF f32"
+			<button v-else class="button rounded-48 flex-h-center bg-primary text-white f32"
 				@tap="onShowTips">手机号快捷登录</button>
 			<!-- 暂不登录 -->
-			<view class="f28 lh-40 mt-40 f-400" style="color:#202020;" @click="onBack">暂不登录</view>
+			<view class="text-28 leading-40 mt-40 font-normal" style="color:#202020;" @click="onBack">暂不登录</view>
 			<!-- 用户协议 & 隐私政策 -->
-			<view class="protocol flex-h-start f26 mt-20">
+			<view class="protocol flex-h-start text-26 mt-20">
 				<icon-check v-model="state.checked" @change="onCheckboxChange" class="mr-10"></icon-check>
 				<text>我已阅读并同意</text>
 				<text class="link mx-10">用户协议</text>

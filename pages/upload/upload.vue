@@ -33,8 +33,8 @@
 <template>
 	<view class="page px-32 pt-40">
 		<!-- 标题描述 -->
-		<view class="f36 lh-40" style="color: #171717;">选择一种上传方式</view>
-		<view class="f24 lh-34 mt-20 color-666666">简历建议使用PDF文件，同时支持DOC、DOCX、JPG、PNG格式，大小不超过20M</view>
+		<view class="text-36 leading-40" style="color: #171717;">选择一种上传方式</view>
+		<view class="text-24 leading-34 mt-20 text-666666">简历建议使用PDF文件，同时支持DOC、DOCX、JPG、PNG格式，大小不超过20M</view>
 		<!-- 上传选择 -->
 		<view class="list">
 			<!-- 微信上传 -->
@@ -42,7 +42,7 @@
 				<view class="flex-h-start flex-1">
 					<image class="icon-72x72" src="./images/icon_weixin.png"></image>
 					<view class="flex-h-start ml-20">
-						<text class="f32 color-222222">微信上传</text>
+						<text class="text-32 text-222222">微信上传</text>
 						<view class="tag flex-h-center">推荐</view>
 					</view>
 				</view>
@@ -53,7 +53,7 @@
 				<view class="flex-h-start flex-1">
 					<image class="icon-72x72" src="./images/icon_local.png"></image>
 					<view class="flex-h-start ml-20">
-						<text class="f32 color-222222">手机文件上传</text>
+						<text class="text-32 text-222222">手机文件上传</text>
 					</view>
 				</view>
 				<image class="icon-32x32" src="./images/icon_right.png"></image>

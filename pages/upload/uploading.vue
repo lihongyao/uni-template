@@ -67,7 +67,7 @@
 			<circle-progress :percent="state.percent"></circle-progress>
 		</view>
 		<!-- 进度提示 -->
-		<view class="f28 lh-32 color-222222 mt-40 text-center">
+		<view class="text-28 leading-32 text-222222 mt-40 text-center">
 			{{state.percent === 100 ? "本地简历上传成功" : "本地简历上传中"}}
 		</view>
 		<!-- 操作按钮 -->
@@ -75,11 +75,11 @@
 			<view class="safe-area-bottom fixed-bottom actions flex-h-center">
 				<template v-if="state.q">
 					<button class="btn flex-h-center" open-type="launchApp" @launchapp="onLaunchAppSuccess" @error="onLaunchAppError">返回APP</button>
-					<button class="btn flex-h-center color-FFFFFF ml-34" @click="onJumpToHome">留在小程序</button>
+					<button class="btn flex-h-center text-white ml-34" @click="onJumpToHome">留在小程序</button>
 				</template>
 				<template v-else>
 					<button class="btn flex-h-center" @click="Utils.pop()">重新上传</button>
-					<button class="btn flex-h-center color-FFFFFF ml-34" @click="onJumpToHome">返回首页</button>
+					<button class="btn flex-h-center text-white ml-34" @click="onJumpToHome">返回首页</button>
 				</template>
 			</view>
 		</template>

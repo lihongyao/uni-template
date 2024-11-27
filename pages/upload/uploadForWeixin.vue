@@ -34,8 +34,8 @@
 <template>
 	<view class="px-32 pt-40">
 		<!-- 标题描述 -->
-		<view class="f36 lh-40" style="color: #171717;">轻松上传文件</view>
-		<view class="f24 lh-34 mt-20 color-666666">将文件发送微信（文件传输助手、自己或好友），在本页面点击“立即上传”，选择刚才发送文件的聊天对象，选择文件，点击确认即可上传成功</view>
+		<view class="text-36 leading-40" style="color: #171717;">轻松上传文件</view>
+		<view class="text-24 leading-34 mt-20 text-666666">将文件发送微信（文件传输助手、自己或好友），在本页面点击“立即上传”，选择刚才发送文件的聊天对象，选择文件，点击确认即可上传成功</view>
 		<!-- Tips -->
 		<view class="tips flex-h-center">
 			<image src="./images/tips.gif" mode="widthFix"></image>

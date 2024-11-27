@@ -88,7 +88,7 @@
 <template>
 	<view class="page px-20">
 		<!-- 描述 -->
-		<view class="pt-28 f28 color-999999 lh-40 mb-28">已添加地址</view>
+		<view class="pt-28 text-28 text-999999 leading-40 mb-28">已添加地址</view>
 		<!-- 列表 -->
 		<view class="list">
 			<template v-if="state.list">
@@ -97,15 +97,15 @@
 						<view class="list-item bg-secondary flex-h-center px-30 mb-20" @click="onAddressItemTap(item)">
 							<view class="flex-1 flex-shrink">
 								<view class="flex-h-start mb-20">
-									<text class="f32 color-secondary lh-44 f-600">{{item.name}}</text>
-									<text class="f24 color-999999 lh-34 ml-20">{{Tools.phoneFormatter(item.phone, "$1 $2 $3")}}</text>
+									<text class="text-32 text-secondary  leading-44 font-semibold">{{item.name}}</text>
+									<text class="text-24 text-999999 leading-34 ml-20">{{Tools.phoneFormatter(item.phone, "$1 $2 $3")}}</text>
 								</view>
-								<view class="address f26 color-secondary lh-36" :class="{'default': !!item.isDefault}">
+								<view class="address text-26 text-secondary  leading-36" :class="{'default': !!item.isDefault}">
 									{{`${item.area.address}-${item.area.name}·${item.doorplate}`}}
 								</view>
 							</view>
 							<view class="line ml-28"></view>
-							<button class="f24 color-999999" @click.stop="onEdit(item)">编辑</button>
+							<button class="text-24 text-999999" @click.stop="onEdit(item)">编辑</button>
 						</view>
 					</block>
 				</template>

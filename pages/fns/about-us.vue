@@ -17,7 +17,7 @@
 </script>
 
 <template>
-	<div class="page h-100 flex-h-center ls-2 ff-DIN-Bold f60 color-primary">
+	<div class="page h-100 flex-h-center tracking-2 ff-DIN-Bold text-60 color-primary">
 		ABOUT US
 	</div>
 </template>

@@ -54,7 +54,7 @@
 					</swiper>
 				</uni-swiper-dot>
 			</template>
-			<image class="skeleton-banners d-block mx-auto rounded-32" v-else :src="defaultBanner"></image>
+			<image class="skeleton-banners block mx-auto rounded-32" v-else :src="defaultBanner"></image>
 		</view>
 		<!-- Swiper End -->
 

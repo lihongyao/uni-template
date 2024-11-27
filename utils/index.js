@@ -161,7 +161,7 @@ export default class Utils {
 	 */
 	static checkLogin() {
 		return new Promise((resolve, reject) => {
-			if (uni.getStorageSync(APP_KEY_LOGIN) === 1) {
+			if (uni.getStorageSync(APP_KEY_LOGIN)) {
 				resolve();
 			} else {
 				uni.navigateTo({

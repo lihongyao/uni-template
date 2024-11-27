@@ -125,13 +125,13 @@ const onClearSearchHistories = () => {
     <template v-else>
       <!-- history-search Start -->
       <view v-if="state.searchHistories" class="mb-40">
-        <view class="f32 lh-44 color-333333 f-600 flex-h-between">
+        <view class="text-32 leading-44 text-333333 font-semibold flex-h-between">
           <text>历史搜索</text>
           <image class="icon-32x32" src="@/static/images/icon_delete.png" @click="onClearSearchHistories" />
         </view>
         <view class="flex-h-between flex-wrap">
           <block v-for="(keyword, index) in state.searchHistories" :key="index">
-            <view class="search-item f26 lh-36 color-888888 mt-20" @click="onKeywordItemTap(keyword)">{{ keyword }}</view>
+            <view class="search-item text-26 leading-36 text-888888 mt-20" @click="onKeywordItemTap(keyword)">{{ keyword }}</view>
           </block>
         </view>
       </view>
@@ -139,13 +139,13 @@ const onClearSearchHistories = () => {
 
       <!-- hot-search Start -->
       <view v-if="state.searchHot && state.searchHot.length > 0">
-        <view class="f32 lh-44 color-333333 f-600 flex-h-start">
+        <view class="text-32 leading-44 text-333333 font-semibold flex-h-start">
           <text>热门搜索</text>
           <image class="icon-32x32 ml-10" src="@/static/images/icon_hot.png" />
         </view>
         <view class="flex-h-between flex-wrap">
           <block v-for="(keyword, index) in state.searchHot" :key="index">
-            <view class="search-item f26 lh-36 color-888888 mt-20" @click="onKeywordItemTap(keyword)">{{ keyword }}</view>
+            <view class="search-item text-26 leading-36 text-888888 mt-20" @click="onKeywordItemTap(keyword)">{{ keyword }}</view>
           </block>
         </view>
       </view>

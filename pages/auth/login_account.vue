@@ -27,9 +27,9 @@
 	<view class="page">
 		<image class="absolute-top" src="./images/bg1.png" mode="widthFix"></image>
 		<view
-			class="wrap position-relative zIndex-1 rounded-24 bg-secondary pt-70 px-48 mx-auto flex-v-center justify-content-start">
+			class="wrap relative z-10 rounded-24 bg-secondary pt-70 px-48 mx-auto flex-v-center justify-start">
 			<image class="icon-120x120" src="../../static/logo.png" mode="widthFix"></image>
-			<view class="text-center mt-16 f-600">项目名称</view>
+			<view class="text-center mt-16 font-semibold">项目名称</view>
 			<view class="form mt-100 w-100">
 				<view class="form-item w-100 mb-24">
 					<uni-easyinput v-model="state.formData.username" :inputBorder="false" placeholder="手机号" type="digit"
@@ -39,10 +39,10 @@
 					<uni-easyinput v-model="state.formData.password" :inputBorder="false" placeholder="登录密码"
 						type="password" :placeholderStyle="placeholderStyle" maxlength="20"></uni-easyinput>
 				</view>
-				<view class="f24 mt-12 color-999999">
+				<view class="text-24 mt-12 text-999999">
 					忘记密码？请联系管理员重置密码
 				</view>
-				<view class="w-100 lh-80 text-center bg-primary color-FFFFFF rounded-12 mt-60" @click="onLogin">
+				<view class="w-100 leading-80 text-center bg-primary text-white rounded-12 mt-60" @click="onLogin">
 					立即登录
 				</view>
 			</view>

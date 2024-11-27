@@ -119,14 +119,14 @@
 		<!-- 1.手机号快捷登录 -->
 		<view v-if="state.k === 0" class="loginForAuth">
 			<!-- 产品图 -->
-			<view class="intro flex-h-center color-FFFFFF">产品介绍图</view>
+			<view class="intro flex-h-center text-white">产品介绍图</view>
 			<!-- 授权按钮 -->
-			<button v-if="state.checkedForAuth" class="auth-button bg-primary flex-h-center f28 color-FFFFFF" open-type="getPhoneNumber" @getphonenumber="onGetPhoneNumber">微信快捷登录</button>
-			<button v-else class="auth-button bg-primary flex-h-center f28 color-FFFFFF" @click="showTips">手机号快捷登录</button>
+			<button v-if="state.checkedForAuth" class="auth-button bg-primary flex-h-center text-28 text-white" open-type="getPhoneNumber" @getphonenumber="onGetPhoneNumber">微信快捷登录</button>
+			<button v-else class="auth-button bg-primary flex-h-center text-28 text-white" @click="showTips">手机号快捷登录</button>
 			<!-- 手机号验证码登录 -->
-			<view class="login-mobile f24 text-center color-555555" @click="state.k = 1">短信验证码登录</view>
+			<view class="login-mobile text-24 text-center text-555555" @click="state.k = 1">短信验证码登录</view>
 			<!-- 用户协议 & 隐私正常 -->
-			<view class="protocol flex-h-center flex-h-center f26 mt-80">
+			<view class="protocol flex-h-center flex-h-center text-26 mt-80">
 				<icon-check v-model="state.checkedForAuth" class="mr-10"></icon-check>
 				<text>我已阅读并同意</text>
 				<text class="link mx-10">用户协议</text>
@@ -139,15 +139,15 @@
 			<!-- logo -->
 			<image class="icon-92x92 mb-40" src="@/static/logo.png"></image>
 			<!-- 标题 -->
-			<view class="f56 color-555555">手机号快捷登录</view>
+			<view class="text-56 text-555555">手机号快捷登录</view>
 			<!-- 提示信息 -->
-			<view class="tips f28 mt-10">新用户登录将自动注册</view>
+			<view class="tips text-28 mt-10">新用户登录将自动注册</view>
 			<!-- 输入框 -->
 			<view class="input-wrap pb-30 mt-96">
-				<input :value="state.mobile" class="f32 f-600 ff-DIN-Bold" type="number" @input="onInput" auto-focus :placeholder-style="placeholderStyles" placeholder="请输入手机号码" maxlength="11" />
+				<input :value="state.mobile" class="text-32 font-semibold ff-DIN-Bold" type="number" @input="onInput" auto-focus :placeholder-style="placeholderStyles" placeholder="请输入手机号码" maxlength="11" />
 			</view>
 			<!-- 用户协议 & 隐私政策 -->
-			<view class="protocol flex-h-start f26 mt-20">
+			<view class="protocol flex-h-start text-26 mt-20">
 				<icon-check v-model="state.checkedForMobile" @change="onCheckedForMobileChange" class="mr-10"></icon-check>
 				<text>我已阅读并同意</text>
 				<text class="link mx-10">用户协议</text>
@@ -156,15 +156,15 @@
 			</view>
 			<!-- 发送验证码 -->
 			<view class="flex-h-end mt-60">
-				<view :class="{disabled: !state.canSendCode}" class="action-button bg-primary flex-h-center color-FFFFFF rounded-45 f26" @click="onSendCode">发送验证码</view>
+				<view :class="{disabled: !state.canSendCode}" class="action-button bg-primary flex-h-center text-white rounded-45 f26" @click="onSendCode">发送验证码</view>
 			</view>
 		</view>
 		<!-- 3.接收验证码 -->
 		<view v-if="state.k === 2" class="loginForReciveCode px-30 pt-60">
 			<!-- 标题 -->
-			<view class="f56 color-555555">手机号快捷登录</view>
+			<view class="text-56 text-555555">手机号快捷登录</view>
 			<!-- 提示信息 -->
-			<view class="tips f28 mt-10">
+			<view class="tips text-28 mt-10">
 				<text>验证码已发送至</text>
 				<text class="mx-10">{{Tools.phoneFormatter(state.mobile, "$1 **** $3")}}</text>
 				<text class="link" @click="onModifyMobile">修改</text>
@@ -174,8 +174,8 @@
 
 			<!-- 发送验证码 -->
 			<view class="flex-h-end mt-60">
-				<view v-if="state.count" class="action-button disabled bg-primary flex-h-center color-FFFFFF rounded-45 f26">{{timeString}}s</view>
-				<view v-else class="action-button bg-primary flex-h-center color-FFFFFF rounded-45 f26" @click="onSendCode">重新获取</view>
+				<view v-if="state.count" class="action-button disabled bg-primary flex-h-center text-white rounded-45 f26">{{timeString}}s</view>
+				<view v-else class="action-button bg-primary flex-h-center text-white rounded-45 f26" @click="onSendCode">重新获取</view>
 			</view>
 		</view>
 	</view>

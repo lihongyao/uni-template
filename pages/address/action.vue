@@ -120,11 +120,11 @@
 				<uni-easyinput class="flex-1" type="digit" v-model="state.formData.phone" :inputBorder="false" :placeholderStyle="placeholderStyle" placeholder="请填写人联系电话" maxlength="11" />
 			</view>
 			<!-- 所在地区 -->
-			<view class="form-item flex-h-between border-bottom py-30 align-items-start">
+			<view class="form-item flex-h-between border-bottom py-30 items-start">
 				<view class="label text-justify  mr-60">所在地区</view>
-				<view class="pr-40 color-secondary flex-1 flex-h-between" @click="onChooseLocation">
+				<view class="pr-40 text-secondary  flex-1 flex-h-between" @click="onChooseLocation">
 					<view v-if="state.formData.area" class="flex-1 flex-shrink f28">{{state.formData.area.name}}</view>
-					<view v-else class="flex-1 flex-shrink color-999999 f28">请选择</view>
+					<view v-else class="flex-1 flex-shrink text-999999 f28">请选择</view>
 					<image class="icon-right ml-20" src="./images/icon_right.png" />
 				</view>
 			</view>
@@ -142,7 +142,7 @@
 			</view>
 			<!-- 删除地址 -->
 			<template v-if="state.formData.id">
-				<view class="py-30 f28 lh-40" style="color:#FF2359;" @click="onDelete(state.formData.id)">删除地址</view>
+				<view class="py-30 text-28 leading-40" style="color:#FF2359;" @click="onDelete(state.formData.id)">删除地址</view>
 			</template>
 		</view>
 		<!-- 提交按钮 -->

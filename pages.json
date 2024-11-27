@@ -1,16 +1,16 @@
 {
-	"pages": [{
+	"pages": [ {
+		"path": "pages/launch/launch",
+		"style": {
+			"navigationStyle": "custom"
+		}
+	},{
 		"path": "pages/auth/login_account",
 		"style": {
 			"navigationStyle": "custom"
 		}
 	}, {
 		"path": "pages/auth/auth",
-		"style": {
-			"navigationStyle": "custom"
-		}
-	}, {
-		"path": "pages/launch/launch",
 		"style": {
 			"navigationStyle": "custom"
 		}
