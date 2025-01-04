@@ -54,7 +54,9 @@
         "setting" : {
             "urlCheck" : false
         },
-        "usingComponents" : true
+        "usingComponents" : true,
+		"permission": { "scope.userLocation": { "desc": "用于定位选择位置" }},
+		"requiredPrivateInfos": [ "getLocation", "chooseLocation"]
     },
     "mp-alipay" : {
         "usingComponents" : true

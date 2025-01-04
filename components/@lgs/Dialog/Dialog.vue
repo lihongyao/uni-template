@@ -1,3 +1,31 @@
+<!-- 使用指南 -->
+<!-- 
+ 1. 导入组件
+ import Dialog from '@/components/@lgs/Dialog/Dialog.vue';
+ 
+ 2. 定义ref
+ const dialog = ref();
+ 
+ 3. 调用组件
+ <Dialog ref="dialog" />
+ 
+ 
+ 4. 使用
+ dialog.value.open({
+ 	content: "客服热线：17398888669",
+ 	confirmText: "立即拨打",
+ 	confirmBgColor: "#42b983",
+ 	onConfirm: () => {
+ 		uni.makePhoneCall({
+ 			phoneNumber: '17398888669',
+ 			fail: () => {
+ 
+ 			}
+ 		});
+ 	}
+ })
+ 
+ -->
 <script setup>
 	import { reactive, toRefs } from "vue";
 

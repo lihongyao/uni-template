@@ -8,8 +8,8 @@
 	// -- state
 	const state = reactive({
 		visible: false,
-		appName: '国韵蜀艺',
-		privacyContractName: '',
+		appName: '【小程序名称】',
+		privacyContractName: '【协议名称】',
 		resolvePrivacyAuthorization: null,
 	});
 
@@ -75,7 +75,7 @@
 			state.resolvePrivacyAuthorization({ buttonId: 'agree-btn', event: 'agree' });
 		}
 		emits('agree');
-		
+
 	}
 
 	// -- exposes
@@ -89,8 +89,9 @@
 		<view class="__content">
 			<view class="__title">用户隐私保护指引</view>
 			<view class="__desc">
-				感谢您选择使用{{state.appName}}小程序，我们非常重视您的个人信息安全和隐私保护。使用我们的产品前，请您仔细阅读：<text class="__link"
-					@tap="openPrivacyContract">{{state.privacyContractName}}</text>如果您同意此隐私保护指引，请点击同意按钮，开始使用此小程序，我们将尽全力保护你你的个人信息及合法权益，感谢您的信任。
+				感谢您选择使用{{state.appName}}小程序，我们非常重视您的个人信息安全和隐私保护。
+				在使用我们的产品前，请您务必仔细阅读：<text class="__link"
+					@tap="openPrivacyContract">{{state.privacyContractName}}</text>。如果您同意此隐私保护指引，请点击同意按钮，开始使用此小程序，我们将尽全力保护您的个人信息及合法权益，感谢您的信任。
 			</view>
 			<view class="__buttons">
 				<button class="item reject" @tap="onReject">拒绝</button>

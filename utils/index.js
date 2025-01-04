@@ -354,7 +354,7 @@ export default class Utils {
 												} else {
 													console.log(
 														'「checkAuthorizeWithScope」：用户拒绝授权'
-													);
+														);
 												}
 											},
 											fail: (error) => {

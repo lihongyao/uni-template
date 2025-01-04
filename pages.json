@@ -1,10 +1,10 @@
 {
-	"pages": [ {
+	"pages": [{
 		"path": "pages/launch/launch",
 		"style": {
 			"navigationStyle": "custom"
 		}
-	},{
+	}, {
 		"path": "pages/auth/login_account",
 		"style": {
 			"navigationStyle": "custom"
@@ -159,4 +159,5 @@
 		"backgroundColor": "#F8F8F8"
 	},
 	"uniIdRouter": {}
+
 }
