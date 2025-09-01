@@ -1,11 +1,11 @@
 {
   "dependencies": {
-    "@likg/bus": "^1.0.1",
-    "@likg/tools": "^2.0.1",
-    "@likg/validator": "^1.0.9",
+    "@likg/bus": "^1.0.2",
+    "@likg/tools": "^2.0.9",
+    "@likg/validator": "^1.0.10",
     "crypto-js": "^4.2.0",
     "js-base64": "^3.7.7",
-    "pinia": "^2.2.6",
+    "pinia": "^3.0.3",
     "umtrack-wx": "^2.8.0"
   }
 }

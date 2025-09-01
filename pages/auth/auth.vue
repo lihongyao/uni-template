@@ -68,7 +68,7 @@
 				open-type="getPhoneNumber" @getphonenumber="onGetPhoneNumber">
 				手机号快捷登录
 			</button>
-			<button v-else class="button rounded-48 flex-h-center bg-primary text-white f32"
+			<button v-else class="button rounded-48 flex-h-center bg-primary text-white text-32"
 				@tap="onShowTips">手机号快捷登录</button>
 			<!-- 暂不登录 -->
 			<view class="text-28 leading-40 mt-40 font-normal" style="color:#202020;" @click="onBack">暂不登录</view>

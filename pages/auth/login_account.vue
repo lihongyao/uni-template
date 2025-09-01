@@ -26,8 +26,7 @@
 <template>
 	<view class="page">
 		<image class="absolute-top" src="./images/bg1.png" mode="widthFix"></image>
-		<view
-			class="wrap relative z-10 rounded-24 bg-secondary pt-70 px-48 mx-auto flex-v-center justify-start">
+		<view class="wrap relative z-10 rounded-24 bg-secondary pt-70 px-48 mx-auto flex-v-center justify-start">
 			<image class="icon-120x120" src="../../static/logo.png" mode="widthFix"></image>
 			<view class="text-center mt-16 font-semibold">项目名称</view>
 			<view class="form mt-100 w-100">

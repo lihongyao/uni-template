@@ -1,8 +1,18 @@
 {
 	"pages": [{
+		"path": "pages/cloud/cloud",
+		"style": {
+			"navigationBarTitleText": "云端存储代码示例"
+		}
+	}, {
 		"path": "pages/launch/launch",
 		"style": {
 			"navigationStyle": "custom"
+		}
+	}, {
+		"path": "pages/auth/login",
+		"style": {
+			"navigationBarTitleText": "登录"
 		}
 	}, {
 		"path": "pages/auth/login_account",
@@ -13,11 +23,6 @@
 		"path": "pages/auth/auth",
 		"style": {
 			"navigationStyle": "custom"
-		}
-	}, {
-		"path": "pages/auth/login",
-		"style": {
-			"navigationBarTitleText": "登录"
 		}
 	}, {
 		"path": "pages/test/test",

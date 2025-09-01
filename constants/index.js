@@ -47,6 +47,7 @@ export const APP_MINE_FNS = [
 	{ label: '意见反馈', path: '/pages/fns/feedback', checkLogin: true },
 	{ label: '设置中心', path: '/pages/fns/sets', checkLogin: false },
 	{ label: '文件上传', path: '/pages/upload/upload', checkLogin: false },
+	{ label: '云端存储', path: '/pages/upload/upload', checkLogin: false },
 ];
 
 import ICON_ORDER_1 from '@/pages/TabPages/images/icon_order_1.png';

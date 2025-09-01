@@ -26,6 +26,12 @@
 			// 自动上传用户信息，设为false取消上传，默认为false
 			uploadUserInfo: true,
 		});*/
+
+		// 3. 初始化云开发
+		wx.cloud.init({
+			env: 'cloud1-5gi79dkg5cb8e223',
+			traceUser: false
+		})
 	});
 	onShow(() => {
 		console.log('__onShow__');

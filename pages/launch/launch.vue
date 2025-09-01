@@ -40,6 +40,7 @@
 				// const { token, isBindPhone } = resp.data;
 				// uni.setStorageSync(APP_KEY_TOKEN, token);
 				// uni.setStorageSync(APP_KEY_LOGIN, isBindPhone);
+				console.log('授权码：', code);
 				uni.setStorageSync(APP_KEY_LOGIN, false);
 				state.isLogin = true;
 				jump();

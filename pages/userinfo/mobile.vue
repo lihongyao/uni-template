@@ -111,9 +111,11 @@
 <template>
 	<view class="page pt-24">
 		<!-- 输入框：真机调试 -->
-		<uni-easyinput v-model="state.mobile" placeholder="请填写您的手机号" :placeholderStyle="placeholderStyles" :maxlength="11" :inputBorder="false" @input="onInput" />
+		<uni-easyinput v-model="state.mobile" placeholder="请填写您的手机号" :placeholderStyle="placeholderStyles"
+			:maxlength="11" :inputBorder="false" @input="onInput" />
 		<!-- 重新获取 -->
-		<button class="text-secondary  text-28 mt-20" open-type="getPhoneNumber" @getphonenumber="onGetPhoneNumber">重新获取</button>
+		<button class="text-secondary  text-28 mt-20" open-type="getPhoneNumber"
+			@getphonenumber="onGetPhoneNumber">重新获取</button>
 		<!-- 确认按钮 -->
 		<button class="save-button" :class="{'enable': state.enable}" @click="onSendCode">获取验证码</button>
 		<!-- 验证码弹框 -->
@@ -128,11 +130,15 @@
 					<text class="link" @click="onModifyMobile">修改</text>
 				</view>
 				<!-- 验证码输入框 -->
-				<VerifyCode v-model="state.code" :length="4" align="left" @validate="onValidate" borderColor="rgba(0, 0, 0, .36)" />
+				<VerifyCode v-model="state.code" :length="4" align="left" @validate="onValidate"
+					borderColor="rgba(0, 0, 0, .36)" />
 				<!-- 发送验证码 -->
 				<view class="flex-h-end mt-80">
-					<view v-if="state.count" class="action-button disabled bg-theme flex-h-center text-white rounded-45 f26">{{timeString}}s</view>
-					<view v-else class="action-button bg-theme flex-h-center text-white rounded-45 f26" @click="onSendCode">重新获取</view>
+					<view v-if="state.count"
+						class="action-button disabled bg-theme flex-h-center text-white rounded-45 f26">{{timeString}}s
+					</view>
+					<view v-else class="action-button bg-theme flex-h-center text-white rounded-45 f26"
+						@click="onSendCode">重新获取</view>
 				</view>
 			</view>
 		</uni-popup>

@@ -13,9 +13,9 @@
 	const state = reactive({
 		swiperCurrentIndex: 0,
 		banners: [
-			{ bannerPic: defaultBanners },
-			{ bannerPic: defaultBanners },
-			{ bannerPic: defaultBanners },
+			{ bannerPic: defaultBanners, jumpUrl: 'https://www.baidu.com' },
+			{ bannerPic: defaultBanners, jumpUrl: 'https://www.baidu.com' },
+			{ bannerPic: defaultBanners, jumpUrl: 'https://www.baidu.com' },
 		]
 	})
 	// -- life circles
@@ -28,6 +28,7 @@
 	}
 	const onSwiperItemTap = ({ jumpUrl }) => {
 		console.log(jumpUrl);
+		Utils.push(`/pages/web-page/web-page?uri=${encodeURIComponent(jumpUrl)}`)
 	}
 </script>
 
@@ -38,7 +39,7 @@
 		<!-- Search-bar Start -->
 		<SearchBar :contents="searchTexts" @tap="Utils.push('/pages/search/search')" />
 		<!-- Search-bar End -->
-
+		
 		<!-- Swiper Start -->
 		<view class="swipers">
 			<template v-if="state.banners && state.banners.length > 0">
